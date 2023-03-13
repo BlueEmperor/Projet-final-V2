@@ -23,7 +23,8 @@ class Map:
 
     def __init__(self, player):
         self._player = player
-        self.map = None
+        self.im=Image.open(ASSETS_DIR / "map.png")
+        self.map = [[[] for _ in range(self.im.size[0])] for _ in range(self.im.size[1])]
         self.map_by_image()
         self.draw_map = self.create_draw_map(self.map)
         print(self)
@@ -35,11 +36,9 @@ class Map:
         return(0<=int(coords[1])<len(self.map) and 0<=int(coords[0])<len(self.map[int(coords[1])]))
     
     def map_by_image(self):
-        im=Image.open(ASSETS_DIR / "map.png")
-        pixel=im.load()
-        self.map=[[[] for _ in range(im.size[0])] for _ in range(im.size[1])]
-        for i in range(im.size[0]):
-            for j in range(im.size[1]):
+        pixel=self.im.load()
+        for i in range(self.im.size[0]):
+            for j in range(self.im.size[1]):
                 if(pixel[i,j]==0):
                     self.put(self.WALL, vec(i,j))
                 else:
@@ -68,7 +67,7 @@ class Map:
             for i in range(len(m[j])): 
                 voisins = self.get_voisins(vec(i,j))
                 rect = pygame.Rect(0,0, 48,48)
-                rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-vec(1,1))*48
+                rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-self._player.map_pos)*48
                 if(self.get_item(vec(i,j))==Map.GROUND):
                     draw_map.append([Map.GROUND_TILE, rect])
 
