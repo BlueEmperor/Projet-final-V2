@@ -82,7 +82,7 @@ class Map:
 
                 elif(voisins[6]==0):
                     draw_map.append([Map.BOTTOM_WALL_TILE, rect])
-                1
+                
                 elif(voisins[0]==0):
                     if(voisins[1]==0 and voisins[3]==0):
                         draw_map.append([Map.EXTERN_CORNER_LEFT_WALL_TILE, rect])
