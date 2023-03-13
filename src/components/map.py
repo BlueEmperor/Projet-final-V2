@@ -10,6 +10,7 @@ class Map:
     GROUND = "."
     WALL = "x"
     GROUND_TILE = pygame.image.load(MAP_DIR / "ground" / "27.png").convert_alpha()
+    WALL_TILE = pygame.image.load(MAP_DIR / "wall.png").convert_alpha()
     TOP_WALL_TILE = pygame.image.load(MAP_DIR / "top_wall" / "14.png").convert_alpha()
     LEFT_WALL_TILE = pygame.image.load(MAP_DIR / "left_wall" / "53.png").convert_alpha()
     RIGHT_WALL_TILE = pygame.image.load(MAP_DIR / "right_wall" / "01.png").convert_alpha()
@@ -67,7 +68,7 @@ class Map:
             for i in range(len(m[j])): 
                 voisins = self.get_voisins(vec(i,j))
                 rect = pygame.Rect(0,0, 32,32)
-                rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-vec(1,1))*48
+                rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-vec(8,8))*48
                 if(self.get_item(vec(i,j))==Map.GROUND):
                     draw_map.append([Map.GROUND_TILE, rect])
 
@@ -96,9 +97,12 @@ class Map:
                 elif(voisins[6]==0):
                     draw_map.append([Map.BOTTOM_WALL_TILE, rect])
 
+                elif(voisins == [1,1,1,1,1,1,1,1]):
+                    draw_map.append([Map.WALL_TILE, rect])
+
                 else:
                     draw_map.append([Map.NOT_DEFINED_TILE, rect])
-                    
+
         return(draw_map)
 
     def update(self):
