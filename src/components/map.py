@@ -25,6 +25,7 @@ class Map:
         self.map = None
         self.map_by_image()
         self.draw_map = self.create_draw_map(self.map)
+        print(self)
 
     def __repr__(self):
         return("\n".join("".join(j for j in i) for i in self.map)+"\n")
@@ -36,7 +37,6 @@ class Map:
         im=Image.open(ASSETS_DIR / "map.png")
         pixel=im.load()
         self.map=[[[] for _ in range(im.size[0])] for _ in range(im.size[1])]
-        print(self.map)
         for i in range(im.size[0]):
             for j in range(im.size[1]):
                 if(pixel[i,j]==0):
@@ -77,28 +77,28 @@ class Map:
                 elif(voisins[1]==1 and voisins[6]==1 and (voisins[3]==0 or voisins[5]==0)):
                     draw_map.append([Map.LEFT_WALL_TILE, rect])
 
-                elif(voisins[1]==0 and voisins[3]==1 and voisins[4]==1):
-                    draw_map.append([Map.TOP_WALL_TILE, rect])
+                elif(voisins[1]==0):
+                    if(voisins[3]==1 and voisins[4]==1):
+                        draw_map.append([Map.TOP_WALL_TILE, rect])
+                        
+                    if(voisins[1]==0 and voisins[3]==0):
+                        draw_map.append([Map.EXTERN_CORNER_LEFT_WALL_TILE, rect])
+                    
+                    elif(voisins[1]==0 and voisins[4]==0):
+                        draw_map.append([Map.EXTERN_CORNER_RIGHT_WALL_TILE, rect])
+                
+                elif(voisins[0]==0 and voisins[1]==1 and voisins[3]==1):
+                    draw_map.append([Map.INTERN_CORNER_LEFT_WALL_TILE, rect])
+
+                elif(voisins[2]==0 and voisins[1]==1 and voisins[4]==1):
+                    draw_map.append([Map.INTERN_CORNER_RIGHT_WALL_TILE, rect])
 
                 elif(voisins[6]==0):
                     draw_map.append([Map.BOTTOM_WALL_TILE, rect])
-                
-                elif(voisins[0]==0):
-                    if(voisins[1]==0 and voisins[3]==0):
-                        draw_map.append([Map.EXTERN_CORNER_LEFT_WALL_TILE, rect])
-
-                    elif(voisins[1]==1 and voisins[3]==1):
-                        draw_map.append([Map.INTERN_CORNER_LEFT_WALL_TILE, rect])
-
-                elif(voisins[2]==0):
-                    if(voisins[1]==0 and voisins[4]==0):
-                        draw_map.append([Map.EXTERN_CORNER_RIGHT_WALL_TILE, rect])
-
-                    elif(voisins[1]==1 and voisins[4]==1):
-                        draw_map.append([Map.INTERN_CORNER_RIGHT_WALL_TILE, rect])
 
                 else:
                     draw_map.append([Map.NOT_DEFINED_TILE, rect])
+                    
         return(draw_map)
 
     def update(self):
