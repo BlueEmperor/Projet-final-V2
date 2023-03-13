@@ -67,8 +67,8 @@ class Map:
         for j in range(len(m)):
             for i in range(len(m[j])): 
                 voisins = self.get_voisins(vec(i,j))
-                rect = pygame.Rect(0,0, 32,32)
-                rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-vec(8,8))*48
+                rect = pygame.Rect(0,0, 48,48)
+                rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-vec(1,1))*48
                 if(self.get_item(vec(i,j))==Map.GROUND):
                     draw_map.append([Map.GROUND_TILE, rect])
 
