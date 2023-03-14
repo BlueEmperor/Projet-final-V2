@@ -7,6 +7,7 @@ from src.config import Config
 vec = pygame.math.Vector2
 
 class Map:
+    DIR={pygame.K_z: vec(0,-1), pygame.K_s: vec(0,1), pygame.K_d: vec(1,0), pygame.K_q: vec(-1,0)}
     GROUND = "."
     WALL = "x"
     GROUND_TILE = pygame.image.load(MAP_DIR / "ground" / "27.png").convert_alpha()
@@ -27,6 +28,8 @@ class Map:
         self.map = [[[] for _ in range(self.im.size[0])] for _ in range(self.im.size[1])]
         self.map_by_image()
         self.draw_map = self.create_draw_map(self.map)
+        self.moving_tick = 0
+
         print(self)
 
     def __repr__(self):
@@ -104,8 +107,23 @@ class Map:
 
         return(draw_map)
 
+
+
     def update(self):
-        pass
+        if(not(self._player.ismoving)):
+            keys=pygame.key.get_pressed()
+            for key in self.DIR.keys():
+                if (keys[key]):
+                    self._player.ismoving=key
+                    self.moving_tick = 16
+        else:
+            for tile in self.draw_map:
+                tile[1].center+=Map.DIR[self._player.ismoving]*3
+            self.moving_tick-=1
+            if(self.moving_tick==0):
+                self._player.ismoving=False
+
+
 
     def draw(self, SCREEN):
         for tile in self.draw_map:
