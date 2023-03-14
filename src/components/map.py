@@ -3,6 +3,7 @@ import pygame
 from PIL import Image
 from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
+from random import randint
 
 vec = pygame.math.Vector2
 
@@ -10,7 +11,7 @@ class Map:
     DIR={pygame.K_z: vec(0,-1), pygame.K_s: vec(0,1), pygame.K_d: vec(1,0), pygame.K_q: vec(-1,0)}
     GROUND = "."
     WALL = "x"
-    GROUND_TILE = pygame.image.load(MAP_DIR / "ground" / "27.png").convert_alpha()
+    GROUND_TILE = [pygame.image.load(MAP_DIR / "ground" / ("ground"+str(i)+".png")).convert_alpha() for i in range(15)]
     WALL_TILE = pygame.image.load(MAP_DIR / "wall.png").convert_alpha()
     TOP_WALL_TILE = pygame.image.load(MAP_DIR / "top_wall" / "14.png").convert_alpha()
     LEFT_WALL_TILE = pygame.image.load(MAP_DIR / "left_wall" / "53.png").convert_alpha()
@@ -72,7 +73,7 @@ class Map:
                 rect = pygame.Rect(0,0, 48,48)
                 rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-self._player.map_pos)*48
                 if(self.get_item(vec(i,j))==Map.GROUND):
-                    draw_map.append([Map.GROUND_TILE, rect])
+                    draw_map.append([Map.GROUND_TILE[randint(0,14)], rect])
 
                 elif(voisins[1]==1 and voisins[6]==1 and (voisins[4]==0 or voisins[7]==0)):
                     draw_map.append([Map.RIGHT_WALL_TILE, rect])
