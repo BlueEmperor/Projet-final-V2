@@ -107,8 +107,6 @@ class Map:
 
         return(draw_map)
 
-
-
     def update(self):
         if(not(self._player.ismoving)):
             keys=pygame.key.get_pressed()
@@ -126,8 +124,6 @@ class Map:
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False
-
-
 
     def draw(self, SCREEN):
         for tile in self.draw_map:
