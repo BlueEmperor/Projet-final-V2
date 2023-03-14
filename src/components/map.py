@@ -113,12 +113,16 @@ class Map:
         if(not(self._player.ismoving)):
             keys=pygame.key.get_pressed()
             for key in self.DIR.keys():
-                if (keys[key]):
-                    self._player.ismoving=key
-                    self.moving_tick = 16
+                if(keys[key]):
+                    if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
+                        self._player.ismoving=key
+                        self.moving_tick = 16
+                        self._player.map_pos += self.DIR[key]
+                        return
+                    
         else:
             for tile in self.draw_map:
-                tile[1].center+=Map.DIR[self._player.ismoving]*3
+                tile[1].center-=Map.DIR[self._player.ismoving]*3
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False

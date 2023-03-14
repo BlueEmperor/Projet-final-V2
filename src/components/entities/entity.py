@@ -9,4 +9,5 @@ class Entity(pygame.sprite.Sprite):
         self.image = image_list[0]
         self.rect = self.image.get_rect()
         self.current_image = 0
+        self.ismoving = False
         
