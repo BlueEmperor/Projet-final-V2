@@ -3,6 +3,7 @@ import pygame
 from src.global_state import GlobalState
 GlobalState.load_main_screen()
 
+from src.components.entities.player import Player
 from src.components.map import Map
 
 vec = pygame.math.Vector2
