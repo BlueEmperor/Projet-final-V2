@@ -18,7 +18,7 @@ def update_game_display():
 
 
 def main():
-    while True:
+    while 1:
         fps = time()
         events = pygame.event.get()
         if GlobalState.GAME_STATE == GameStatus.MAIN_MENU:
