@@ -28,9 +28,9 @@ class Map:
         self.im=Image.open(ASSETS_DIR / "map.png")
         self.map = [[[] for _ in range(self.im.size[0])] for _ in range(self.im.size[1])]
         self.map_by_image()
-        self.draw_map = self.create_draw_map(self.map)
+        self.tiles_sprites = pygame.sprite.Group()
+        self.create_draw_map(self.map)
         self.moving_tick = 0
-
         print(self)
 
     def __repr__(self):
@@ -38,7 +38,7 @@ class Map:
 
     def __contains__(self, coords):
         return(0<=int(coords[1])<len(self.map) and 0<=int(coords[0])<len(self.map[int(coords[1])]))
-    
+
     def map_by_image(self):
         pixel=self.im.load()
         for i in range(self.im.size[0]):
@@ -47,13 +47,13 @@ class Map:
                     self.put(self.WALL, vec(i,j))
                 else:
                     self.put(self.GROUND, vec(i,j))
-        
+
 
     def get_item(self, coord):
         if(coord in self):
             return(self.map[int(coord[1])][int(coord[0])])
         return(Map.WALL)
-    
+
     def put(self, elem, coord):
         if(coord in self):
             self.map[int(coord[1])][int(coord[0])]=elem
@@ -64,49 +64,55 @@ class Map:
         for i in L:
             voisins.append(0 if(self.get_item(i+coord)==Map.GROUND) else 1)
         return(voisins)
-    
+
     def create_draw_map(self, m):
-        draw_map = []
+        class Tile(pygame.sprite.Sprite):
+            def __init__(self, image, rect):
+                super().__init__()
+                self.image = image
+                self.rect = rect
+            
+            def update(self, coord):
+                self.rect.topleft-=coord
+
         for j in range(len(m)):
             for i in range(len(m[j])): 
                 voisins = self.get_voisins(vec(i,j))
                 rect = pygame.Rect(0,0, 48,48)
                 rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)+(vec(i,j)-self._player.map_pos)*48
                 if(self.get_item(vec(i,j))==Map.GROUND):
-                    draw_map.append([Map.GROUND_TILE[randint(0,14)], rect])
+                    self.tiles_sprites.add(Tile(Map.GROUND_TILE[randint(0,14)], rect))
 
                 elif(voisins[1]==1 and voisins[6]==1 and (voisins[4]==0 or voisins[7]==0)):
-                    draw_map.append([Map.RIGHT_WALL_TILE, rect])
+                    self.tiles_sprites.add(Tile(Map.RIGHT_WALL_TILE, rect))
 
                 elif(voisins[1]==1 and voisins[6]==1 and (voisins[3]==0 or voisins[5]==0)):
-                    draw_map.append([Map.LEFT_WALL_TILE, rect])
+                    self.tiles_sprites.add(Tile(Map.LEFT_WALL_TILE, rect))
 
                 elif(voisins[1]==0):
                     if(voisins[3]==1 and voisins[4]==1):
-                        draw_map.append([Map.TOP_WALL_TILE, rect])
+                        self.tiles_sprites.add(Tile(Map.TOP_WALL_TILE, rect))
                         
                     if(voisins[1]==0 and voisins[3]==0):
-                        draw_map.append([Map.EXTERN_CORNER_LEFT_WALL_TILE, rect])
+                        self.tiles_sprites.add(Tile(Map.EXTERN_CORNER_LEFT_WALL_TILE, rect))
                     
                     elif(voisins[1]==0 and voisins[4]==0):
-                        draw_map.append([Map.EXTERN_CORNER_RIGHT_WALL_TILE, rect])
+                        self.tiles_sprites.add(Tile(Map.EXTERN_CORNER_RIGHT_WALL_TILE, rect))
                 
                 elif(voisins[0]==0 and voisins[1]==1 and voisins[3]==1):
-                    draw_map.append([Map.INTERN_CORNER_LEFT_WALL_TILE, rect])
+                    self.tiles_sprites.add(Tile(Map.INTERN_CORNER_LEFT_WALL_TILE, rect))
 
                 elif(voisins[2]==0 and voisins[1]==1 and voisins[4]==1):
-                    draw_map.append([Map.INTERN_CORNER_RIGHT_WALL_TILE, rect])
+                    self.tiles_sprites.add(Tile(Map.INTERN_CORNER_RIGHT_WALL_TILE, rect))
 
                 elif(voisins[6]==0):
-                    draw_map.append([Map.BOTTOM_WALL_TILE, rect])
+                    self.tiles_sprites.add(Tile(Map.BOTTOM_WALL_TILE, rect))
 
                 elif(voisins == [1,1,1,1,1,1,1,1]):
-                    draw_map.append([Map.WALL_TILE, rect])
+                    self.tiles_sprites.add(Tile(Map.WALL_TILE, rect))
 
                 else:
-                    draw_map.append([Map.NOT_DEFINED_TILE, rect])
-
-        return(draw_map)
+                    self.tiles_sprites.add(Tile(Map.NOT_DEFINED_TILE, rect))
 
     def update(self):
         if(not(self._player.ismoving)):
@@ -120,12 +126,10 @@ class Map:
                         return
                     
         else:
-            for tile in self.draw_map:
-                tile[1].center-=Map.DIR[self._player.ismoving]*3
+            self.tiles_sprites.update(Map.DIR[self._player.ismoving]*3)
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False
 
     def draw(self, SCREEN):
-        for tile in self.draw_map:
-            SCREEN.blit(tile[0], tile[1])
+        self.tiles_sprites.draw(SCREEN)
