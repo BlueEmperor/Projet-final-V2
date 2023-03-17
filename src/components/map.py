@@ -124,13 +124,13 @@ class Map:
                 if(keys[key]):
                     if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
                         self._player.ismoving=key
-                        self.moving_tick = 16
+                        self.moving_tick = 12
                         self._player.map_pos += self.DIR[key]
                         self.coords_draw = [vec(max(0,self._player.map_pos[0]-Config.WIDTH//96-3),max(0,self._player.map_pos[1]-Config.HEIGHT//96-3)),vec(min(len(self.map[0]),self._player.map_pos[0]+Config.WIDTH//96+3),min(len(self.map),self._player.map_pos[1]+Config.HEIGHT//96+3))]
                         return
                     
         else:
-            self._player.absolute_pos += self.DIR[self._player.ismoving]*3
+            self._player.absolute_pos += self.DIR[self._player.ismoving]*4
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False
