@@ -1,12 +1,15 @@
 import pygame
 
-from path import ASSETS_DIR
+from path import ASSETS_DIR, AUDIO_DIR
 from src.config import Config
 from src.components.items.sword import Sword
 
 vec = pygame.math.Vector2
 
 class InventoryUI:
+    SELECTED_SOUND = pygame.mixer.Sound(AUDIO_DIR / "sounds" / "select_sound.mp3")
+    SELECT_IMAGE = pygame.image.load(ASSETS_DIR / "blue_hotbar.png").convert_alpha()
+    SELECTED_SOUND.set_volume(0.08)
     def __init__(self, player):
         self.image = pygame.image.load(ASSETS_DIR / "inventory.png").convert_alpha()
         self.rect = self.image.get_rect()
@@ -20,12 +23,14 @@ class InventoryUI:
         self.animation = 0
         self.direction = 1
         self.offset = 0
+        self.hover = None
+        self.selected = None
 
     def add(self, item):
         slots=self.empty_slots()
         if(len(slots)>0):
             self._player.inventory[int(slots[0][1])][int(slots[0][0])]=item
-            item.update(self.rect)
+            item.update(self.rect, self)
             item.add(self.items_sprite_group)
             item.slot = slots[0]
             return(True)
@@ -55,18 +60,22 @@ class InventoryUI:
 
     def left_click_down_event(self, mouse):
         if(self.isopen and not(self.animation)):
-            pass
+            for sprite in self.items_sprite_group:
+                if(sprite.rect.collidepoint(pygame.mouse.get_pos())):
+                    self.selected = sprite
+                    InventoryUI.SELECTED_SOUND.play()
+                    return
     
     def right_click_down_event(self, mouse):
         if(self.isopen and not(self.animation)):
             pass
-
+            
     def update(self):
         if(self.animation != 0):
             self.animation -= 1
             self.rect.topleft += vec(1,0)*Config.WIDTH//16*self.direction
         if(self.isopen or (self.animation)):
-            self.items_sprite_group.update(self.rect)
+            self.items_sprite_group.update(self.rect, self)
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.rect.topleft[0], self.rect.topleft[1]))
@@ -79,3 +88,6 @@ class InventoryUI:
 
             #sword
             self.items_sprite_group.draw(SCREEN)
+
+            if(self.selected):
+                SCREEN.blit(InventoryUI.SELECT_IMAGE, self.selected.rect)
