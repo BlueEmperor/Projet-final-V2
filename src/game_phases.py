@@ -22,14 +22,19 @@ def gameplay_phase(events):
         #Mouses events
         if(event.type == pygame.MOUSEBUTTONDOWN):
             if(event.button == 1):
-                inventory_ui.left_click_down_event(event.type == pygame.MOUSEBUTTONDOWN)
+                inventory_ui.left_click_down_event()
                 continue
             elif(event.button == 3):
-                inventory_ui.right_click_down_event(event.type == pygame.MOUSEBUTTONDOWN)
+                inventory_ui.right_click_down_event()
                 continue
 
         elif(event.type == pygame.MOUSEBUTTONUP):
-            pass
+            if(event.button == 1):
+                inventory_ui.left_click_up_event()
+                continue
+            elif(event.button == 3):
+                inventory_ui.right_click_down_event()
+                continue
         
         #keyboard events
         if(event.type == pygame.KEYDOWN):
