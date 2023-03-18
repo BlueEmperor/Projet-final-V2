@@ -29,10 +29,9 @@ class Map:
         self.map = [[[] for _ in range(self.im.size[0])] for _ in range(self.im.size[1])]
         self.map_by_image()
         self.tiles_sprites = []
-        self.coords_draw = [vec(max(0,self._player.map_pos[0]-Config.WIDTH//96-3),max(0,self._player.map_pos[1]-Config.HEIGHT//96-3)),vec(min(len(self.map[0]),self._player.map_pos[0]+Config.WIDTH//96+3),min(len(self.map),self._player.map_pos[1]+Config.HEIGHT//96+3))]
+        self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
         self.create_draw_map(self.map)
         self.moving_tick = 0
-        print(self)
 
     def __repr__(self):
         return("\n".join("".join(j for j in i) for i in self.map)+"\n")
@@ -67,9 +66,8 @@ class Map:
         return(voisins)
 
     def create_draw_map(self, m):
-        class Tile(pygame.sprite.Sprite):
+        class Tile:
             def __init__(self, image, rect):
-                super().__init__()
                 self.image = image
                 self.rect = rect
             
@@ -126,7 +124,7 @@ class Map:
                         self._player.ismoving=key
                         self.moving_tick = 12
                         self._player.map_pos += self.DIR[key]
-                        self.coords_draw = [vec(max(0,self._player.map_pos[0]-Config.WIDTH//96-3),max(0,self._player.map_pos[1]-Config.HEIGHT//96-3)),vec(min(len(self.map[0]),self._player.map_pos[0]+Config.WIDTH//96+3),min(len(self.map),self._player.map_pos[1]+Config.HEIGHT//96+3))]
+                        self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
                         return
                     
         else:
@@ -136,6 +134,6 @@ class Map:
                 self._player.ismoving=False
 
     def draw(self, SCREEN):
-        for i in range(int(self.coords_draw[0][0]), int(self.coords_draw[1][0])):
-            for j in range(int(self.coords_draw[0][1]), int(self.coords_draw[1][1])):
+        for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
+            for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
                 self.tiles_sprites[j][i].draw(SCREEN, self)
