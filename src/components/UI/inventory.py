@@ -22,7 +22,6 @@ class InventoryUI:
         for i in range(12):
             self.add(Sword())
 
-        self.inventory_slot_rect = [[pygame.Rect(vec(215,23)+vec(self.rect.topleft+vec(Config.WIDTH+1, 1))+vec(i,j)*48, (46,46)) for i in range(len(player.inventory[j]))] for j in range(len(player.inventory))]
         self.isopen = False
         self.animation = 0
         self.direction = 1
@@ -104,18 +103,15 @@ class InventoryUI:
             self.rect.topleft += vec(1,0)*(Config.WIDTH/16)*self.direction
 
         if((self.isopen  or (self.animation))):
+            mouse_pos = pygame.mouse.get_pos()
             if(self.drag):
-                self.drag.rect.topleft = pygame.mouse.get_pos()+self.delta_drag
+                self.drag.rect.topleft = mouse_pos+self.delta_drag
             else:
                 self.items_sprite_group.update(self.rect.topleft)
 
-            for i in range(len(self.inventory_slot_rect)):
-                for j in range(len(self.inventory_slot_rect[i])):
-                    if(self.inventory_slot_rect[i][j].collidepoint(pygame.mouse.get_pos())):
-                        self.hover = vec(j,i)
-                        return
-                    
-            self.hover=None
+            self.hover = (vec(mouse_pos)-(vec(self.rect.topleft)+vec(215,23)))//48
+            if(not(0<=self.hover[1]<len(self._player.inventory) and 0<=self.hover[0]<len(self._player.inventory[int(self.hover[1])]))):
+                self.hover=None
             
             
     def draw(self, SCREEN):
@@ -133,7 +129,7 @@ class InventoryUI:
             #hover tile
             if(self.hover!=None and (self.isopen  and not(self.animation))):
                 self.alpha_surface.fill((0,0,0,0))
-                pygame.draw.rect(self.alpha_surface, (150,150,150, 100), self.inventory_slot_rect[int(self.hover[1])][int(self.hover[0])])
+                pygame.draw.rect(self.alpha_surface, (150,150,150, 100), (vec(self.rect.topleft)+vec(216,24)+self.hover*48,(46,46)))
                 SCREEN.blit(self.alpha_surface, (0,0))
 
             #draw items
