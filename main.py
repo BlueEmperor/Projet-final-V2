@@ -14,7 +14,7 @@ FramePerSec = pygame.time.Clock()
 
 def update_game_display():
     pygame.display.update()
-    FramePerSec.tick(Config.FPS)
+    #FramePerSec.tick(Config.FPS)
 
 
 def main():
