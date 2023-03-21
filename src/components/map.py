@@ -4,6 +4,7 @@ from PIL import Image
 from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
 from random import randint
+from src.components.entities.squelette import Squelette
 
 vec = pygame.math.Vector2
 
@@ -32,6 +33,10 @@ class Map:
         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
         self.create_draw_map(self.map)
         self.moving_tick = 0
+        self.monster_group = pygame.sprite.Group()
+        Squelette(vec(5,2)).add(self.monster_group)
+        Squelette(vec(3,4)).add(self.monster_group)
+        
 
     def __repr__(self):
         return("\n".join("".join(j for j in i) for i in self.map)+"\n")
@@ -128,6 +133,7 @@ class Map:
                         return
                     
         else:
+            self.monster_groups.update(self._player)
             self._player.absolute_pos += self.DIR[self._player.ismoving]*4
             self.moving_tick-=1
             if(self.moving_tick==0):
@@ -137,3 +143,5 @@ class Map:
         for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
             for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
                 self.tiles_sprites[j][i].draw(SCREEN, self)
+        
+        self.monster_group.draw(SCREEN)
