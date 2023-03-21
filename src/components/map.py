@@ -133,8 +133,8 @@ class Map:
                         return
                     
         else:
-            self.monster_groups.update(self._player)
             self._player.absolute_pos += self.DIR[self._player.ismoving]*4
+            self.monster_group.update(self._player)
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False
