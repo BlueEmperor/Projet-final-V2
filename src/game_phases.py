@@ -2,7 +2,7 @@ import pygame
 
 from src.global_state import GlobalState
 GlobalState.load_main_screen()
-from src.components.map import Map
+from src.components.map.map import Map
 from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
 from src.components.items.sword import Sword
