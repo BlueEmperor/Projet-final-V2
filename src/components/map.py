@@ -5,6 +5,7 @@ from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
 from random import randint
 from src.components.entities.squelette import Squelette
+from src.components.entities.vampire import Vampire
 
 vec = pygame.math.Vector2
 
@@ -36,6 +37,7 @@ class Map:
         self.monster_group = pygame.sprite.Group()
         Squelette(vec(5,2)).add(self.monster_group)
         Squelette(vec(3,4)).add(self.monster_group)
+        Vampire(vec(9/10)).add(self.monster_group)
         
 
     def __repr__(self):
@@ -130,6 +132,8 @@ class Map:
                         self.moving_tick = 12
                         self._player.map_pos += self.DIR[key]
                         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
+                        for monster in self.monster_group:
+                            monster.turn_action(self)
                         return
                     
         else:

@@ -11,3 +11,6 @@ class Monster(Entity):
 
     def update(self, player):
         self.rect.topleft = vec(player.rect.topleft)-player.absolute_pos+self.absolute_pos
+    
+    def turn_action(self, m):
+        print("zob")
