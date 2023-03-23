@@ -5,6 +5,7 @@ GlobalState.load_main_screen()
 from src.components.map import Map
 from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
+from src.components.items.sword import Sword
 
 vec = pygame.math.Vector2
 
@@ -13,6 +14,11 @@ pygame.mouse.set_visible(False)
 player = Player()
 inventory_ui = InventoryUI(player)
 m = Map(player)
+
+for i in range(15):
+    player.add_in_inventory(Sword(), inventory_ui)
+
+print(player.hotbar, player.inventory)
 
 def main_menu_phase(events):
     pass
@@ -53,6 +59,8 @@ def gameplay_phase(events):
     m.draw(GlobalState.SCREEN)
     player.draw(GlobalState.SCREEN)
     inventory_ui.draw(GlobalState.SCREEN)
-
+    inventory_ui.inventory_sprite_group.draw(GlobalState.SCREEN)
+    inventory_ui.hotbar_sprite_group.draw(GlobalState.SCREEN)
+    
 def end_menu_phase(events):
     pass
