@@ -48,3 +48,7 @@ class Player(Entity):
                     L[1].append(vec(j,i))
 
         return(L)
+
+    def teleport(self, coord):
+        self.map_pos = coord
+        self.absolute_pos = coord*48

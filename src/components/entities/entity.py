@@ -13,5 +13,8 @@ class Entity(pygame.sprite.Sprite):
         self.current_image = 0
         self.ismoving = False
         
+    def __repr__(self):
+        return(self.name[0])
+    
     def draw(self,SCREEN):
         SCREEN.blit(self.image, self.rect)
