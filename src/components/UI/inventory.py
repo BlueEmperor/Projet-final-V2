@@ -2,177 +2,209 @@ import pygame
 
 from path import ASSETS_DIR, AUDIO_DIR
 from src.config import Config
-from src.components.items.sword import Sword
 
 vec = pygame.math.Vector2
 
 class InventoryUI:
     SELECTED_SOUND = pygame.mixer.Sound(AUDIO_DIR / "sounds" / "select_sound.mp3")
-    SELECT_IMAGE = pygame.image.load(ASSETS_DIR / "blue_hotbar.png").convert_alpha()
     SELECTED_SOUND.set_volume(0.08)
+    SELECT_IMAGE = pygame.image.load(ASSETS_DIR / "blue_hotbar.png").convert_alpha()
 
     def __init__(self, player):
+        #inventory image and rect
         self.inventory_image = pygame.image.load(ASSETS_DIR / "inventory.png").convert_alpha()
         self.inventory_rect = self.inventory_image.get_rect()
-        self.inventory_rect.center = (-Config.WIDTH//2, Config.HEIGHT//2)
+        self.inventory_rect.center = (-Config.WIDTH/2, Config.HEIGHT/2)
 
+        #hotbar image and rect
         self.hotbar_image = pygame.image.load(ASSETS_DIR / "hotbar.png").convert_alpha()
         self.hotbar_rect = self.hotbar_image.get_rect()
-        self.hotbar_rect.center = (Config.WIDTH//2, self.hotbar_rect.center[1])
+        self.hotbar_rect.center = (Config.WIDTH/2, self.hotbar_rect.center[1])
 
+        #fonts
         self.font = pygame.font.Font(ASSETS_DIR / "font.ttf", 48)
         self.font2 = pygame.font.Font(ASSETS_DIR / "font.ttf", 36)
 
         self._player = player
-        self.inventory_sprite_group = pygame.sprite.Group()
-        self.hotbar_sprite_group = pygame.sprite.Group()
-
+        self.inventory_group = pygame.sprite.Group()
+        self.hotbar_group = pygame.sprite.Group()
+        
+        #open and close variable
         self.isopen = False
         self.animation = 0
-        self.direction = 1
+        self.dir = 1
 
-        self.hover = None
-        self.selected = None
-        self.drag = None
+        #hover variable
+        self.hover_object = None
+        self.hover_coord = None
 
-        self.delta_drag = vec(0,0)
-        self.alpha_surface = pygame.Surface((Config.WIDTH, Config.HEIGHT), pygame.SRCALPHA)
+        #drag variable
+        self.drag_item = None
+        self.drag_offset = None
+
+        #selected item
+        self.select_item = None
+
+        #select rectangle when hover
+        self.select_surface = pygame.Surface((69,69), pygame.SRCALPHA)
+        self.select_surface.fill((25,212,255, 100))
 
     def __repr__(self) -> str:
-        return("--------------------------------\n"+"".join("@" if(i) else "." for i in self._player.hotbar)+"\n\n"+"\n".join("".join("@" if(j) else "." for j in self._player.inventory[i]) for i in range(len(self._player.inventory))))
+        return("--------------------------------\n"+" ".join(i.name[0] if(i) else "." for i in self._player.hotbar)+"\n\n\n"+"\n\n".join(" ".join(j.name[0] if(j) else "." for j in self._player.inventory[i]) for i in range(len(self._player.inventory))))
     
-    def replace(self, item, pos, hotbar):
-        if(hotbar):
-            self._player.hotbar[int(pos[0])] = item
-        else:
-            self._player.inventory[int(pos[1])][int(pos[0])] = item
-
-        if(item):
-            item.in_hotbar = hotbar
-            item.slot = pos
-
-    def delete(self, item):
-        #self._player.inventory.pop(self._player.inventory.index(item))
-        return
-        item.remove(self.items_sprite_group)
+    #--------------------------- Utilities functions --------------------------------
+    #Return the item at the coord depending on the location
+    def get_item(self, coord, location):
+        if(location == "i"):
+            item = self._player.inventory[int(coord[1])][int(coord[0])]
+            return(item)
+        elif(location == "h"):
+            item = self._player.hotbar[int(coord[0])]
+            return(item)
+        return(None)
     
-    def K_e_event(self, key):
-        if(not(self.animation)):
-            self.animation = 16
-            if(self.isopen):
-                self.direction = -1
-            else:
-                self.direction = 1
-            self.isopen = not(self.isopen)
+    #Put an item in the location without checking if an item was already present
+    def put(self, item, coord, location):
+        if(item != None):
+            item.location = location
+            item.slot = coord
+            item.kill()
+            item.add(self.inventory_group) if(location == "i") else item.add(self.hotbar_group)
+
+        if(location == "i"):
+            self._player.inventory[int(coord[1])][int(coord[0])] = item
+
+        elif(location == "h"):
+            self._player.hotbar[int(coord[0])] = item
+    
+    #Replace an item with None on the location
+    def remove(self, coord, location):
+        if(location == "i"):
+            self._player.inventory[int(coord[1])][int(coord[0])] = None
+        elif(location == "h"):
+            self._player.hotbar[int(coord[0])] = None
+            
+    #--------------------------- Events functions --------------------------------
+    def e_down_event(self):
+        #If not in animation
+        if(self.animation==0):
+            self.animation = 12 #Number of frame of the animation
+            self.dir*=(-1) #Invert the direction for the animation
+            self.isopen=not(self.isopen) #Invert the state of the inventory
+            self.drag_item=None #Remove the drag item
+            if(self.select_item != None and self.select_item.location == "i"):
+                self.select_item=None #Remove the select item
 
     def left_click_down_event(self):
-        #drag and drop
-        for sprite in self.hotbar_sprite_group:
-            if(sprite.rect.collidepoint(pygame.mouse.get_pos())):
-                #stockage du sprite sélectionné
-                self.selected = sprite
-                self.drag = sprite
-                self.delta_drag = vec(sprite.rect.topleft) - pygame.mouse.get_pos()
-                #InventoryUI.SELECTED_SOUND.play()
-                return
+        if(self.animation==0):
+            #Make the select item default to None
+            self.select_item = None
+            
+            #Get the select item with the hover coord
+            self.select_item = self.get_item(self.hover_coord, self.hover_object)
+            self.drag_item = self.select_item
 
-        if(self.isopen and not(self.animation)):
-            for sprite in self.inventory_sprite_group:
-                if(sprite.rect.collidepoint(pygame.mouse.get_pos())):
-                    #stockage du sprite sélectionné
-                    self.selected = sprite
-                    self.drag = sprite
-                    self.delta_drag = vec(sprite.rect.topleft) - pygame.mouse.get_pos()
-                    #InventoryUI.SELECTED_SOUND.play()
-                    return
-                
-        self.selected = None
+            #Set the offset with the mouse
+            if(self.drag_item!=None):
+                self.drag_offset = vec(pygame.mouse.get_pos())-self.drag_item.rect.topleft
     
     def left_click_up_event(self):
-        #drag and drop
-        if(self.drag):
-            if(self.hover!=None):
-                #échange de slot
-                if(self.hotbar_rect.collidepoint(pygame.mouse.get_pos())):
-                    a=self._player.hotbar[int(self.hover[0])]
-                else:
-                    a=self._player.inventory[int(self.hover[1])][int(self.hover[0])]
-                self.replace(a, self.drag.slot, self.drag.in_hotbar)
-                if(a):
-                    a.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
-            
-                self.replace(self.drag, self.hover, self.hotbar_rect.collidepoint(pygame.mouse.get_pos()))
+        if(self.drag_item!=None):
+            if(self.hover_object):
+                hover_item = self.get_item(self.hover_coord, self.hover_object)
 
-            self.drag.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
-            self.drag = None
+                #Exchange the 2 items slots
+                self.put(hover_item, self.drag_item.slot, self.drag_item.location)
+                self.put(self.drag_item, self.hover_coord, self.hover_object)
+
+            #Update coord of the 2 items
+                if(hover_item!=None):
+                    hover_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
+            self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
+
+            self.drag_item = None
             print(self)
-            #print(self._player.hotbar, self._player.inventory)
 
     def right_click_down_event(self):
-        if(self.isopen and not(self.animation)):
-            pass
-            
+        pass
+
+    def right_click_up_event(self):
+        pass
+
+    #--------------------------- update functions --------------------------------
     def update(self):
-        if(self.animation != 0):
-            self.animation -= 1
-            self.inventory_rect.topleft += vec(1,0)*(Config.WIDTH/16)*self.direction
-            self.inventory_sprite_group.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
-
         mouse_pos = pygame.mouse.get_pos()
+        self.hover_object = None
+        self.hover_coord = None
+
+        #If in animation
+        if(self.animation!=0):
+            self.animation -= 1
+            self.inventory_rect.center=(self.dir*(Config.WIDTH*(self.animation-6)/12), Config.HEIGHT/2)
+
+            #Update inventory items while in animation
+            for item in self.inventory_group:
+                item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
         
-        if(self.drag):
-            self.drag.rect.topleft = mouse_pos+self.delta_drag
+        else:
+            #If an item is dragged, put his center at the mouse position
+            if(self.drag_item!=None):
+                self.drag_item.rect.topleft=mouse_pos-self.drag_offset
 
-        if(self.hotbar_rect.collidepoint(mouse_pos)):
-            self.hover = (vec(mouse_pos)-(vec(self.hotbar_rect.topleft)+vec(89,11)))//72
-            if(not(self.hover[1]==0 and 0<=self.hover[0]<len(self._player.hotbar))):
-                self.hover=None
+        #If mouse collide with inventory
+        if(self.isopen and self.inventory_rect.collidepoint(mouse_pos)):
+            #calculate the position in the inventory
+            #topleft : (322, 34)
+            self.hover_coord = (mouse_pos - vec(322, 34) - vec(self.inventory_rect.topleft))//72
+            if(0<=self.hover_coord[1]<len(self._player.inventory) and 0<=self.hover_coord[0]<len(self._player.inventory[0])):
+                self.hover_object = "i"
 
+        #If mouse collide with hotbar
+        elif(self.hotbar_rect.collidepoint(mouse_pos)):
+            #calculate the position in the hotbar
+            #topleft : (88, 10)
+            self.hover_coord = (mouse_pos - vec(88, 10) - vec(self.hotbar_rect.topleft))//72
+            if(self.hover_coord[1]==0 and 0<=self.hover_coord[0]<len(self._player.hotbar)):
+                self.hover_object = "h"
 
-        if((self.isopen or (self.animation))):
-            if(self.inventory_rect.collidepoint(mouse_pos)):
-                self.hover = (vec(mouse_pos)-(vec(self.inventory_rect.topleft)+vec(323,35)))//72
-                if(not(0<=self.hover[1]<len(self._player.inventory) and 0<=self.hover[0]<len(self._player.inventory[int(self.hover[1])]))):
-                    self.hover=None
-            
-            
-            
+    #--------------------------- draw functions --------------------------------
     def draw(self, SCREEN):
-        SCREEN.blit(self.inventory_image, vec(self.inventory_rect.topleft))
-        SCREEN.blit(self.hotbar_image, vec(self.hotbar_rect.topleft))
+        #draw hotbar image
+        SCREEN.blit(self.hotbar_image, self.hotbar_rect)
+
+        #inventory select rectangle draw in hotbar
+        if(self.hover_object == "h"):
+            SCREEN.blit(self.select_surface, vec(90, 12) + vec(self.hotbar_rect.topleft) + self.hover_coord*72)
         
-        #hover tile
-        if(self.hover!=None):
-            self.alpha_surface.fill((0,0,0,0))
-            if(self.hotbar_rect.collidepoint(pygame.mouse.get_pos())):
-                pygame.draw.rect(self.alpha_surface, (150,150,150, 100), (vec(self.hotbar_rect.topleft)+vec(89,11)+self.hover*72,(70,70)))
-                
-            elif(self.inventory_rect.collidepoint(pygame.mouse.get_pos())):
-                if((self.isopen  and not(self.animation))):
-                    pygame.draw.rect(self.alpha_surface, (150,150,150, 100), (vec(self.inventory_rect.topleft)+vec(324,36)+self.hover*72,(70,70)))
+        #if not in animation and inventory is open, draw everything
+        if(self.isopen or self.animation!=0):
+            #draw inventory image
+            SCREEN.blit(self.inventory_image, self.inventory_rect)
             
-            SCREEN.blit(self.alpha_surface, (0,0))
-
-        if(self.selected):
-                SCREEN.blit(InventoryUI.SELECT_IMAGE, self.selected.rect.center-vec(37,37))
-
-        if(self.isopen or (self.animation)):
-            #player image
-            SCREEN.blit(self._player.big_image_list[self._player.current_image], vec(self.inventory_rect.topleft) + vec(87, 140)*1.5)
-
-            #health
-            SCREEN.blit(self.font.render(str(self._player.health)+"/"+str(self._player.max_health),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(40, 260)*1.5)
-
-            #gold
-            SCREEN.blit(self.font.render(str(self._player.gold),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(130, 260)*1.5)
+            #inventory select rectangle draw in inventory
+            if(self.hover_object == "i"):
+                SCREEN.blit(self.select_surface, vec(324, 36) + vec(self.inventory_rect.topleft) + self.hover_coord*72)
             
-            #draw sprites
-            self.inventory_sprite_group.draw(SCREEN)
+            #inventory items draw
+            self.inventory_group.draw(SCREEN)
+        
+        #hotbar items draw
+        self.hotbar_group.draw(SCREEN)
 
-            if(self.selected):
-                SCREEN.blit(InventoryUI.SELECT_IMAGE, self.selected.rect.center-vec(37,37))
+        #Draw the information of the select item
+        self.draw_select_information(SCREEN)
 
-                #info display
-                #top left : (216, 220)
-                SCREEN.blit(self.font2.render("Description : " + str(self.selected.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(220,223)*1.5)
-                SCREEN.blit(self.font2.render("Damage : " + str(self.selected.damage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(220,242)*1.5)
+        #Draw the dragged item
+        if(self.drag_item!=None):
+            self.drag_item.draw(SCREEN)
+        
+        elif(self.select_item!=None):
+            #Draw select image if there is not an item dragged
+            SCREEN.blit(InventoryUI.SELECT_IMAGE, self.select_item.rect)
+
+
+    def draw_select_information(self, SCREEN):
+        if(self.select_item != None):
+            if(self.select_item.type in ("sword", "wand")):
+                SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(220,223)*1.5)
+                SCREEN.blit(self.font2.render("Damage : " + str(self.select_item.damage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(220,242)*1.5)

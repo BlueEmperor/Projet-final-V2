@@ -22,13 +22,14 @@ class Player(Entity):
         if(len(slots[0])>0):
             self.hotbar[int(slots[0][0][0])]=item
             item.slot = slots[0][0]
-            item.in_hotbar = True
-            item.add(inventory_ui.hotbar_sprite_group)
+            item.location = "h"
+            item.add(inventory_ui.hotbar_group)
 
         elif(len(slots[1])>0):
             self.inventory[int(slots[1][0][1])][int(slots[1][0][0])]=item
             item.slot = slots[1][0]
-            item.add(inventory_ui.inventory_sprite_group)
+            item.location = "i"
+            item.add(inventory_ui.inventory_group)
         
         else:
             return(False)

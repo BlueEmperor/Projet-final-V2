@@ -13,13 +13,11 @@ from src.draw_cursor import DrawCursor
 FramePerSec = pygame.time.Clock()
 
 def update_game_display():
-    pygame.display.update()
+    pygame.display.flip()
     FramePerSec.tick(Config.FPS)
-
 
 def main():
     while 1:
-        fps = time()
         events = pygame.event.get()
         if GlobalState.GAME_STATE == GameStatus.MAIN_MENU:
             main_menu_phase(events)
@@ -35,8 +33,7 @@ def main():
                 exit()
         
         update_game_display()
-        GlobalState.SCREEN.fill((0,0,0))
-        pygame.display.set_caption(str(int(1/(time()-fps))))
+        pygame.display.set_caption(str(int(FramePerSec.get_fps())))
 
 
 if __name__ == "__main__":

@@ -77,7 +77,6 @@ class Map:
         self._roomsToReach.append(room)
         for i in range(int(room.c1.x), int(room.c2.x)):
             for j in range(int(room.c1.y), int(room.c2.y)):
-                print(j,i)
                 self.map[j][i]=Map.GROUND
     
     def findRoom(self, coord):
@@ -160,7 +159,7 @@ class Map:
                     L.append(Tile(Map.GROUND_TILE[random.randint(0,14)], rect))
 
                 elif(voisins==[1]*9):
-                    L.append(Tile(Map.WALL_TILE, rect))
+                    L.append(None)
 
                 elif(voisins[7]==0):
                     L.append(Tile(Map.BOTTOM_WALL_TILE, rect))
@@ -233,6 +232,7 @@ class Map:
     def draw(self, SCREEN):
         for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
             for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
-                self.tiles_sprites[j][i].draw(SCREEN, self)
+                if(self.tiles_sprites[j][i]!=None):
+                    self.tiles_sprites[j][i].draw(SCREEN, self)
         
         self.monster_group.draw(SCREEN)
