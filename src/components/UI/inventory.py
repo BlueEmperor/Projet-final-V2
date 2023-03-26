@@ -91,7 +91,10 @@ class InventoryUI:
             self.animation = 12 #Number of frame of the animation
             self.dir*=(-1) #Invert the direction for the animation
             self.isopen=not(self.isopen) #Invert the state of the inventory
-            self.drag_item=None #Remove the drag item
+            if(self.drag_item != None):
+                self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
+                self.drag_item=None #Remove the drag item
+                
             if(self.select_item != None and self.select_item.location == "i"):
                 self.select_item=None #Remove the select item
 
