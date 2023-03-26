@@ -19,7 +19,7 @@ class InventoryUI:
         #hotbar image and rect
         self.hotbar_image = pygame.image.load(ASSETS_DIR / "hotbar.png").convert_alpha()
         self.hotbar_rect = self.hotbar_image.get_rect()
-        self.hotbar_rect.center = (Config.WIDTH/2, self.hotbar_rect.center[1])
+        self.hotbar_rect.center = (Config.WIDTH/2, Config.HEIGHT-self.hotbar_rect.center[1])
 
         #fonts
         self.font = pygame.font.Font(ASSETS_DIR / "font.ttf", 48)
@@ -50,11 +50,11 @@ class InventoryUI:
         self.select_surface.fill((25,212,255, 100))
 
     def __repr__(self) -> str:
-        return("--------------------------------\n"+" ".join(i.name[0] if(i) else "." for i in self._player.hotbar)+"\n\n\n"+"\n\n".join(" ".join(j.name[0] if(j) else "." for j in self._player.inventory[i]) for i in range(len(self._player.inventory))))
+        return("\n################################################\n\n"+"\n".join("".join(j.name[0] if(j) else "." for j in self._player.inventory[i]) for i in range(len(self._player.inventory)))+"\n\n"+"".join(i.name[0] if(i) else "." for i in self._player.hotbar))
     
     #--------------------------- Utilities functions --------------------------------
     #Return the item at the coord depending on the location
-    def get_item(self, coord, location):
+    def get_item(self, coord, location) -> pygame.sprite.Sprite or None:
         if(location == "i"):
             item = self._player.inventory[int(coord[1])][int(coord[0])]
             return(item)
@@ -64,7 +64,7 @@ class InventoryUI:
         return(None)
     
     #Put an item in the location without checking if an item was already present
-    def put(self, item, coord, location):
+    def put(self, item, coord, location) -> None:
         if(item != None):
             item.location = location
             item.slot = coord
@@ -78,7 +78,7 @@ class InventoryUI:
             self._player.hotbar[int(coord[0])] = item
     
     #Replace an item with None on the location
-    def remove(self, coord, location):
+    def remove(self, coord, location) -> None:
         if(location == "i"):
             self._player.inventory[int(coord[1])][int(coord[0])] = None
         elif(location == "h"):
@@ -107,6 +107,11 @@ class InventoryUI:
             self.select_item = self.get_item(self.hover_coord, self.hover_object)
             self.drag_item = self.select_item
 
+            self._player.weapon = None
+            if(self.drag_item != None and self.drag_item.location == "h"):
+                self._player.weapon = self.drag_item
+            
+
             #Set the offset with the mouse
             if(self.drag_item!=None):
                 self.drag_offset = vec(pygame.mouse.get_pos())-self.drag_item.rect.topleft
@@ -120,6 +125,10 @@ class InventoryUI:
                 self.put(hover_item, self.drag_item.slot, self.drag_item.location)
                 self.put(self.drag_item, self.hover_coord, self.hover_object)
 
+                self._player.weapon = None
+                if(self.drag_item != None and self.drag_item.location == "h"):
+                    self._player.weapon = self.drag_item
+            
             #Update coord of the 2 items
                 if(hover_item!=None):
                     hover_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
@@ -139,7 +148,7 @@ class InventoryUI:
         mouse_pos = pygame.mouse.get_pos()
         self.hover_object = None
         self.hover_coord = None
-
+        
         #If in animation
         if(self.animation!=0):
             self.animation -= 1
@@ -156,17 +165,22 @@ class InventoryUI:
 
         #If mouse collide with inventory
         if(self.isopen and self.inventory_rect.collidepoint(mouse_pos)):
-            #calculate the position in the inventory
-            #topleft : (322, 34)
-            self.hover_coord = (mouse_pos - vec(322, 34) - vec(self.inventory_rect.topleft))//72
-            if(0<=self.hover_coord[1]<len(self._player.inventory) and 0<=self.hover_coord[0]<len(self._player.inventory[0])):
-                self.hover_object = "i"
+            if((vec(mouse_pos)-self.inventory_rect.topleft)[0]>=306):
+                #calculate the position in the inventory
+                #topleft : (322, 34)
+                self.hover_coord = (mouse_pos - vec(322, 34) - vec(self.inventory_rect.topleft))//72
+                if(0<=self.hover_coord[1]<len(self._player.inventory) and 0<=self.hover_coord[0]<len(self._player.inventory[0])):
+                    self.hover_object = "i"
+            
+            else:
+                #Armor equipment
+                pass
 
         #If mouse collide with hotbar
         elif(self.hotbar_rect.collidepoint(mouse_pos)):
             #calculate the position in the hotbar
             #topleft : (88, 10)
-            self.hover_coord = (mouse_pos - vec(88, 10) - vec(self.hotbar_rect.topleft))//72
+            self.hover_coord = (mouse_pos - vec(88, 16) - vec(self.hotbar_rect.topleft))//72
             if(self.hover_coord[1]==0 and 0<=self.hover_coord[0]<len(self._player.hotbar)):
                 self.hover_object = "h"
 
@@ -177,7 +191,7 @@ class InventoryUI:
 
         #inventory select rectangle draw in hotbar
         if(self.hover_object == "h"):
-            SCREEN.blit(self.select_surface, vec(90, 12) + vec(self.hotbar_rect.topleft) + self.hover_coord*72)
+            SCREEN.blit(self.select_surface, vec(90, 18) + vec(self.hotbar_rect.topleft) + self.hover_coord*72)
         
         #if not in animation and inventory is open, draw everything
         if(self.isopen or self.animation!=0):
@@ -188,14 +202,23 @@ class InventoryUI:
             if(self.hover_object == "i"):
                 SCREEN.blit(self.select_surface, vec(324, 36) + vec(self.inventory_rect.topleft) + self.hover_coord*72)
             
+            #player sprite draw
+            SCREEN.blit(self._player.big_image_list[self._player.current_image], self.inventory_rect.topleft+vec(130,210))
+
+            #Draw the information of the select item
+            self.draw_select_information(SCREEN)
+
+            #health
+            SCREEN.blit(self.font.render(f"{self._player.health}/{self._player.max_health}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(60,391))
+
+            #gold
+            SCREEN.blit(self.font.render(f"{self._player.gold}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(195,391))
+
             #inventory items draw
             self.inventory_group.draw(SCREEN)
         
         #hotbar items draw
         self.hotbar_group.draw(SCREEN)
-
-        #Draw the information of the select item
-        self.draw_select_information(SCREEN)
 
         #Draw the dragged item
         if(self.drag_item!=None):
@@ -205,9 +228,9 @@ class InventoryUI:
             #Draw select image if there is not an item dragged
             SCREEN.blit(InventoryUI.SELECT_IMAGE, self.select_item.rect)
 
-
+    #Draw the information of the select item
     def draw_select_information(self, SCREEN):
         if(self.select_item != None):
             if(self.select_item.type in ("sword", "wand")):
-                SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(220,223)*1.5)
-                SCREEN.blit(self.font2.render("Damage : " + str(self.select_item.damage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(220,242)*1.5)
+                SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
+                SCREEN.blit(self.font2.render("Damage : " + str(self.select_item.damage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
