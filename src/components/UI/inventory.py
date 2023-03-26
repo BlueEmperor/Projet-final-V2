@@ -209,7 +209,7 @@ class InventoryUI:
             self.draw_select_information(SCREEN)
 
             #health
-            SCREEN.blit(self.font.render(f"{self._player.health}/{self._player.max_health}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(60,391))
+            SCREEN.blit(self.font.render(f"{int(self._player.health)}/{int(self._player.max_health)}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(60,391))
 
             #gold
             SCREEN.blit(self.font.render(f"{self._player.gold}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(195,391))

@@ -5,6 +5,7 @@ GlobalState.load_main_screen()
 from src.components.map.map import Map
 from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
+from src.components.UI.stats import StatUI
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 
@@ -14,6 +15,7 @@ pygame.mouse.set_visible(False)
 
 player = Player()
 inventory_ui = InventoryUI(player)
+stat_ui = StatUI(player)
 m = Map(player)
 
 for i in range(10):
@@ -55,6 +57,7 @@ def gameplay_phase(events):
     m.draw(GlobalState.SCREEN)
     player.draw(GlobalState.SCREEN)
     inventory_ui.draw(GlobalState.SCREEN)
+    stat_ui.draw(GlobalState.SCREEN)
     
 def end_menu_phase(events):
     pass
