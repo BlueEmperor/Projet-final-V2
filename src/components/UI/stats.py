@@ -13,7 +13,7 @@ class StatUI:
         self._player = player
 
     def draw(self, SCREEN):
-        pygame.draw.rect(SCREEN, (50,50,50), pygame.Rect(105,36,225,81))
+        pygame.draw.rect(SCREEN, [65]*3, pygame.Rect(105,36,225,81))
 
         #Health
         pygame.draw.rect(SCREEN, (244,45,66), pygame.Rect(105,36,225*self._player.health/self._player.max_health,24))

@@ -135,7 +135,6 @@ class InventoryUI:
             self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
 
             self.drag_item = None
-            print(self)
 
     def right_click_down_event(self):
         pass
