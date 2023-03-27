@@ -6,6 +6,7 @@ from src.components.map.map import Map
 from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
 from src.components.UI.stats import StatUI
+from src.components.UI.minimap import MiniMap
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 
@@ -17,6 +18,7 @@ player = Player()
 inventory_ui = InventoryUI(player)
 stat_ui = StatUI(player)
 m = Map(player)
+minimap = MiniMap(m)
 
 for i in range(10):
     player.add_in_inventory(Sword(), inventory_ui)
@@ -47,17 +49,20 @@ def gameplay_phase(events):
         if(event.type == pygame.KEYDOWN):
             if(event.key == pygame.K_e):
                 inventory_ui.e_down_event()
-
+            elif(event.key == pygame.K_m):
+                minimap.m_down_event()
         elif(event.type == pygame.KEYUP):
             pass
+    
+    if(not(minimap.open)):
+        m.update()
+        inventory_ui.update()
 
-    m.update()
-    inventory_ui.update()
-
-    m.draw(GlobalState.SCREEN)
-    player.draw(GlobalState.SCREEN)
-    inventory_ui.draw(GlobalState.SCREEN)
-    stat_ui.draw(GlobalState.SCREEN)
+        m.draw(GlobalState.SCREEN)
+        player.draw(GlobalState.SCREEN)
+        inventory_ui.draw(GlobalState.SCREEN)
+        stat_ui.draw(GlobalState.SCREEN)
+    minimap.draw(GlobalState.SCREEN)
     
 def end_menu_phase(events):
     pass
