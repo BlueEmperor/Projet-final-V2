@@ -52,8 +52,6 @@ class Map:
         self.monster_zob()
         self.monster_group.update(player)
         self.moving_tick = 0
-        print("-------------------------------")
-        print(self.A_star(player.map_pos, self.monster_group.sprites()[0].map_pos))
         
 
     def __repr__(self):
@@ -93,7 +91,6 @@ class Map:
         open=[Node(start_coord,-1,end_coord)]
         close=[]
         current=open[0]
-        print(start_coord, end_coord)
         while(True):
             if(len(open)==0):
                 return([])
@@ -106,11 +103,11 @@ class Map:
                 break
             
             for voisin in Node.voisins(current):
-                if(self.get_item(voisin.coord)!=self.GROUND or (voisin.coord in [i.coord for i in close])):
+                if((voisin.coord != end_coord and self.get_item(voisin.coord)!=self.GROUND) or (voisin.coord in [i.coord for i in close])):
                     continue
 
-                if(not(voisin in open) or voisin.is_shortest(open)):
-                    if(not(voisin in open)):
+                if(not(voisin.coord in [node.coord for node in open]) or voisin.is_shortest(open)):
+                    if(not(voisin.coord in [node.coord for node in open])):
                         open.append(voisin)
         
         list=[]

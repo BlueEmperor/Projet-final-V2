@@ -15,14 +15,13 @@ class Node:
         return(str(self.coord))
     
     def is_shortest(self, open):
-        if(not(self in open)):
-            return(True)
-        
         for node in open:
             if(node.coord == self.coord):
                 if(node.total_cost<self.total_cost):
+                    print(len(open))
                     open.remove(node)
                     open.append(self)
+                    print(len(open))
                     return(False)
         return(True)
     
