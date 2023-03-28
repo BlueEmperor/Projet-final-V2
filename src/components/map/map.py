@@ -62,26 +62,36 @@ class Map:
     def __len__(self):
         return(len(self.map))
     
+    #--------------------------- Utilities functions --------------------------------
+    #Remove the entity in the map
+    def rm(self, entity):
+        self.map[int(entity.map_pos[1])][int(entity.map_pos[0])] = Map.GROUND
+
+    #Put the entity in the map at the coord
+    def put(self, entity, coord):
+        if(coord in self):
+            self.map[int(coord[1])][int(coord[0])]=entity
+
+    #Get the item at the coord
+    def get_item(self, coord):
+        if(coord in self):
+            return(self.map[int(coord[1])][int(coord[0])])
+        return(Map.WALL)
+    
+    #Get the pos of the element
     def pos(self, element):
         for i in range(len(self)):
             for j in range(len(self)):
                 if(self.map[j][i]==element):
                     return(vec(i,j))
     
-    def rm(self, entity):
-        self.map[int(entity.map_pos[1])][int(entity.map_pos[0])] = Map.GROUND
-
-    def put(self, entity, coord):
-        if(coord in self):
-            self.map[int(coord[1])][int(coord[0])]=entity
-
+    #--------------------------- Map generation --------------------------------
     def addRoom(self, room):
         self._roomsToReach.append(room)
         for i in range(int(room.c1.x), int(room.c2.x)):
             for j in range(int(room.c1.y), int(room.c2.y)):
                 self.map[j][i]=Map.GROUND
         
-
     
     def findRoom(self, coord):
         for room in self._roomsToReach:
@@ -136,20 +146,18 @@ class Map:
         for room in self._rooms:
             for i in range(random.randint(1,3)):
                 x=random.randint(room.c1.x,room.c2.x-1)
-                y=random.randint(room.c1.y,room.c2.y-1) 
+                y=random.randint(room.c1.y,room.c2.y-1)
+                #Try to put the monster in the room until the pos is empty
                 while(self.get_item(vec(x,y))!=self.GROUND):
                     x=random.randint(room.c1.x,room.c2.x-1)
-                    y=random.randint(room.c1.y,room.c2.y-1) 
+                    y=random.randint(room.c1.y,room.c2.y-1)
 
                 monster=Map.MONSTER_LIST[random.randint(0,len(Map.MONSTER_LIST)-1)](vec(x,y))
                 self.put(monster, vec(x,y))
                 monster.add(self.monster_group)
-    
-    def get_item(self, coord):
-        if(coord in self):
-            return(self.map[int(coord[1])][int(coord[0])])
-        return(Map.WALL)
 
+    #--------------------------- Draw map generation --------------------------------
+    #Get the neighbors of the tile
     def get_voisins(self, coord):
         L = [vec(-1,-1), vec(0,-1), vec(1,-1), vec(-1,0),vec(0,0), vec(1,0), vec(-1,1), vec(0,1), vec(1, 1)]
         voisins = []
@@ -157,6 +165,7 @@ class Map:
             voisins.append(0 if(self.get_item(i+coord)==Map.GROUND) else 1)
         return(voisins)
 
+    #Create the list of the sprites for the map
     def create_draw_map(self, m):
         class Tile:
             def __init__(self, image, rect):
@@ -225,31 +234,43 @@ class Map:
                     L.append(Tile(Map.NOT_DEFINED_TILE, rect))
             self.tiles_sprites.append(L)
 
+    #--------------------------- Update functions --------------------------------
     def update(self):
         if(not(self._player.ismoving)):
+            #Check if a key is pressed
             keys=pygame.key.get_pressed()
             for key in self.DIR.keys():
                 if(keys[key]):
+                    #Check if the player can move
                     if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
+                        #Is executed at every move of the player
                         self._player.ismoving=key
                         self.moving_tick = 12
+
+                        #Move the player on the map
                         self.rm(self._player)
                         self._player.map_pos += self.DIR[key]
-                        self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
                         self.put(self._player, self._player.map_pos)
+
+                        #Update the numbers of the tile to draw
+                        self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
                         return
                     
         else:
+            #Update the visual position of every entities
             self._player.absolute_pos += self.DIR[self._player.ismoving]*4
             self.monster_group.update(self._player)
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False
 
+    #--------------------------- Draw functions --------------------------------
     def draw(self, SCREEN):
+        #Draw the map
         for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
             for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
                 if(self.tiles_sprites[j][i]!=None):
                     self.tiles_sprites[j][i].draw(SCREEN, self)
         
+        #Draw the monsters
         self.monster_group.draw(SCREEN)

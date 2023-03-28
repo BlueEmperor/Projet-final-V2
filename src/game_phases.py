@@ -60,8 +60,9 @@ def gameplay_phase(events):
 
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN)
-        inventory_ui.draw(GlobalState.SCREEN)
         stat_ui.draw(GlobalState.SCREEN)
+        inventory_ui.draw(GlobalState.SCREEN)
+
     minimap.draw(GlobalState.SCREEN)
     
 def end_menu_phase(events):
