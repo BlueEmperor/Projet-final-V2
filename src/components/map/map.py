@@ -5,6 +5,7 @@ from src.config import Config
 import random
 from src.components.map.room import Room
 from src.components.entities.squelette import Squelette
+from src.components.entities.vampire import Vampire
 
 vec = pygame.math.Vector2
 
@@ -31,10 +32,12 @@ class Map:
     LEFT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "left_wall_and_corner.png").convert_alpha()
     RIGHT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "right_wall_and_corner.png").convert_alpha()
     NOT_DEFINED_TILE = pygame.image.load(MAP_DIR / "rien.png").convert_alpha()
+    MONSTER_LIST = [Squelette, Vampire]
 
     def __init__(self, player, size=50, nbrooms=20):
         self._player = player
         self.map = [[self.WALL]*size for _ in range(size)]
+        self.monster_group = pygame.sprite.Group()
         self.nbrooms = nbrooms
         self._roomsToReach = []
         self._rooms = []
@@ -45,10 +48,9 @@ class Map:
         self.tiles_sprites = []
         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
         self.create_draw_map(self.map)
+        self.monster_zob()
         self.moving_tick = 0
-        self.monster_group = pygame.sprite.Group()
-        Squelette(vec(5,2)).add(self.monster_group)
-        Squelette(vec(3,4)).add(self.monster_group)
+
         
 
     def __repr__(self):
@@ -78,6 +80,8 @@ class Map:
         for i in range(int(room.c1.x), int(room.c2.x)):
             for j in range(int(room.c1.y), int(room.c2.y)):
                 self.map[j][i]=Map.GROUND
+        
+
     
     def findRoom(self, coord):
         for room in self._roomsToReach:
@@ -127,7 +131,20 @@ class Map:
             r=self.randRoom()
             if(self.intersectNone(r)):
                 self.addRoom(r)
+    
+    def monster_zob(self):
+        for room in self._rooms:
+            for i in range(random.randint(1,3)):
+                x=random.randint(room.c1.x,room.c2.x-1)
+                y=random.randint(room.c1.y,room.c2.y-1) 
+                while(self.get_item(vec(x,y))!=self.GROUND):
+                    x=random.randint(room.c1.x,room.c2.x-1)
+                    y=random.randint(room.c1.y,room.c2.y-1) 
 
+                monster=Map.MONSTER_LIST[random.randint(0,len(Map.MONSTER_LIST)-1)](vec(x,y))
+                self.put(monster, vec(x,y))
+                monster.add(self.monster_group)
+    
     def get_item(self, coord):
         if(coord in self):
             return(self.map[int(coord[1])][int(coord[0])])
