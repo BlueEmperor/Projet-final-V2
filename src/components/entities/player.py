@@ -15,7 +15,7 @@ class Player(Entity):
         self.hotbar = [None for i in range(9)]
         self.inventory = [[None for i in range(9)] for j in range(4)]
         self.gold = 0
-        self.mana = 39
+        self.mana = 96
         self.max_mana = 100
         self.level = 62
     

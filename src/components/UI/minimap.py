@@ -24,13 +24,13 @@ class MiniMap:
             for j in range(len(map)):
                 item = map.get_item(vec(i,j))
                 if(item == map.WALL):
-                    L[i][j] = (100,70,30)
+                    L[i][j] = (100,70,30) # type: ignore
                 
                 elif(isinstance(item, Player)):
-                    L[i][j] = (0, 255, 0)
+                    L[i][j] = (0, 255, 0) # type: ignore
 
                 else:
-                    L[i][j] = (200,150,70)
+                    L[i][j] = (200,150,70) # type: ignore
         
         return(L)
     
@@ -42,7 +42,7 @@ class MiniMap:
             pygame.draw.rect(SCREEN, [240]*3, pygame.Rect(Config.WIDTH/2-r*taille/2-10, Config.HEIGHT/2-r*taille/2-10, r*taille+20, r*taille+20))
             for i in range(taille):
                 for j in range(taille):
-                    pygame.draw.rect(SCREEN, self.draw_minimap[i][j], pygame.Rect(Config.WIDTH/2-r*taille/2+i*r, Config.HEIGHT/2-r*taille/2+j*r, r, r))
+                    pygame.draw.rect(SCREEN, self.draw_minimap[i][j], pygame.Rect(Config.WIDTH/2-r*taille/2+i*r, Config.HEIGHT/2-r*taille/2+j*r, r, r)) # type: ignore
         else:
             return
             pygame.draw.rect(SCREEN, [220]*3, self.rect)

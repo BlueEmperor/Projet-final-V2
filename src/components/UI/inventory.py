@@ -36,11 +36,11 @@ class InventoryUI:
 
         #hover variable
         self.hover_object = None
-        self.hover_coord = None
+        self.hover_coord = vec(0,0)
 
         #drag variable
         self.drag_item = None
-        self.drag_offset = None
+        self.drag_offset = vec(0,0)
 
         #selected item
         self.select_item = None
@@ -146,12 +146,12 @@ class InventoryUI:
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         self.hover_object = None
-        self.hover_coord = None
+        self.hover_coord = vec(0,0)
         
         #If in animation
         if(self.animation!=0):
             self.animation -= 1
-            self.inventory_rect.center=(self.dir*(Config.WIDTH*(self.animation-6)/12), Config.HEIGHT/2)
+            self.inventory_rect.center=(self.dir*(Config.WIDTH*(self.animation-6)//12), Config.HEIGHT//2)
 
             #Update inventory items while in animation
             for item in self.inventory_group:

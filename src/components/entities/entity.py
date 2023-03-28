@@ -5,7 +5,7 @@ class Entity(pygame.sprite.Sprite):
         super().__init__()
         self.name = name
         self.map_pos = pos
-        self.health = health*2/3
+        self.health = int(health*2/5)
         self.max_health = health
         self.absolute_pos = pos*48
         self.image = image_list[0]

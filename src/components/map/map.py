@@ -1,8 +1,9 @@
 import pygame
+import random
 
 from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
-import random
+from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.squelette import Squelette
 from src.components.entities.vampire import Vampire
@@ -51,7 +52,8 @@ class Map:
         self.monster_zob()
         self.monster_group.update(player)
         self.moving_tick = 0
-
+        print("-------------------------------")
+        print(self.A_star(player.map_pos, self.monster_group.sprites()[0].map_pos))
         
 
     def __repr__(self):
@@ -85,6 +87,55 @@ class Map:
             for j in range(len(self)):
                 if(self.map[j][i]==element):
                     return(vec(i,j))
+    
+    #--------------------------- Utilities algorithmes functions --------------------------------
+    def A_star(self,start_coord,end_coord):
+        open=[Node(start_coord,-1,end_coord)]
+        close=[]
+        current=open[0]
+        print(start_coord, end_coord)
+        while(True):
+            if(len(open)==0):
+                return([])
+            
+            current=Node.lowest_node(open)
+            open.remove(current)
+            close.append(current)
+
+            if(current.coord==vec(end_coord)):
+                break
+            
+            for voisin in Node.voisins(current):
+                if(self.get_item(voisin.coord)!=self.GROUND or (voisin.coord in [i.coord for i in close])):
+                    continue
+
+                if(not(voisin in open) or voisin.is_shortest(open)):
+                    if(not(voisin in open)):
+                        open.append(voisin)
+        
+        list=[]
+        while(current.parent!=None):
+            list.append(current.coord)
+            current=current.parent
+        return(list[1:])
+    
+    def line_of_sight(self, coord1, coord2):
+        list = []
+        x1,y1,x2,y2 = coord1[0], coord1[1], coord2[0], coord2[1]
+        x,y = x1,y1
+        length = abs((x2-x1) if abs(x2-x1) > abs(y2-y1) else (y2-y1))
+        dx = (x2-x1)/float(length)
+        dy = (y2-y1)/float(length)
+        list.append([round(x),round(y)])
+        for i in range(int(length)):
+            x += dx
+            y += dy
+            list.append([round(x),round(y)])
+
+        for i in list:
+            if(not(self.map[int(i[1])][int(i[0])]==self.GROUND or i in (coord1,coord2))):
+                return(False)
+        return(True)
     
     #--------------------------- Map generation --------------------------------
     def addRoom(self, room):
@@ -181,7 +232,7 @@ class Map:
             for i in range(len(m[j])): 
                 voisins = self.get_voisins(vec(i,j))
                 rect = pygame.Rect(0,0, 48,48)
-                rect.topleft=vec(i,j)*48
+                rect.topleft=vec(i,j)*48 # type: ignore
                 if(self.get_item(vec(i,j))!=Map.WALL):
                     L.append(Tile(Map.GROUND_TILE[random.randint(0,14)], rect))
 

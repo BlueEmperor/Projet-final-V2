@@ -28,7 +28,7 @@ def main_menu_phase(events):
     pass
 
 def gameplay_phase(events):
-    GlobalState.SCREEN.fill((37,19,26))
+    GlobalState.SCREEN.fill((37,19,26)) # type: ignore
     for event in events:
         #Mouses events
         if(event.type == pygame.MOUSEBUTTONDOWN):
