@@ -49,6 +49,7 @@ class Map:
         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
         self.create_draw_map(self.map)
         self.monster_zob()
+        self.monster_group.update(player)
         self.moving_tick = 0
 
         

@@ -14,12 +14,12 @@ class InventoryUI:
         #inventory image and rect
         self.inventory_image = pygame.image.load(ASSETS_DIR / "inventory.png").convert_alpha()
         self.inventory_rect = self.inventory_image.get_rect()
-        self.inventory_rect.center = (-Config.WIDTH/2, Config.HEIGHT/2)
+        self.inventory_rect.center = (-Config.WIDTH//2, Config.HEIGHT//2)
 
         #hotbar image and rect
         self.hotbar_image = pygame.image.load(ASSETS_DIR / "hotbar.png").convert_alpha()
         self.hotbar_rect = self.hotbar_image.get_rect()
-        self.hotbar_rect.center = (Config.WIDTH/2, Config.HEIGHT-self.hotbar_rect.center[1])
+        self.hotbar_rect.center = (Config.WIDTH//2, Config.HEIGHT-self.hotbar_rect.center[1])
 
         #fonts
         self.font = pygame.font.Font(ASSETS_DIR / "font.ttf", 48)
@@ -54,7 +54,7 @@ class InventoryUI:
     
     #--------------------------- Utilities functions --------------------------------
     #Return the item at the coord depending on the location
-    def get_item(self, coord, location) -> pygame.sprite.Sprite or None:
+    def get_item(self, coord, location):
         if(location == "i"):
             item = self._player.inventory[int(coord[1])][int(coord[0])]
             return(item)
@@ -64,7 +64,7 @@ class InventoryUI:
         return(None)
     
     #Put an item in the location without checking if an item was already present
-    def put(self, item, coord, location) -> None:
+    def put(self, item, coord, location):
         if(item != None):
             item.location = location
             item.slot = coord
