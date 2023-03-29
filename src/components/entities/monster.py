@@ -18,9 +18,36 @@ class Monster(Entity):
         self.weapon = weapon
         self.health = health
         self.max_health = health
+        self.aggro = True
 
     def update(self, player):
         self.rect.topleft = vec(player.rect.topleft)-player.absolute_pos+self.absolute_pos
+        if self.ismoving !=False:
+            self.absolute_pos += self.ismoving
+            self.moving_tick-=1
+            if(self.moving_tick==0):
+                self.ismoving=False
+
+    def can_attack(self,other,m):
+        return False
     
-    def turn_action(self, m):
-        print("zob")
+    def move(self,m):
+        coord = (self.map_pos-m._player.map_pos)
+        if((coord[0]**2+coord[1]**2)**0.5>8 or not(self.aggro)):
+            return
+        
+        chemin=m.A_star(self.map_pos, m._player.map_pos)
+        if(len(chemin)==0):
+            return
+        
+        m.move(self.map_pos,chemin[-1])
+        self.ismoving=(chemin[-1]-self.map_pos)*4
+        self.map_pos=chemin[-1]
+        self.moving_tick = 12
+       
+    
+    def turn_action(self, m,player):
+        if self.can_attack(player,m):
+            pass
+        else:
+            self.move(m)

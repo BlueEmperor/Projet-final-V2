@@ -10,6 +10,7 @@ class Entity(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.current_image = 0
         self.ismoving = False
+        self.moving_tick=0
         
     def __repr__(self):
         return(self.name[0])

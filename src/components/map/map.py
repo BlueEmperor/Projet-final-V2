@@ -84,6 +84,11 @@ class Map:
                 if(self.map[j][i]==element):
                     return(vec(i,j))
     
+    def move(self, coord1, coord2):
+        item = self.get_item(coord1)
+        self.rm(item)
+        self.put(item, coord2)
+    
     #--------------------------- Utilities algorithmes functions --------------------------------
     def A_star(self,start_coord,end_coord):
         open=[Node(start_coord,-1,end_coord)]
@@ -283,7 +288,7 @@ class Map:
 
     #--------------------------- Update functions --------------------------------
     def update(self):
-        if(not(self._player.ismoving)):
+        if(self._player.ismoving == False):
             #Check if a key is pressed
             keys=pygame.key.get_pressed()
             for key in self.DIR.keys():
@@ -291,13 +296,15 @@ class Map:
                     #Check if the player can move
                     if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
                         #Is executed at every move of the player
-                        self._player.ismoving=key
+                        self._player.ismoving=self.DIR[key]
                         self.moving_tick = 12
 
                         #Move the player on the map
                         self.rm(self._player)
                         self._player.map_pos += self.DIR[key]
                         self.put(self._player, self._player.map_pos)
+                        for monster in self.monster_group:
+                            monster.turn_action(self,self._player)
 
                         #Update the numbers of the tile to draw
                         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
@@ -305,11 +312,11 @@ class Map:
                     
         else:
             #Update the visual position of every entities
-            self._player.absolute_pos += self.DIR[self._player.ismoving]*4
-            self.monster_group.update(self._player)
+            self._player.absolute_pos += self._player.ismoving*4
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False
+        self.monster_group.update(self._player)
 
     #--------------------------- Draw functions --------------------------------
     def draw(self, SCREEN):
