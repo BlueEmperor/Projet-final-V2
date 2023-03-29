@@ -5,8 +5,7 @@ from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
 from src.components.map.node import Node
 from src.components.map.room import Room
-from src.components.entities.squelette import Squelette
-from src.components.entities.vampire import Vampire
+from src.components.entities.monster import Monster
 
 vec = pygame.math.Vector2
 
@@ -33,7 +32,6 @@ class Map:
     LEFT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "left_wall_and_corner.png").convert_alpha()
     RIGHT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "right_wall_and_corner.png").convert_alpha()
     NOT_DEFINED_TILE = pygame.image.load(MAP_DIR / "rien.png").convert_alpha()
-    MONSTER_LIST = [Squelette, Vampire]
 
     def __init__(self, player, size=50, nbrooms=20):
         self._player = player
@@ -201,7 +199,7 @@ class Map:
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
 
-                monster=Map.MONSTER_LIST[random.randint(0,len(Map.MONSTER_LIST)-1)](vec(x,y))
+                monster=Monster(*Monster.MONSTER_LIST[random.randint(0,len(Monster.MONSTER_LIST)-1)], vec(x,y))
                 self.put(monster, vec(x,y))
                 monster.add(self.monster_group)
 
