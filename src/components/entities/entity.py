@@ -1,7 +1,7 @@
 import pygame
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self,name,pos, image_list):
+    def __init__(self,name,pos, image_list, health=0):
         super().__init__()
         self.name = name
         self.map_pos = pos
@@ -11,9 +11,20 @@ class Entity(pygame.sprite.Sprite):
         self.current_image = 0
         self.ismoving = False
         self.moving_tick=0
+        self.health = health
         
     def __repr__(self):
         return(self.name[0])
     
     def draw(self,SCREEN):
         SCREEN.blit(self.image, self.rect)
+
+    def meet(self,other):
+        if isinstance(other,Entity):
+            if (other.health > self.weapon.damage):
+                other.health-= self.weapon.damage
+            else:
+                other.health=0
+
+
+

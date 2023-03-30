@@ -88,6 +88,8 @@ class Map:
         item = self.get_item(coord1)
         self.rm(item)
         self.put(item, coord2)
+
+
     
     #--------------------------- Utilities algorithmes functions --------------------------------
     def A_star(self,start_coord,end_coord):
@@ -304,7 +306,7 @@ class Map:
                         self._player.map_pos += self.DIR[key]
                         self.put(self._player, self._player.map_pos)
                         for monster in self.monster_group:
-                            monster.turn_action(self,self._player)
+                            monster.turn_action(self)
 
                         #Update the numbers of the tile to draw
                         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]

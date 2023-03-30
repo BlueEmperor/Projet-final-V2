@@ -16,3 +16,5 @@ class Sword(Item):
         self.description = "Une épée qui fait mal !"
         self.damage = 3
         self.durability = 10
+        self.range = 1
+        self.wall_ability = False

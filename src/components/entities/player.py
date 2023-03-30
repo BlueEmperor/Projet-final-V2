@@ -58,3 +58,4 @@ class Player(Entity):
     def teleport(self, coord):
         self.map_pos = coord
         self.absolute_pos = coord*48
+
