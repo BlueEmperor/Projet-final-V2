@@ -41,7 +41,7 @@ class Monster(Entity):
             return
         
         chemin=m.A_star(self.map_pos, m._player.map_pos)
-        if(len(chemin)<=self.weapon.range):
+        if(len(chemin)<self.weapon.range):
             return
         
         m.move(self.map_pos,chemin[-1])

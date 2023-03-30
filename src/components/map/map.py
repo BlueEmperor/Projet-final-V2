@@ -206,7 +206,7 @@ class Map:
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
 
-                monster=Monster(*Monster.MONSTER_LIST[random.randint(0,len(Monster.MONSTER_LIST)-1)], vec(x,y))
+                monster=Monster(*Monster.MONSTER_LIST[random.randint(0,len(Monster.MONSTER_LIST)-1)], vec(x,y)) # type: ignore
                 self.put(monster, vec(x,y))
                 monster.add(self.monster_group)
 
