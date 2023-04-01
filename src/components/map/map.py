@@ -1,6 +1,7 @@
 import pygame
 import random
 
+from src.components.entities.coffre import Coffre
 from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
 from src.components.map.node import Node
@@ -37,6 +38,7 @@ class Map:
         self._player = player
         self.map = [[self.WALL]*size for _ in range(size)]
         self.monster_group = pygame.sprite.Group()
+        self.box_group = pygame.sprite.Group()
         self.nbrooms = nbrooms
         self._roomsToReach = []
         self._rooms = []
@@ -48,7 +50,9 @@ class Map:
         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
         self.create_draw_map(self.map)
         self.monster_zob()
+        self.coffre_zob()
         self.monster_group.update(player)
+        self.box_group.update()
         self.moving_tick = 0
         
 
@@ -210,6 +214,25 @@ class Map:
                 self.put(monster, vec(x,y))
                 monster.add(self.monster_group)
 
+    def coffre_zob(self):
+        for room in self._rooms:
+            for i in range(random.randint(0,1)):
+                if i ==0:
+                    return
+                x=random.randint(room.c1.x,room.c2.x-1)
+                y=random.randint(room.c1.y,room.c2.y-1)
+
+                while(self.get_item(vec(x,y))!=self.GROUND):
+                    x=random.randint(room.c1.x,room.c2.x-1)
+                    y=random.randint(room.c1.y,room.c2.y-1)
+                
+                box=Coffre(vec(x,y),Coffre.COFFRE_EZ)
+                self.put(box, vec(x,y))
+                box.add(self.box_group)
+                print(self.box_group)
+
+
+
     #--------------------------- Draw map generation --------------------------------
     #Get the neighbors of the tile
     def get_voisins(self, coord):
@@ -319,6 +342,7 @@ class Map:
             if(self.moving_tick==0):
                 self._player.ismoving=False
         self.monster_group.update(self._player)
+        self.box_group.update(self._player)
 
     #--------------------------- Draw functions --------------------------------
     def draw(self, SCREEN):
@@ -330,3 +354,4 @@ class Map:
         
         #Draw the monsters
         self.monster_group.draw(SCREEN)
+        self.box_group.draw(SCREEN)

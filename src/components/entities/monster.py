@@ -51,8 +51,9 @@ class Monster(Entity):
        
     
     def turn_action(self, m):
-        if self.can_attack(m):
-            self.meet(m._player)
-            print(m._player.health)
-        else:
-            self.move(m)
+        if m.line_of_sight(self.map_pos, m._player.map_pos):
+            if self.can_attack(m):
+                self.meet(m._player)
+                print(m._player.health)
+            else:
+                self.move(m)
