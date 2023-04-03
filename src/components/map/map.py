@@ -52,7 +52,7 @@ class Map:
         self.monster_zob()
         self.coffre_zob()
         self.monster_group.update(player)
-        self.box_group.update()
+        self.box_group.update(player)
         self.moving_tick = 0
         
 
@@ -216,9 +216,7 @@ class Map:
 
     def coffre_zob(self):
         for room in self._rooms:
-            for i in range(random.randint(0,1)):
-                if i ==0:
-                    return
+            for _ in range(random.randint(0,1)):
                 x=random.randint(room.c1.x,room.c2.x-1)
                 y=random.randint(room.c1.y,room.c2.y-1)
 
@@ -226,7 +224,7 @@ class Map:
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
                 
-                box=Coffre(vec(x,y),Coffre.COFFRE_EZ)
+                box=Coffre(vec(x,y))
                 self.put(box, vec(x,y))
                 box.add(self.box_group)
                 print(self.box_group)
@@ -334,7 +332,7 @@ class Map:
                         #Update the numbers of the tile to draw
                         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
                         return
-                    
+
         else:
             #Update the visual position of every entities
             self._player.absolute_pos += self._player.ismoving*4

@@ -6,15 +6,16 @@ from src.components.entities.entity import Entity
 vec = pygame.math.Vector2
 
 class Coffre(Entity):
-    COFFRE_EZ = ("coffre_ez",pygame.image.load(ASSETS_DIR / "coffre.png").convert_alpha(),1)
-    def __init__(self,pos,name,image_list, open_time=1):
-        super().__init__(name,pos,image_list)
+    COFFRE_EZ = [pygame.image.load(ASSETS_DIR / "coffre.png").convert_alpha()]
+    def __init__(self,pos, open_time=1):
+        super().__init__("coffre",pos,Coffre.COFFRE_EZ)
         self.description = "Un coffre"
         self.open_time = open_time
         self.wall_ability = False
+        self.isopening = False
 
     def update(self, player):
-        self.rect.topleft = vec(self.rect.topleft)
+        self.rect.topleft = vec(player.rect.topleft)-player.absolute_pos+self.absolute_pos
         if self.isopening !=False:
             return
         else: 

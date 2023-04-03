@@ -1,8 +1,7 @@
 import pygame
-pygame.init()
-
 from sys import exit
-from time import time
+
+pygame.init()
 
 from src.config import Config
 from src.global_state import GlobalState
