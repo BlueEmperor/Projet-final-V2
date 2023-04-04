@@ -13,8 +13,9 @@ class Wand(Item):
         self.rect = self.image.get_rect()
         self.name = "baton"
         self.type = "wand"
+        self.attack_type = "linear"
         self.description = "Un baton dangereux !"
         self.damage = 2
         self.durability = 15
-        self.range = 4
+        self.range = vec(3, 5)
         self.wall_ability = True

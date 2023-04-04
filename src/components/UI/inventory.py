@@ -98,7 +98,7 @@ class InventoryUI:
             if(self.select_item != None and self.select_item.location == "i"):
                 self.select_item=None #Remove the select item
 
-    def left_click_down_event(self):
+    def left_click_down_event(self, m):
         if(self.animation==0):
             #Make the select item default to None
             self.select_item = None
@@ -110,7 +110,7 @@ class InventoryUI:
             self._player.weapon = None
             if(self.drag_item != None and self.drag_item.location == "h"):
                 self._player.weapon = self.drag_item
-            
+                m.create_attack_zone(self._player.map_pos, self._player.weapon)
 
             #Set the offset with the mouse
             if(self.drag_item!=None):

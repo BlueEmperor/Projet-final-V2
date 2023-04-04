@@ -13,8 +13,9 @@ class Sword(Item):
         self.rect = self.image.get_rect()
         self.name = "sword"
         self.type = "sword"
+        self.attack_type = "zone"
         self.description = "Une épée qui fait mal !"
         self.damage = 3
         self.durability = 10
-        self.range = 1
+        self.range = vec(1,3)
         self.wall_ability = False

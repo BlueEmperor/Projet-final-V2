@@ -1,5 +1,6 @@
 import pygame
 import random
+from math import cos, sin, pi, floor
 
 from src.components.entities.coffre import Coffre
 from path import MAP_DIR, ASSETS_DIR
@@ -33,12 +34,15 @@ class Map:
     LEFT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "left_wall_and_corner.png").convert_alpha()
     RIGHT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "right_wall_and_corner.png").convert_alpha()
     NOT_DEFINED_TILE = pygame.image.load(MAP_DIR / "rien.png").convert_alpha()
+    ATTACK_TILE_BLUE = pygame.image.load(ASSETS_DIR / "attack_tile_blue.png").convert_alpha()
+    ATTACK_TILE_RED = pygame.image.load(ASSETS_DIR / "attack_tile_red.png").convert_alpha()
 
     def __init__(self, player, size=50, nbrooms=20):
         self._player = player
         self.map = [[self.WALL]*size for _ in range(size)]
         self.monster_group = pygame.sprite.Group()
         self.box_group = pygame.sprite.Group()
+        self.attack_tile_group = pygame.sprite.Group()
         self.nbrooms = nbrooms
         self._roomsToReach = []
         self._rooms = []
@@ -143,6 +147,20 @@ class Map:
                 return(False)
         return(True)
     
+    def create_attack_zone(self, coord, weapon):
+        L=[["."]*int(weapon.range[1]*2+1) for i in range(int(weapon.range[1]*2+1))]
+        if(weapon.attack_type == "linear"):
+            for i in range(4):
+                for j in range(int(weapon.range[0]), int(weapon.range[1])+1):
+                    L[int(cos(pi/2*i))*j+int(weapon.range[1])][int(sin(pi/2*i))*j+int(weapon.range[1])]="x"
+                
+
+        elif(weapon.attack_type == "zone"):
+            for i in range(len(L)):
+                for j in range(len(L[i])):
+        
+        print("\n".join("".join(str(j) for j in i) for i in L)+"\n")
+
     #--------------------------- Map generation --------------------------------
     def addRoom(self, room):
         self._roomsToReach.append(room)

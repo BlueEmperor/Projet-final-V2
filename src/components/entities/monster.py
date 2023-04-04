@@ -31,8 +31,7 @@ class Monster(Entity):
 
     def can_attack(self,m):
         dist=(m._player.map_pos-self.map_pos)
-        if ((dist[0]**2+dist[1]**2)**0.5>self.weapon.range):
-                return False
+        
         return True
     
     def move(self,m):
