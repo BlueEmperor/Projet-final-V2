@@ -2,6 +2,8 @@ import pygame
 
 from path import ASSETS_DIR, AUDIO_DIR
 from src.config import Config
+from src.global_state import GlobalState
+from src.status import PlayerStatus
 
 vec = pygame.math.Vector2
 
@@ -98,8 +100,9 @@ class InventoryUI:
             if(self.select_item != None and self.select_item.location == "i"):
                 self.select_item=None #Remove the select item
 
-    def left_click_down_event(self, m):
+    def left_click_down_event(self):
         if(self.animation==0):
+            GlobalState.PLAYER_STATE = PlayerStatus.MOVEMENT
             #Make the select item default to None
             self.select_item = None
             
@@ -110,13 +113,13 @@ class InventoryUI:
             self._player.weapon = None
             if(self.drag_item != None and self.drag_item.location == "h"):
                 self._player.weapon = self.drag_item
-                m.create_attack_zone(self._player.map_pos, self._player.weapon)
+                
 
             #Set the offset with the mouse
             if(self.drag_item!=None):
                 self.drag_offset = vec(pygame.mouse.get_pos())-self.drag_item.rect.topleft
     
-    def left_click_up_event(self):
+    def left_click_up_event(self, m):
         if(self.drag_item!=None):
             if(self.hover_object):
                 hover_item = self.get_item(self.hover_coord, self.hover_object)
@@ -128,6 +131,8 @@ class InventoryUI:
                 self._player.weapon = None
                 if(self.drag_item != None and self.drag_item.location == "h"):
                     self._player.weapon = self.drag_item
+                    GlobalState.PLAYER_STATE = PlayerStatus.ATTACK
+                    m.create_attack_zone(self._player.map_pos, self._player.weapon)
             
             #Update coord of the 2 items
                 if(hover_item!=None):

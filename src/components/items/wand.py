@@ -17,5 +17,5 @@ class Wand(Item):
         self.description = "Un baton dangereux !"
         self.damage = 2
         self.durability = 15
-        self.range = vec(3, 5)
+        self.range = vec(1, 5)
         self.wall_ability = True

@@ -17,5 +17,5 @@ class Sword(Item):
         self.description = "Une épée qui fait mal !"
         self.damage = 3
         self.durability = 10
-        self.range = vec(1,3)
+        self.range = vec(1,1)
         self.wall_ability = False

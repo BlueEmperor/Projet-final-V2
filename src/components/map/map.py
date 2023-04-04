@@ -8,6 +8,8 @@ from src.config import Config
 from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.monster import Monster
+from src.global_state import GlobalState
+from src.status import PlayerStatus
 
 vec = pygame.math.Vector2
 
@@ -36,13 +38,16 @@ class Map:
     NOT_DEFINED_TILE = pygame.image.load(MAP_DIR / "rien.png").convert_alpha()
     ATTACK_TILE_BLUE = pygame.image.load(ASSETS_DIR / "attack_tile_blue.png").convert_alpha()
     ATTACK_TILE_RED = pygame.image.load(ASSETS_DIR / "attack_tile_red.png").convert_alpha()
+    ATTACK_TILE_LIGHT_BLUE = pygame.image.load(ASSETS_DIR / "attack_tile_light_blue.png").convert_alpha()
+    ATTACK_TILE_LIGHT_RED = pygame.image.load(ASSETS_DIR / "attack_tile_light_red.png").convert_alpha()
+    HOVER_TILE = pygame.image.load(ASSETS_DIR / "hover_tile.png").convert_alpha()
 
     def __init__(self, player, size=50, nbrooms=20):
         self._player = player
         self.map = [[self.WALL]*size for _ in range(size)]
         self.monster_group = pygame.sprite.Group()
         self.box_group = pygame.sprite.Group()
-        self.attack_tile_group = pygame.sprite.Group()
+        self.attack_tile = []
         self.nbrooms = nbrooms
         self._roomsToReach = []
         self._rooms = []
@@ -148,18 +153,45 @@ class Map:
         return(True)
     
     def create_attack_zone(self, coord, weapon):
-        L=[["."]*int(weapon.range[1]*2+1) for i in range(int(weapon.range[1]*2+1))]
+        self.attack_tile = []
         if(weapon.attack_type == "linear"):
             for i in range(4):
                 for j in range(int(weapon.range[0]), int(weapon.range[1])+1):
-                    L[int(cos(pi/2*i))*j+int(weapon.range[1])][int(sin(pi/2*i))*j+int(weapon.range[1])]="x"
-                
+                    c = vec(round(sin(pi/2*i)*j+coord[0]),round(cos(pi/2*i)*j+coord[1]))
+                    item = self.get_item(c)
+                    if(vec(c) in self and item != Map.WALL):
+                        if(self.line_of_sight(c, coord)):
+                            if(item == Map.GROUND):
+                                self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
+                            else:
+                                self.attack_tile.append((c,Map.ATTACK_TILE_RED))
+                        
+                        else:
+                            if(item == Map.GROUND):
+                                self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
+                            else:
+                                self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
 
         elif(weapon.attack_type == "zone"):
-            for i in range(len(L)):
-                for j in range(len(L[i])):
-                    pass
-        print("\n".join("".join(str(j) for j in i) for i in L)+"\n")
+            for i in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
+                for j in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
+                    c = vec(i+coord[0], j+coord[1])
+                    if(c in self and self.get_item(c) != Map.WALL):
+                        diff = c - coord
+                        if(weapon.range[0]<=abs(diff[0])+abs(diff[1])<=weapon.range[1]):
+                            item = self.get_item(c)
+                            if(vec(c) in self and item != Map.WALL):
+                                if(self.line_of_sight(c, coord)):
+                                    if(item == Map.GROUND):
+                                        self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
+                                    else:
+                                        self.attack_tile.append((c,Map.ATTACK_TILE_RED))
+                                
+                                else:
+                                    if(item == Map.GROUND):
+                                        self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
+                                    else:
+                                        self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
 
     #--------------------------- Map generation --------------------------------
     def addRoom(self, room):
@@ -330,26 +362,27 @@ class Map:
     #--------------------------- Update functions --------------------------------
     def update(self):
         if(self._player.ismoving == False):
-            #Check if a key is pressed
-            keys=pygame.key.get_pressed()
-            for key in self.DIR.keys():
-                if(keys[key]):
-                    #Check if the player can move
-                    if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
-                        #Is executed at every move of the player
-                        self._player.ismoving=self.DIR[key]
-                        self.moving_tick = 12
+            if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
+                #Check if a key is pressed
+                keys=pygame.key.get_pressed()
+                for key in self.DIR.keys():
+                    if(keys[key]):
+                        #Check if the player can move
+                        if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
+                            #Is executed at every move of the player
+                            self._player.ismoving=self.DIR[key]
+                            self.moving_tick = 12
 
-                        #Move the player on the map
-                        self.rm(self._player)
-                        self._player.map_pos += self.DIR[key]
-                        self.put(self._player, self._player.map_pos)
-                        for monster in self.monster_group:
-                            monster.turn_action(self)
+                            #Move the player on the map
+                            self.rm(self._player)
+                            self._player.map_pos += self.DIR[key]
+                            self.put(self._player, self._player.map_pos)
+                            for monster in self.monster_group:
+                                monster.turn_action(self)
 
-                        #Update the numbers of the tile to draw
-                        self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
-                        return
+                            #Update the numbers of the tile to draw
+                            self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
+                            return
 
         else:
             #Update the visual position of every entities
@@ -368,6 +401,15 @@ class Map:
                 if(self.tiles_sprites[j][i]!=None):
                     self.tiles_sprites[j][i].draw(SCREEN, self)
         
+        #Draw attack tiles
+        if(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
+            for tile in self.attack_tile:
+                coord = vec(self._player.rect.topleft)-self._player.absolute_pos+tile[0]*48
+                SCREEN.blit(tile[1],coord)
+        
+        mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
+        if(mouse_pos in self and self.get_item(mouse_pos) != Map.WALL):
+            SCREEN.blit(Map.HOVER_TILE, mouse_pos*48-self._player.absolute_pos+self._player.rect.topleft)
         #Draw the monsters
         self.monster_group.draw(SCREEN)
         self.box_group.draw(SCREEN)

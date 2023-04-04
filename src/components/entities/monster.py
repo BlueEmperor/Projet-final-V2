@@ -31,7 +31,11 @@ class Monster(Entity):
 
     def can_attack(self,m):
         dist=(m._player.map_pos-self.map_pos)
+        if(self.weapon.attack_type == "linear"):
+            return((dist[0]==0 or dist[1]==0) and abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
         
+        elif(self.weapon.attack_type == "zone"):
+            return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
         return True
     
     def move(self,m):
@@ -40,9 +44,8 @@ class Monster(Entity):
             return
         
         chemin=m.A_star(self.map_pos, m._player.map_pos)
-        if(len(chemin)<self.weapon.range):
+        if(len(chemin) == 0):
             return
-        
         m.move(self.map_pos,chemin[-1])
         self.ismoving=(chemin[-1]-self.map_pos)*4
         self.map_pos=chemin[-1]
