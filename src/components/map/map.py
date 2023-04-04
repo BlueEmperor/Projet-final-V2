@@ -158,7 +158,7 @@ class Map:
         elif(weapon.attack_type == "zone"):
             for i in range(len(L)):
                 for j in range(len(L[i])):
-        
+                    pass
         print("\n".join("".join(str(j) for j in i) for i in L)+"\n")
 
     #--------------------------- Map generation --------------------------------
