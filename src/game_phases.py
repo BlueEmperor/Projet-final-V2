@@ -69,6 +69,7 @@ def gameplay_phase(events):
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN)
         hover.draw(GlobalState.SCREEN)
+        GlobalState.SCREEN.blit(Map.DARK_EFFECT, (0,0))
         stat_ui.draw(GlobalState.SCREEN)
         inventory_ui.draw(GlobalState.SCREEN)
 

@@ -41,6 +41,7 @@ class Map:
     ATTACK_TILE_LIGHT_BLUE = pygame.image.load(ASSETS_DIR / "attack_tile_light_blue.png").convert_alpha()
     ATTACK_TILE_LIGHT_RED = pygame.image.load(ASSETS_DIR / "attack_tile_light_red.png").convert_alpha()
     HOVER_TILE = pygame.image.load(ASSETS_DIR / "hover_tile.png").convert_alpha()
+    DARK_EFFECT = pygame.image.load(ASSETS_DIR / "dark_effect.png").convert_alpha()
 
     def __init__(self, player, size=50, nbrooms=20):
         self._player = player
