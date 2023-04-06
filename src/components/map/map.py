@@ -102,8 +102,6 @@ class Map:
         self.rm(item)
         self.put(item, coord2)
 
-
-    
     #--------------------------- Utilities algorithmes functions --------------------------------
     def A_star(self,start_coord,end_coord):
         open=[Node(start_coord,-1,end_coord)]
@@ -359,8 +357,19 @@ class Map:
                     L.append(Tile(Map.NOT_DEFINED_TILE, rect))
             self.tiles_sprites.append(L)
 
+    #--------------------------- Events functions --------------------------------
+    def left_click_down_event(self):
+        if(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
+            item = self.get_item(self.mouse_pos)
+            if(isinstance(item, Monster) and self.line_of_sight(self._player.map_pos, self.mouse_pos)):
+                self._player.meet(item, self)
+                for monster in self.monster_group:
+                    monster.turn_action(self)
+
+
     #--------------------------- Update functions --------------------------------
     def update(self):
+        self.mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
         if(self._player.ismoving == False):
             if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
                 #Check if a key is pressed
@@ -404,12 +413,13 @@ class Map:
         #Draw attack tiles
         if(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
             for tile in self.attack_tile:
+
                 coord = vec(self._player.rect.topleft)-self._player.absolute_pos+tile[0]*48
                 SCREEN.blit(tile[1],coord)
         
-        mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
-        if(mouse_pos in self and self.get_item(mouse_pos) != Map.WALL):
-            SCREEN.blit(Map.HOVER_TILE, mouse_pos*48-self._player.absolute_pos+self._player.rect.topleft)
+                if(tile[0] == self.mouse_pos):
+                    SCREEN.blit(Map.HOVER_TILE, self.mouse_pos*48-self._player.absolute_pos+self._player.rect.topleft)
+
         #Draw the monsters
         self.monster_group.draw(SCREEN)
         self.box_group.draw(SCREEN)

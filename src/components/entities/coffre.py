@@ -7,8 +7,9 @@ vec = pygame.math.Vector2
 
 class Coffre(Entity):
     COFFRE_EZ = [pygame.image.load(ASSETS_DIR / "coffre.png").convert_alpha()]
+    HOVER_COFFRE = [pygame.image.load(ASSETS_DIR / "coffre_hover.png").convert_alpha()]
     def __init__(self,pos, open_time=1):
-        super().__init__("coffre",pos,Coffre.COFFRE_EZ)
+        super().__init__("coffre",pos,Coffre.COFFRE_EZ, Coffre.HOVER_COFFRE)
         self.description = "Un coffre"
         self.open_time = open_time
         self.wall_ability = False

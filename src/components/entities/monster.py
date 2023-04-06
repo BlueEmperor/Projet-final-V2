@@ -9,12 +9,12 @@ from path import ASSETS_DIR
 vec=pygame.math.Vector2
 
 class Monster(Entity):
-    SQUELETTE = ("Squelette", 8, 1, Sword(), [pygame.image.load(ASSETS_DIR / ("squelette.png")).convert_alpha()])
-    VAMPIRE = ("Vampire", 15, 1, Wand(), [pygame.image.load(ASSETS_DIR / ("vampire.png")).convert_alpha()])
+    SQUELETTE = ("Squelette", 8, 1, Sword(), [pygame.image.load(ASSETS_DIR / ("squelette.png")).convert_alpha()], [pygame.image.load(ASSETS_DIR / ("squelette_hover.png")).convert_alpha()])
+    VAMPIRE = ("Vampire", 15, 1, Wand(), [pygame.image.load(ASSETS_DIR / ("vampire.png")).convert_alpha()], [pygame.image.load(ASSETS_DIR / ("vampire_hover.png")).convert_alpha()])
     MONSTER_LIST = [SQUELETTE, VAMPIRE]
     
-    def __init__(self,name,health,speed, weapon, image_list, pos):
-        super().__init__(name,pos,image_list)
+    def __init__(self,name,health,speed, weapon, image_list, hover_list, pos):
+        super().__init__(name,pos,image_list, hover_list)
         self.speed = speed
         self.weapon = weapon
         self.health = health
@@ -55,7 +55,7 @@ class Monster(Entity):
     def turn_action(self, m):
         if m.line_of_sight(self.map_pos, m._player.map_pos):
             if self.can_attack(m):
-                self.meet(m._player)
+                self.meet(m._player, m)
                 print(m._player.health)
             else:
                 self.move(m)

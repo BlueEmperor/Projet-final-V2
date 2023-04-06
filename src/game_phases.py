@@ -7,6 +7,7 @@ from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
 from src.components.UI.stats import StatUI
 from src.components.UI.minimap import MiniMap
+from src.components.UI.hover import Hover
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 
@@ -19,10 +20,15 @@ inventory_ui = InventoryUI(player)
 stat_ui = StatUI(player)
 m = Map(player)
 minimap = MiniMap(m)
+hover = Hover(m)
 
 for i in range(10):
-    player.add_in_inventory(Sword(), inventory_ui)
-    player.add_in_inventory(Wand(), inventory_ui)
+    a=Sword()
+    a.damage = 5
+    player.add_in_inventory(a, inventory_ui)
+    b=Wand()
+    b.damage = 7
+    player.add_in_inventory(b, inventory_ui)
     
 def main_menu_phase(events):
     pass
@@ -33,6 +39,7 @@ def gameplay_phase(events):
         #Mouses events
         if(event.type == pygame.MOUSEBUTTONDOWN):
             if(event.button == 1):
+                m.left_click_down_event()
                 inventory_ui.left_click_down_event()
 
             elif(event.button == 3):
@@ -57,9 +64,11 @@ def gameplay_phase(events):
     if(not(minimap.open)):
         m.update()
         inventory_ui.update()
+        hover.update()
 
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN)
+        hover.draw(GlobalState.SCREEN)
         stat_ui.draw(GlobalState.SCREEN)
         inventory_ui.draw(GlobalState.SCREEN)
 

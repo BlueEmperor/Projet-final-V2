@@ -129,14 +129,16 @@ class InventoryUI:
                 self.put(self.drag_item, self.hover_coord, self.hover_object)
 
                 self._player.weapon = None
-                if(self.drag_item != None and self.drag_item.location == "h"):
-                    self._player.weapon = self.drag_item
-                    GlobalState.PLAYER_STATE = PlayerStatus.ATTACK
-                    m.create_attack_zone(self._player.map_pos, self._player.weapon)
             
             #Update coord of the 2 items
                 if(hover_item!=None):
                     hover_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
+            
+            if(self.drag_item.location == "h"):
+                self._player.weapon = self.drag_item
+                GlobalState.PLAYER_STATE = PlayerStatus.ATTACK # type: ignore
+                m.create_attack_zone(self._player.map_pos, self._player.weapon)
+
             self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
 
             self.drag_item = None

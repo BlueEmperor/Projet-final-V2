@@ -6,13 +6,13 @@ from src.components.entities.player import Player
 vec = pygame.math.Vector2
 
 class MiniMap:
-    def __init__(self,map):
+    def __init__(self,m):
         size = 200
         self.rect = pygame.Rect(Config.WIDTH-size, 0, size, size)
         self.rect2 = pygame.Rect(Config.WIDTH-size*19/20, size/20, size*9/10, size*9/10)
-        self._map = map
+        self._map = m
         self.open = False
-        self.draw_minimap = self.minimap_init(map)
+        self.draw_minimap = self.minimap_init(m)
 
     def m_down_event(self):
         self.open = not(self.open)
