@@ -43,8 +43,8 @@ class Hover:
                 #Health
                 h = 37
                 SCREEN.blit(Hover.HEART_ICON, vec(self.rect.topleft)+vec(15,h))
-                pygame.draw.rect(SCREEN, [55]*3, pygame.Rect(self.rect.topleft + vec(50, h+3), vec(125, 21)))
-                pygame.draw.rect(SCREEN, (244,45,66), pygame.Rect(self.rect.topleft + vec(50, h+3), vec(125*self.current_hover.health/self.current_hover.max_health, 21)))
+                pygame.draw.rect(SCREEN, [55]*3, pygame.Rect(self.rect.topleft + vec(50, h+2), vec(125, 21)))
+                pygame.draw.rect(SCREEN, (244,45,66), pygame.Rect(self.rect.topleft + vec(50, h+2), vec(125*self.current_hover.health/self.current_hover.max_health, 21)))
                 SCREEN.blit(self.font.render(f"{int(self.current_hover.health)}/{int(self.current_hover.max_health)}",True,(255, 255, 255)), self.rect.topleft + vec(55, h))
 
                 #Damage
