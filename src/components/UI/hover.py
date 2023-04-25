@@ -10,6 +10,8 @@ class Hover:
     HOVER_RECTANGLE = pygame.image.load(ASSETS_DIR / "hover_info.png").convert_alpha()
     HEART_ICON = pygame.image.load(ASSETS_DIR / "heart_icon.png").convert_alpha()
     SWORD_ICON = pygame.image.load(ASSETS_DIR / "sword_icon.png").convert_alpha()
+    TARGET_ICON = pygame.image.load(ASSETS_DIR / "target_icon.png").convert_alpha()
+
     def __init__(self, m):
         self._map = m
         self.current_hover = None
@@ -51,3 +53,7 @@ class Hover:
                 h = 70
                 SCREEN.blit(Hover.SWORD_ICON, vec(self.rect.topleft)+vec(15,h))
                 SCREEN.blit(self.font.render(f"{int(self.current_hover.weapon.damage)}",True,(255, 255, 255)), self.rect.topleft + vec(50, h))
+
+                #Range
+                SCREEN.blit(Hover.TARGET_ICON, vec(self.rect.topleft)+vec(90,h))
+                SCREEN.blit(self.font.render(" : ".join(str(int(i)) for i in self.current_hover.weapon.range),True,(255, 255, 255)), self.rect.topleft + vec(120, h-2))

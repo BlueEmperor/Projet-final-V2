@@ -360,13 +360,19 @@ class Map:
 
     #--------------------------- Events functions --------------------------------
     def left_click_down_event(self):
-        if(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
-            item = self.get_item(self.mouse_pos)
-            if(isinstance(item, Monster) and self.line_of_sight(self._player.map_pos, self.mouse_pos)):
-                self._player.meet(item, self)
-                for monster in self.monster_group:
-                    monster.turn_action(self)
-
+        if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
+            return
+        
+        item = self.get_item(self.mouse_pos)
+        if(not(isinstance(item, Monster)) or not(self.line_of_sight(self._player.map_pos, self.mouse_pos))):
+            return
+        
+        if(not(self._player.can_attack(item, self))):
+            return
+        
+        self._player.meet(item, self)
+        for monster in self.monster_group:
+            monster.turn_action(self)
 
     #--------------------------- Update functions --------------------------------
     def update(self):

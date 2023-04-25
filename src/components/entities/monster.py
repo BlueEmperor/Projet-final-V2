@@ -28,15 +28,6 @@ class Monster(Entity):
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self.ismoving=False
-
-    def can_attack(self,m):
-        dist=(m._player.map_pos-self.map_pos)
-        if(self.weapon.attack_type == "linear"):
-            return((dist[0]==0 or dist[1]==0) and abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
-        
-        elif(self.weapon.attack_type == "zone"):
-            return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
-        return True
     
     def move(self,m):
         coord = (self.map_pos-m._player.map_pos)
@@ -54,7 +45,7 @@ class Monster(Entity):
     
     def turn_action(self, m):
         if m.line_of_sight(self.map_pos, m._player.map_pos):
-            if self.can_attack(m):
+            if self.can_attack(m._player, m):
                 self.meet(m._player, m)
                 print(m._player.health)
             else:
