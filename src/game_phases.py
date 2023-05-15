@@ -53,7 +53,7 @@ def gameplay_phase(events):
                 inventory_ui.right_click_up_event()
         
         #keyboard events
-        if(event.type == pygame.KEYDOWN):
+        elif(event.type == pygame.KEYDOWN):
             if(event.key == pygame.K_e):
                 inventory_ui.e_down_event()
             elif(event.key == pygame.K_m):

@@ -25,11 +25,15 @@ class Hover:
             self.current_hover.image = self.current_hover.image_list[0]
         self.current_hover = None
 
-        if(not(item in (self._map.GROUND, self._map.WALL))):
-            if(not(isinstance(item, Player))):
-                self.current_hover = item
-                self.rect.center = self.current_hover.rect.center + vec(0, -85)
-                self.current_hover.image = self.current_hover.hover_list[0]
+        if(item in (self._map.GROUND, self._map.WALL)):
+            return
+        
+        if(isinstance(item, Player)):
+            return
+        
+        self.current_hover = item
+        self.rect.center = self.current_hover.rect.center + vec(0, -85)
+        self.current_hover.image = self.current_hover.hover_list[0]
 
     def draw(self, SCREEN):
         if(self.current_hover != None):
