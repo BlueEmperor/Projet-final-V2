@@ -29,7 +29,7 @@ for i in range(10):
     b=Wand()
     b.damage = 7
     player.add_in_inventory(b, inventory_ui)
-    
+
 def main_menu_phase(events):
     pass
 
