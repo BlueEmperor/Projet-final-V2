@@ -273,7 +273,7 @@ class Map:
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
                 
-                box=Coffre(vec(x,y))
+                box=Coffre(vec(x,y),self._player)
                 self.put(box, vec(x,y))
                 box.add(self.box_group)
                 print(self.box_group)

@@ -19,7 +19,7 @@ class Player(Entity):
         self.gold = 0
         self.mana = 96
         self.max_mana = 100
-        self.level = 62
+        self.level = 1
     
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()

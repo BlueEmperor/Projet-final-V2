@@ -23,10 +23,10 @@ minimap = MiniMap(m)
 hover = Hover(m)
 
 for i in range(10):
-    a=Sword()
+    a=Sword(*Sword.LIST[0])
     a.damage = 5
     player.add_in_inventory(a, inventory_ui)
-    b=Wand()
+    b=Wand(*Wand.LIST[0])
     b.damage = 7
     player.add_in_inventory(b, inventory_ui)
 
