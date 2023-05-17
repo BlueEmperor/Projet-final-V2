@@ -24,10 +24,10 @@ hover = Hover(m)
 
 for i in range(10):
     a=Sword(*Sword.LIST[0])
-    a.damage = 5
+    a.damage = 1000
     player.add_in_inventory(a, inventory_ui)
     b=Wand(*Wand.LIST[0])
-    b.damage = 7
+    b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
 
 def main_menu_phase(events):
