@@ -7,11 +7,12 @@ vec = pygame.math.Vector2
 
 class Sword(Item):
     IMAGE = pygame.image.load(ASSETS_DIR / "sword_item.png").convert_alpha()
-    SKELETON_SWORD =("Skeleton sword",pygame.image.load(ASSETS_DIR / "sword_item.png").convert_alpha(), 4, 200, vec(1,1) )
-    SWORD1 = ("Jesus sword", pygame.image.load(ASSETS_DIR / "sword_item.png").convert_alpha(), 5, 50, vec(1,1))
-    SWORD2 = ("SEXYSEB' sword", pygame.image.load(ASSETS_DIR / "sword_item.png").convert_alpha(), 8, 20, vec(1,1))
-    SWORD3 = ("Timozob' sword", pygame.image.load(ASSETS_DIR / "sword_item.png").convert_alpha(), 10, 50, vec(1,2))
-    LIST = [SWORD1,SWORD2,SWORD3]
+    SKELETON_SWORD =("Skeleton sword",IMAGE, 4, 200, vec(1,1) )
+    COMMUNE_SWORD = ("Jesus sword", IMAGE, 5, 50, vec(1,1))
+    RARE_SWORD = ("SEXYSEB's sword", IMAGE, 8, 20, vec(1,1))
+    EPIC_SWORD = ("Timozob' sword", IMAGE, 10, 50, vec(1,2))
+    LEGENDARY_SWORD = ("3 FROMAGES' Sword", IMAGE, 15, 100, vec(1,3))
+    LIST = [COMMUNE_SWORD,RARE_SWORD,EPIC_SWORD,LEGENDARY_SWORD]
     def __init__(self, name, image, damage, durability, range):
         super().__init__()
         self.image = pygame.transform.scale(image, (72,72))

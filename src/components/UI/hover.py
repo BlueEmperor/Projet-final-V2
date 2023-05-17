@@ -27,7 +27,7 @@ class Hover:
     def update(self):
         item = self._map.get_item(self._map.mouse_pos)
         if(self.current_hover != None):
-            self.current_hover.image = self.current_hover.image_list[0]
+            self.current_hover.image=self.current_hover.image_list[0]
         self.current_hover = None
 
         if(item in (self._map.GROUND, self._map.WALL)):
@@ -38,6 +38,8 @@ class Hover:
         
         self.current_hover = item
         self.rect.center = self.current_hover.rect.center + vec(0, -85)
+        #self._map._player.meet(self.current_hover,self._map)
+        #self.current_hover.update(self._map._player)
         self.current_hover.image = self.current_hover.hover_list[0]
 
     def draw(self, SCREEN):

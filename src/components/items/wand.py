@@ -7,11 +7,12 @@ vec = pygame.math.Vector2
 
 class Wand(Item):
     IMAGE = pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha()
-    VAMPIRE_WAND = ("Vampire's wand", pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha(), 2, 30 ,vec(1,4))
-    WAND1 =("Harry Potter's wand", pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha(), 2, 30 ,vec(1,5))
-    WAND2 =("Hermione's wand", pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha(), 5, 50 ,vec(1,3))
-    WAND3 =("APAGNAN's wand", pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha(), 10, 50 ,vec(1,4))
-    LIST=[WAND1,WAND2,WAND3]
+    VAMPIRE_WAND = ("Vampire's wand", IMAGE, 2, 30 ,vec(1,4))
+    COMMUNE_WAND =("Harry Potter's wand", IMAGE, 2, 30 ,vec(1,5))
+    RARE_WAND =("Hermione's wand", IMAGE, 5, 50 ,vec(1,3))
+    EPIC_WAND =("APAGNAN's wand", IMAGE, 10, 50 ,vec(1,4))
+    LEGENDARY_WAND =("CROPINOU's wand",IMAGE, 15, 100, vec(1,5))
+    LIST=[COMMUNE_WAND,RARE_WAND,EPIC_WAND,LEGENDARY_WAND]
     def __init__(self,name,image,damage,durability,range):
         super().__init__()
         self.image = pygame.transform.scale(image,(72,72))

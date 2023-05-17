@@ -8,6 +8,7 @@ from src.config import Config
 from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.monster import Monster
+from src.components.entities.coffre import Coffre
 from src.global_state import GlobalState
 from src.status import PlayerStatus
 
@@ -365,6 +366,11 @@ class Map:
         
         item = self.get_item(self.mouse_pos)
         if(not(isinstance(item, Monster)) or not(self.line_of_sight(self._player.map_pos, self.mouse_pos))):
+            if isinstance(item,Coffre):
+                item.isopening = True
+                self._player.meet(item,self)
+                #item.isopening=True
+            
             return
         
         if(not(self._player.can_attack(item, self))):

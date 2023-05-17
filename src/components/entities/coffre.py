@@ -1,6 +1,7 @@
 import pygame
 import random
 from path import ASSETS_DIR, AUDIO_DIR
+from src.components.UI.inventory import InventoryUI
 from src.components.entities.entity import Entity
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
@@ -10,12 +11,15 @@ vec = pygame.math.Vector2
 class Coffre(Entity):
     COFFRE_EZ = [pygame.image.load(ASSETS_DIR / "coffre.png").convert_alpha()]
     HOVER_COFFRE = [pygame.image.load(ASSETS_DIR / "coffre_hover.png").convert_alpha()]
+    OPEN_CLOSE_COFFRE = [pygame.image.load(ASSETS_DIR / "JARRIVEPAD.png").convert_alpha(),pygame.image.load(ASSETS_DIR / "coffre_ouvert.png").convert_alpha()]
     RARITY_COFFRE = ["Coffre Commun"]*10 + ["Coffre Rare"]*5 + ["Coffre Epique"]*3 + ["Coffre Legendaire"]
     ITEM_LIST = (Sword,Wand)
     def __init__(self,pos, player, open_time=1):
-        super().__init__("coffre",pos,Coffre.COFFRE_EZ, Coffre.HOVER_COFFRE)
+        super().__init__("coffre",pos,self.OPEN_CLOSE_COFFRE, self.OPEN_CLOSE_COFFRE,health=0)
         self.description = "Un coffre"
         self.inventory=[]
+        if self.health==0:
+            self.health = None
         self.gold = random.randint(1,5)
         self.xp = 0
         self.open_time = open_time
@@ -33,9 +37,11 @@ class Coffre(Entity):
             self.RARITY_NUMBER = 3
         self.name = self.RARITY
         print (self.RARITY)
-        for i in range(random.randint(1,3)):
-            item = random.choice(self.ITEM_LIST)
-            self.inventory.append(item(*random.choice(item.LIST)))
+        self.inventory_creation()
+        print (self.inventory)
+        #for i in range(random.randint(1,3)):
+            #item = random.choice(self.ITEM_LIST)
+            #self.inventory.append(item(*random.choice(item.LIST)))
 
 
     def rarity(self,player):
@@ -43,14 +49,21 @@ class Coffre(Entity):
     
     def inventory_creation(self):
         for i in range(2):#(random.randint(2,3)):
-            self.inventory.append(self.ITEM_LIST[random.randint].LIST[self.RARITY_NUMBER])
+            a=random.randint(0,1)
+            self.inventory.append(self.ITEM_LIST[a](*self.ITEM_LIST[a].LIST[self.RARITY_NUMBER]))
 
     
     def update(self, player):
         self.rect.topleft = vec(player.rect.topleft)-player.absolute_pos+self.absolute_pos
-        if self.isopening !=False:
+        if self.inventory==[]:
             return
-        else: 
+        elif self.isopening !=False:
+            self.image=self.OPEN_CLOSE_COFFRE[1]
+            for i in self.inventory:
+                player.add_in_inventory(i, InventoryUI(player))
+            self.inventory.pop()
+            print(self.inventory)
+        else:
             return
 
     
