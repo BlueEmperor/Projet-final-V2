@@ -3,6 +3,8 @@ import pygame
 from src.components.entities.entity import Entity
 from path import ASSETS_DIR
 from src.config import Config
+from src.components.entities.coffre import Coffre
+from src.components.entities.monster import Monster
 
 vec = pygame.math.Vector2
 
@@ -19,7 +21,7 @@ class Player(Entity):
         self.gold = 0
         self.mana = 96
         self.max_mana = 100
-        self.level = 62
+        self.level = 1
     
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()
@@ -58,4 +60,15 @@ class Player(Entity):
     def teleport(self, coord):
         self.map_pos = coord
         self.absolute_pos = coord*48
+    
+    def meet(self,other, m):
+        if isinstance(other,Monster):
+            if (other.health > self.weapon.damage):
+                other.health-= self.weapon.damage
+            else:
+                other.health = 0
+                other.kill()
+                m.rm(other)
+        if isinstance(other,Coffre):
+            Coffre.isopening = True
 

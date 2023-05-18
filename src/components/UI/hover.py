@@ -3,6 +3,9 @@ import pygame
 from path import ASSETS_DIR
 from src.components.entities.monster import Monster
 from src.components.entities.player import Player
+from src.components.entities.coffre import Coffre
+from src.components.items.sword import Sword
+from src.components.items.wand import Wand
 
 vec = pygame.math.Vector2
 
@@ -10,6 +13,8 @@ class Hover:
     HOVER_RECTANGLE = pygame.image.load(ASSETS_DIR / "hover_info.png").convert_alpha()
     HEART_ICON = pygame.image.load(ASSETS_DIR / "heart_icon.png").convert_alpha()
     SWORD_ICON = pygame.image.load(ASSETS_DIR / "sword_icon.png").convert_alpha()
+    WAND_ICON = pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha()
+    BOW_ICON = pygame.image.load(ASSETS_DIR / "bow_icon.png").convert_alpha()
     TARGET_ICON = pygame.image.load(ASSETS_DIR / "target_icon.png").convert_alpha()
 
     def __init__(self, m):
@@ -22,7 +27,7 @@ class Hover:
     def update(self, animation):
         item = self._map.get_item(self._map.mouse_pos)
         if(self.current_hover != None):
-            self.current_hover.image = self.current_hover.image_list[0]
+            self.current_hover.image=self.current_hover.image_list[0]
         self.current_hover = None
         if(len(animation) != 0):
             return
@@ -35,9 +40,12 @@ class Hover:
         
         self.current_hover = item
         self.rect.center = self.current_hover.rect.center + vec(0, -85)
+        #self._map._player.meet(self.current_hover,self._map)
+        #self.current_hover.update(self._map._player)
         self.current_hover.image = self.current_hover.hover_list[0]
 
     def draw(self, SCREEN):
+        item = self._map.get_item(self._map.mouse_pos)
         if(self.current_hover != None):
             SCREEN.blit(self.image, self.rect)
             if(isinstance(self.current_hover, Monster)):
@@ -63,3 +71,23 @@ class Hover:
                 #Range
                 SCREEN.blit(Hover.TARGET_ICON, vec(self.rect.topleft)+vec(90,h))
                 SCREEN.blit(self.font.render(" : ".join(str(int(i)) for i in self.current_hover.weapon.range),True,(255, 255, 255)), self.rect.topleft + vec(120, h-2))
+            
+            elif(isinstance(self.current_hover, Coffre)):
+                name_text = self.font.render(self.current_hover.name,True,(255,255,255))
+                name_text_rect = name_text.get_rect()
+                name_text_rect.centerx = self.rect.centerx
+                name_text_rect.y = self.rect.y + 10
+                SCREEN.blit(name_text, name_text_rect)
+
+                #information:
+                h = 37
+                phase = 0
+                for i in self.current_hover.inventory:
+                    SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(50+phase,h))
+                    phase += 50
+
+                
+                        #SCREEN.blit(Hover.BOW_ICON, vec(self.rect.topleft)+vec(80,h))  #Hover.self.current_hover.inventory[0]_ICON,
+                #pygame.draw.rect(SCREEN, [55]*3, pygame.Rect(self.rect.topleft + vec(50, h+2), vec(125, 21)))
+                #pygame.draw.rect(SCREEN, (244,45,66), pygame.Rect(self.rect.topleft + vec(50, h+2), vec(125*self.current_hover.inventory/self.current_hover.max_health, 21)))
+                    SCREEN.blit(self.font.render(f"{int(i.damage)}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))

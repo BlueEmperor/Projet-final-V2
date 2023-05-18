@@ -8,6 +8,8 @@ from src.config import Config
 from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.monster import Monster
+from src.components.entities.coffre import Coffre
+from src.components.items.bow import Bow
 from src.global_state import GlobalState
 from src.status import PlayerStatus
 
@@ -192,6 +194,22 @@ class Map:
                                     else:
                                         self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
 
+        elif (weapon.attack_type=="continuous"):
+            for i in range(4):
+                for j in range(int(weapon.range[0]), int(weapon.range[1])+1):
+                    c = vec(round(sin(pi/2*i)*j+coord[0]),round(cos(pi/2*i)*j+coord[1]))
+                    item = self.get_item(c)
+                    if(vec(c) in self and item != Map.WALL):
+                        if(item == Map.GROUND):
+                            self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
+                        else:
+                            self.attack_tile.append((c,Map.ATTACK_TILE_RED))
+                    
+
+                        #if(item == Map.GROUND):
+                            #self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
+                        #else:
+                            #self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
     #--------------------------- Map generation --------------------------------
     def addRoom(self, room):
         self._roomsToReach.append(room)
@@ -273,7 +291,7 @@ class Map:
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
                 
-                box=Coffre(vec(x,y))
+                box=Coffre(vec(x,y),self._player)
                 self.put(box, vec(x,y))
                 box.add(self.box_group)
                 print(self.box_group)
@@ -365,6 +383,15 @@ class Map:
         
         item = self.get_item(self.mouse_pos)
         if(not(isinstance(item, Monster)) or not(self.line_of_sight(self._player.map_pos, self.mouse_pos))):
+            if isinstance(item,Monster):
+                if isinstance(self._player.weapon,Bow):
+                    self._player.meet(item,self)
+
+            elif isinstance(item,Coffre):
+                item.isopening = True
+                self._player.meet(item,self)
+                #item.isopening=True
+            
             return
         
         if(not(self._player.can_attack(item, self))):

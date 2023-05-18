@@ -7,15 +7,22 @@ vec = pygame.math.Vector2
 
 class Wand(Item):
     IMAGE = pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha()
-    def __init__(self):
+    VAMPIRE_WAND = ("Vampire's wand", IMAGE, 2, 30 ,vec(1,4))
+    COMMUNE_WAND =("Harry Potter's wand", IMAGE, 2, 30 ,vec(1,5))
+    RARE_WAND =("Hermione's wand", IMAGE, 5, 50 ,vec(1,3))
+    EPIC_WAND =("APAGNAN's wand", IMAGE, 10, 50 ,vec(1,4))
+    LEGENDARY_WAND =("CROPINOU's wand",IMAGE, 15, 100, vec(1,5))
+    LIST=[COMMUNE_WAND,RARE_WAND,EPIC_WAND,LEGENDARY_WAND]
+    def __init__(self,name,image,damage,durability,range):
         super().__init__()
-        self.image = pygame.transform.scale(Wand.IMAGE, (72,72))
+        self.image = pygame.transform.scale(image,(72,72))
+        self.image_icon = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
-        self.name = "baton"
+        self.name = name
         self.type = "wand"
         self.attack_type = "linear"
         self.description = "Un baton dangereux !"
-        self.damage = 2
-        self.durability = 15
-        self.range = vec(1, 5)
+        self.damage = damage
+        self.durability = durability
+        self.range = range
         self.wall_ability = True

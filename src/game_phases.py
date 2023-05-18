@@ -26,12 +26,12 @@ minimap = MiniMap(m)
 hover = Hover(m)
 animation = [[Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, random.randint(0,60), 220, vec(400+j*30, 100)) for j in range(9)], [Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, j*10, 220, vec(400+j*30, 100)) for j in range(9)]]
 
-for i in range(10):
-    a=Sword()
-    a.damage = 5
+for i in range(1):
+    a=Sword(*Sword.LIST[0])
+    #a.damage = 1000
     player.add_in_inventory(a, inventory_ui)
-    b=Wand()
-    b.damage = 7
+    b=Wand(*Wand.LIST[0])
+    #b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
 
 def main_menu_phase(events):

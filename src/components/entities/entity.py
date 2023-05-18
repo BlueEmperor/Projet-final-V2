@@ -1,5 +1,6 @@
 import pygame
-
+#from src.components.entities.monster import Monster
+#from src.components.entities.coffre import Coffre
 class Entity(pygame.sprite.Sprite):
     def __init__(self,name,pos, image_list, hover_list, health=0):
         super().__init__()
@@ -23,12 +24,17 @@ class Entity(pygame.sprite.Sprite):
 
     def meet(self,other, m):
         if isinstance(other,Entity):
-            if (other.health > self.weapon.damage):
+            if other.health ==None:
+                other.isopening= True
+            elif (other.health > self.weapon.damage):
                 other.health-= self.weapon.damage
-            else:
+            elif other.health < self.weapon.damage:
                 other.health = 0
                 other.kill()
                 m.rm(other)
+
+        else:
+            return
     
     def can_attack(self,entity, m):
         dist=(entity.map_pos-self.map_pos)
@@ -37,4 +43,6 @@ class Entity(pygame.sprite.Sprite):
         
         elif(self.weapon.attack_type == "zone"):
             return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
-        return True
+
+        elif (self.weapon.attack_type == "continuous"):
+                    return True
