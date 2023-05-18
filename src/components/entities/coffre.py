@@ -5,6 +5,7 @@ from src.components.UI.inventory import InventoryUI
 from src.components.entities.entity import Entity
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
+from src.components.items.bow import Bow
 from src.components.items.item import Item
 vec = pygame.math.Vector2
 
@@ -13,7 +14,7 @@ class Coffre(Entity):
     HOVER_COFFRE = [pygame.image.load(ASSETS_DIR / "coffre_hover.png").convert_alpha()]
     OPEN_CLOSE_COFFRE = [pygame.image.load(ASSETS_DIR / "JARRIVEPAD.png").convert_alpha(),pygame.image.load(ASSETS_DIR / "coffre_ouvert.png").convert_alpha()]
     RARITY_COFFRE = ["Coffre Commun"]*10 + ["Coffre Rare"]*5 + ["Coffre Epique"]*3 + ["Coffre Legendaire"]
-    ITEM_LIST = (Sword,Wand)
+    ITEM_LIST = (Sword,Wand,Bow)
     def __init__(self,pos, player, open_time=1):
         super().__init__("coffre",pos,self.OPEN_CLOSE_COFFRE, self.OPEN_CLOSE_COFFRE,health=0)
         self.description = "Un coffre"
@@ -49,7 +50,7 @@ class Coffre(Entity):
     
     def inventory_creation(self):
         for i in range(2):#(random.randint(2,3)):
-            a=random.randint(0,1)
+            a=random.randint(0,2)
             self.inventory.append(self.ITEM_LIST[a](*self.ITEM_LIST[a].LIST[self.RARITY_NUMBER]))
 
     

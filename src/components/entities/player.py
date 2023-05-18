@@ -61,14 +61,14 @@ class Player(Entity):
         self.map_pos = coord
         self.absolute_pos = coord*48
     
-        def meet(self,other, m):
-            if isinstance(other,Monster):
-                if (other.health > self.weapon.damage):
-                    other.health-= self.weapon.damage
-                else:
-                    other.health = 0
-                    other.kill()
-                    m.rm(other)
-            if isinstance(other,Coffre):
-                Coffre.isopening = True
+    def meet(self,other, m):
+        if isinstance(other,Monster):
+            if (other.health > self.weapon.damage):
+                other.health-= self.weapon.damage
+            else:
+                other.health = 0
+                other.kill()
+                m.rm(other)
+        if isinstance(other,Coffre):
+            Coffre.isopening = True
 

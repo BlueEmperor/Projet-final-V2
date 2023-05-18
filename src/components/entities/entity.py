@@ -43,4 +43,6 @@ class Entity(pygame.sprite.Sprite):
         
         elif(self.weapon.attack_type == "zone"):
             return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
-        return True
+
+        elif (self.weapon.attack_type == "continuous"):
+                    return True

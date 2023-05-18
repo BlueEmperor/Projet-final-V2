@@ -22,12 +22,12 @@ m = Map(player)
 minimap = MiniMap(m)
 hover = Hover(m)
 
-for i in range(10):
+for i in range(1):
     a=Sword(*Sword.LIST[0])
-    a.damage = 1000
+    #a.damage = 1000
     player.add_in_inventory(a, inventory_ui)
     b=Wand(*Wand.LIST[0])
-    b.damage = 700000
+    #b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
 
 def main_menu_phase(events):
