@@ -1,7 +1,10 @@
 import pygame
 
+import random
+from path import ASSETS_DIR
 from src.global_state import GlobalState
 GlobalState.load_main_screen()
+from src.animation import Animation
 from src.components.map.map import Map
 from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
@@ -21,6 +24,7 @@ stat_ui = StatUI(player)
 m = Map(player)
 minimap = MiniMap(m)
 hover = Hover(m)
+animation = [[Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, random.randint(0,60), 220, vec(400+j*30, 100)) for j in range(9)], [Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, j*10, 220, vec(400+j*30, 100)) for j in range(9)]]
 
 for i in range(10):
     a=Sword()
@@ -34,6 +38,7 @@ def main_menu_phase(events):
     pass
 
 def gameplay_phase(events):
+    global animation
     GlobalState.SCREEN.fill((37,19,26)) # type: ignore
     for event in events:
         #Mouses events
@@ -64,11 +69,22 @@ def gameplay_phase(events):
     if(not(minimap.open)):
         m.update()
         inventory_ui.update()
-        hover.update()
-
+        hover.update(animation)
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN)
-        hover.draw(GlobalState.SCREEN)
+        if(len(animation) == 0):
+            hover.draw(GlobalState.SCREEN)
+        else:
+            i=0
+            while(i<len(animation[0])):
+                animation[0][i].update()
+                animation[0][i].draw(GlobalState.SCREEN)
+                if(animation[0][i].actual_frame == animation[0][i].max_frame_duration):
+                    animation[0].pop(i)
+                i+=1
+            if(len(animation) != 0 and len(animation[0]) == 0):
+                animation=animation[1:]
+
         GlobalState.SCREEN.blit(Map.DARK_EFFECT, (0,0))
         stat_ui.draw(GlobalState.SCREEN)
         inventory_ui.draw(GlobalState.SCREEN)

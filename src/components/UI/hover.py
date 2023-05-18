@@ -19,12 +19,14 @@ class Hover:
         self.rect = self.image.get_rect()
         self.font = pygame.font.Font(ASSETS_DIR / "font.ttf", 36)
         
-    def update(self):
+    def update(self, animation):
         item = self._map.get_item(self._map.mouse_pos)
         if(self.current_hover != None):
             self.current_hover.image = self.current_hover.image_list[0]
         self.current_hover = None
-
+        if(len(animation) != 0):
+            return
+        
         if(item in (self._map.GROUND, self._map.WALL)):
             return
         

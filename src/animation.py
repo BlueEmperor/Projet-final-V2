@@ -1,7 +1,7 @@
 import pygame
 
 class Animation:
-    def __init__(self, image_list, frame_per_image, direction, speed, frame_duration, start_coord):
+    def __init__(self, image_list, frame_per_image, direction, speed, delay, frame_duration, start_coord):
         self.image_list = image_list
         self.image = self.image_list[0]
         self.frame_per_image = frame_per_image
@@ -12,8 +12,12 @@ class Animation:
         self.coord = start_coord
         self.frame_image = 0
         self.frame = 0
+        self.delay = delay
 
     def update(self):
+        if(self.delay != 0):
+            self.delay -= 1
+            return
         self.actual_frame += 1
         if(self.actual_frame == self.max_frame_duration):
             return
@@ -26,3 +30,6 @@ class Animation:
             self.image = self.image_list[self.frame_image]
 
         self.coord += self.direction*self.speed
+
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, self.coord)
