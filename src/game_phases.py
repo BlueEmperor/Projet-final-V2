@@ -24,14 +24,14 @@ stat_ui = StatUI(player)
 m = Map(player)
 minimap = MiniMap(m)
 hover = Hover(m)
-animation = [[Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, random.randint(0,60), 220, vec(400+j*30, 100)) for j in range(9)], [Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, j*10, 220, vec(400+j*30, 100)) for j in range(9)]]
+animation = [[Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, random.randint(0,60), 3, vec(400+j*30, 100)) for j in range(9)], [Animation([pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], 6, vec(0,1), 5, j*10, 3, vec(400+j*30, 100)) for j in range(9)]]
 
 for i in range(1):
     a=Sword(*Sword.LIST[0])
     #a.damage = 1000
     player.add_in_inventory(a, inventory_ui)
     b=Wand(*Wand.LIST[0])
-    #b.damage = 700000
+    b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
 
 def main_menu_phase(events):
@@ -61,8 +61,13 @@ def gameplay_phase(events):
         elif(event.type == pygame.KEYDOWN):
             if(event.key == pygame.K_e):
                 inventory_ui.e_down_event()
+            
             elif(event.key == pygame.K_m):
                 minimap.m_down_event()
+            
+            elif(event.key == pygame.K_f):
+                m.f_down_event(inventory_ui)
+
         elif(event.type == pygame.KEYUP):
             pass
     
@@ -72,6 +77,8 @@ def gameplay_phase(events):
         hover.update(animation)
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN)
+
+        #ANIMATION /!\ NE PAS TOUCHER OU CA EXPLOSE /!\
         if(len(animation) == 0):
             hover.draw(GlobalState.SCREEN)
         else:
@@ -84,6 +91,8 @@ def gameplay_phase(events):
                 i+=1
             if(len(animation) != 0 and len(animation[0]) == 0):
                 animation=animation[1:]
+
+        # ------------------------------------------
 
         GlobalState.SCREEN.blit(Map.DARK_EFFECT, (0,0))
         stat_ui.draw(GlobalState.SCREEN)

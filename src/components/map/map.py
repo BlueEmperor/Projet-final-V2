@@ -2,13 +2,12 @@ import pygame
 import random
 from math import cos, sin, pi, floor
 
-from src.components.entities.coffre import Coffre
+from src.components.entities.chest import Chest
 from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
 from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.monster import Monster
-from src.components.entities.coffre import Coffre
 from src.components.items.bow import Bow
 from src.global_state import GlobalState
 from src.status import PlayerStatus
@@ -291,7 +290,7 @@ class Map:
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
                 
-                box=Coffre(vec(x,y),self._player)
+                box=Chest(vec(x,y),self._player)
                 self.put(box, vec(x,y))
                 box.add(self.box_group)
                 print(self.box_group)
@@ -387,7 +386,7 @@ class Map:
                 if isinstance(self._player.weapon,Bow):
                     self._player.meet(item,self)
 
-            elif isinstance(item,Coffre):
+            elif isinstance(item,Chest):
                 item.isopening = True
                 self._player.meet(item,self)
                 #item.isopening=True
@@ -400,6 +399,13 @@ class Map:
         self._player.meet(item, self)
         for monster in self.monster_group:
             monster.turn_action(self)
+
+    def f_down_event(self, inventory_ui):
+        item = self.get_item(self.mouse_pos)
+        if(isinstance(item, Chest)):
+            if(((self._player.map_pos[0]-self.mouse_pos[0])**2+(self._player.map_pos[1]-self.mouse_pos[1])**2)**0.5<=1):
+                item.open_chest(self._player, inventory_ui)
+
 
     #--------------------------- Update functions --------------------------------
     def update(self):

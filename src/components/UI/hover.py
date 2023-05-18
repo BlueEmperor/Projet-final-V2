@@ -3,7 +3,7 @@ import pygame
 from path import ASSETS_DIR
 from src.components.entities.monster import Monster
 from src.components.entities.player import Player
-from src.components.entities.coffre import Coffre
+from src.components.entities.chest import Chest
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 
@@ -42,7 +42,7 @@ class Hover:
         self.rect.center = self.current_hover.rect.center + vec(0, -85)
         #self._map._player.meet(self.current_hover,self._map)
         #self.current_hover.update(self._map._player)
-        self.current_hover.image = self.current_hover.hover_list[0]
+        self.current_hover.image = self.current_hover.image_list[1]
 
     def draw(self, SCREEN):
         item = self._map.get_item(self._map.mouse_pos)
@@ -72,7 +72,7 @@ class Hover:
                 SCREEN.blit(Hover.TARGET_ICON, vec(self.rect.topleft)+vec(90,h))
                 SCREEN.blit(self.font.render(" : ".join(str(int(i)) for i in self.current_hover.weapon.range),True,(255, 255, 255)), self.rect.topleft + vec(120, h-2))
             
-            elif(isinstance(self.current_hover, Coffre)):
+            elif(isinstance(self.current_hover, Chest)):
                 name_text = self.font.render(self.current_hover.name,True,(255,255,255))
                 name_text_rect = name_text.get_rect()
                 name_text_rect.centerx = self.rect.centerx

@@ -2,19 +2,19 @@ import pygame
 #from src.components.entities.monster import Monster
 #from src.components.entities.coffre import Coffre
 class Entity(pygame.sprite.Sprite):
-    def __init__(self,name,pos, image_list, hover_list, health=0):
+    def __init__(self,name,pos, image_list, health=0):
         super().__init__()
         self.name = name
         self.map_pos = pos
         self.absolute_pos = pos*48
         self.image = image_list[0]
         self.image_list = image_list
-        self.hover_list = hover_list
         self.rect = self.image.get_rect()
         self.current_image = 0
         self.ismoving = False
         self.moving_tick=0
         self.health = health
+        self.max_health = health
         
     def __repr__(self):
         return(self.name[0])
@@ -45,4 +45,4 @@ class Entity(pygame.sprite.Sprite):
             return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
 
         elif (self.weapon.attack_type == "continuous"):
-                    return True
+            return True

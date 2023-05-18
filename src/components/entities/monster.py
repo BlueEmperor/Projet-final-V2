@@ -9,16 +9,14 @@ from path import ASSETS_DIR
 vec=pygame.math.Vector2
 
 class Monster(Entity):
-    SQUELETTE = ("Squelette", 8, 1, Sword(*Sword.SKELETON_SWORD), [pygame.image.load(ASSETS_DIR / ("squelette.png")).convert_alpha()], [pygame.image.load(ASSETS_DIR / ("squelette_hover.png")).convert_alpha()])
-    VAMPIRE = ("Vampire", 15, 1, Wand(*Wand.VAMPIRE_WAND), [pygame.image.load(ASSETS_DIR / ("vampire.png")).convert_alpha()], [pygame.image.load(ASSETS_DIR / ("vampire_hover.png")).convert_alpha()])
+    SQUELETTE = ("Squelette", 8, 1, Sword(*Sword.SKELETON_SWORD), [pygame.image.load(ASSETS_DIR / ("squelette.png")).convert_alpha(), pygame.image.load(ASSETS_DIR / ("squelette_hover.png")).convert_alpha()])
+    VAMPIRE = ("Vampire", 15, 1, Wand(*Wand.VAMPIRE_WAND), [pygame.image.load(ASSETS_DIR / ("vampire.png")).convert_alpha(), pygame.image.load(ASSETS_DIR / ("vampire_hover.png")).convert_alpha()])
     MONSTER_LIST = [SQUELETTE, VAMPIRE]
     
-    def __init__(self,name,health,speed, weapon, image_list, hover_list, pos):
-        super().__init__(name,pos,image_list, hover_list)
+    def __init__(self,name,health,speed, weapon, image_list, pos):
+        super().__init__(name, pos,image_list, health)
         self.speed = speed
         self.weapon = weapon
-        self.health = health
-        self.max_health = health
         self.aggro = True
 
     def update(self, player):
