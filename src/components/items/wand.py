@@ -19,7 +19,6 @@ class Wand(Item):
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
         self.name = name
-        self.type = "wand"
         self.attack_type = "linear"
         self.description = "Un baton dangereux !"
         self.damage = damage

@@ -4,7 +4,9 @@ from path import ASSETS_DIR, AUDIO_DIR
 from src.config import Config
 from src.global_state import GlobalState
 from src.status import PlayerStatus
-
+from src.components.items.bow import Bow
+from src.components.items.sword import Sword
+from src.components.items.wand import Wand
 vec = pygame.math.Vector2
 
 class InventoryUI:
@@ -136,8 +138,9 @@ class InventoryUI:
             
             if(self.drag_item.location == "h"):
                 self._player.weapon = self.drag_item
-                GlobalState.PLAYER_STATE = PlayerStatus.ATTACK # type: ignore
-                m.create_attack_zone(self._player.map_pos, self._player.weapon)
+                if(isinstance(self._player.weapon, (Bow, Sword, Wand))):
+                    GlobalState.PLAYER_STATE = PlayerStatus.ATTACK # type: ignore
+                    m.create_attack_zone(self._player.map_pos, self._player.weapon)
 
             self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
 

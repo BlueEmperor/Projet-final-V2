@@ -1,6 +1,6 @@
 import pygame
 import random
-from math import cos, sin, pi, floor
+from math import cos, sin, pi
 
 from src.components.entities.chest import Chest
 from path import MAP_DIR, ASSETS_DIR
@@ -9,6 +9,8 @@ from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.monster import Monster
 from src.components.items.bow import Bow
+from src.components.items.sword import Sword
+from src.components.items.wand import Wand
 from src.global_state import GlobalState
 from src.status import PlayerStatus
 
@@ -65,6 +67,7 @@ class Map:
         self.monster_group.update(player)
         self.box_group.update(player)
         self.moving_tick = 0
+        print(self)
         
 
     def __repr__(self):
@@ -153,6 +156,8 @@ class Map:
         return(True)
     
     def create_attack_zone(self, coord, weapon):
+        if(not(isinstance(weapon, (Bow, Sword, Wand)))):
+           return
         self.attack_tile = []
         if(weapon.attack_type == "linear"):
             for i in range(4):
@@ -408,8 +413,11 @@ class Map:
 
 
     #--------------------------- Update functions --------------------------------
-    def update(self):
+    def update(self, animation):
         self.mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
+        if(len(animation) != 0):
+            return
+        
         if(self._player.ismoving == False):
             if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
                 #Check if a key is pressed

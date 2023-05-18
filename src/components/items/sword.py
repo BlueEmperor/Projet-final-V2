@@ -19,7 +19,6 @@ class Sword(Item):
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
         self.name = name
-        self.type = "sword"
         self.attack_type = "zone"
         self.description = "Une épée qui fait mal !"
         self.damage = damage

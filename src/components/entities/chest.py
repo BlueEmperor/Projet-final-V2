@@ -44,12 +44,14 @@ class Chest(Entity):
     def inventory_creation(self):
         for i in range(2):#(random.randint(2,3)):
             #a=random.randint(0,3)
-            a=random.choice(self.ITEM_LIST)
-            if a==Potion:
+            item=random.choice(self.ITEM_LIST)
+            if item==Potion:
                 b=random.choice(Potion.LIST)
                 #print(a(*b[self.RARITY_NUMBER]))
-                self.inventory.append(a(*b[self.RARITY_NUMBER]))
-            self.inventory.append(a(*a.LIST[self.RARITY_NUMBER]))
+                self.inventory.append(item(*b[self.RARITY_NUMBER]))
+                continue
+            
+            self.inventory.append(item(*item.LIST[self.RARITY_NUMBER]))
 
 
     def open_chest(self, player, inventory_ui):

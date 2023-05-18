@@ -72,3 +72,8 @@ class Player(Entity):
         if isinstance(other,Chest):
             other.isopening = True
 
+    def heal(self, number):
+        if(self.health + number > self.max_health):
+            self.health = self.max_health
+        else:
+            self.health += number

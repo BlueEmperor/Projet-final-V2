@@ -19,7 +19,6 @@ class Bow(Item):
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
         self.name = name
-        self.type = "bow"
         self.attack_type = "continuous"
         self.description = "Un arc magique !"
         self.damage = damage
