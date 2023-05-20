@@ -25,3 +25,4 @@ class Bow(Item):
         self.durability = durability
         self.range = range
         self.wall_ability = True
+        self.type="bow"

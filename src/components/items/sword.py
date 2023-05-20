@@ -25,4 +25,5 @@ class Sword(Item):
         self.durability = durability
         self.range = range
         self.wall_ability = False
+        self.type="sword"
  

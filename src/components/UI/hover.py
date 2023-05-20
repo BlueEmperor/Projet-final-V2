@@ -87,12 +87,9 @@ class Hover:
                     #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(50+phase,h))
                     phase += 50
                     if isinstance(i, Potion):
-                        SCREEN.blit(self.font.render(f"{(i.name)}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
-
-                        #SCREEN.blit(Hover.BOW_ICON, vec(self.rect.topleft)+vec(80,h))  #Hover.self.current_hover.inventory[0]_ICON,
-                #pygame.draw.rect(SCREEN, [55]*3, pygame.Rect(self.rect.topleft + vec(50, h+2), vec(125, 21)))
-                #pygame.draw.rect(SCREEN, (244,45,66), pygame.Rect(self.rect.topleft + vec(50, h+2), vec(125*self.current_hover.inventory/self.current_hover.max_health, 21)))
-                    #elif not(isinstance(i,Potion)):
+                        SCREEN.blit(self.font.render(f"{(i.usage[0])}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
+                        #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))
+                        
                     else:
                         SCREEN.blit(self.font.render(f"{int(i.damage)}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
-                        SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))
+                    SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))

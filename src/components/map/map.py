@@ -13,6 +13,7 @@ from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.global_state import GlobalState
 from src.status import PlayerStatus
+from src.components.entities.entity import Entity
 
 vec = pygame.math.Vector2
 
@@ -94,6 +95,17 @@ class Map:
         if(coord in self):
             return(self.map[int(coord[1])][int(coord[0])])
         return(Map.WALL)
+    #get the room that contains the coord or the element
+    def get_room(self, object):
+        if isinstance(object,Entity):
+            for room in self._rooms:
+                if self.pos(object) in room:
+                    return room
+        else:
+            for room in self._rooms:
+                if object in room:
+                    return room
+
     
     #Get the pos of the element
     def pos(self, element):
