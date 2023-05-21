@@ -13,7 +13,7 @@ class Bow(Item):
     EPIC_BOW =("Bo bow", IMAGE, 10, 50 ,vec(1,6))
     LEGENDARY_BOW =("Racist bow",IMAGE, 15, 100, vec(1,7))
     LIST=[COMMUNE_BOW,RARE_BOW,EPIC_BOW,LEGENDARY_BOW]  
-    def __init__(self,name,image,damage,durability,range):
+    def __init__(self,name,image,damage,durability,range,animation = None):
         super().__init__()
         self.image = pygame.transform.scale(image,(72,72))
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
@@ -25,3 +25,4 @@ class Bow(Item):
         self.durability = durability
         self.range = range
         self.wall_ability = True
+        self.animation = animation

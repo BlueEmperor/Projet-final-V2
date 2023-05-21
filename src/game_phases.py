@@ -4,7 +4,7 @@ import random
 from path import ASSETS_DIR
 from src.global_state import GlobalState
 GlobalState.load_main_screen()
-from src.animation import Animation
+from src.components.animations.fireball_animation import FireballAnimation
 from src.components.map.map import Map
 from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
@@ -25,7 +25,7 @@ stat_ui = StatUI(player)
 m = Map(player)
 minimap = MiniMap(m)
 hover = Hover(m)
-animation = [[Animation(image_list = [pygame.image.load(ASSETS_DIR / ("Fireball/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(7)], frame_per_image = 5, direction = vec(0,1), speed = 5, delay = 50, frame_duration = 100, start_coord = vec(Config.WIDTH/2, Config.HEIGHT/2))]]
+animation = []
 
 for i in range(1):
     a=Sword(*Sword.LIST[0])
@@ -47,7 +47,7 @@ def gameplay_phase(events):
             #Mouses events
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 1):
-                    m.left_click_down_event()
+                    m.left_click_down_event(animation)
                     inventory_ui.left_click_down_event()
 
                 elif(event.button == 3):
@@ -86,7 +86,7 @@ def gameplay_phase(events):
         anim(animation)
 
         # ------------------------------------------
-
+        hover.draw(GlobalState.SCREEN)
         GlobalState.SCREEN.blit(Map.DARK_EFFECT, (0,0))
         stat_ui.draw(GlobalState.SCREEN)
         inventory_ui.draw(GlobalState.SCREEN)
@@ -97,16 +97,8 @@ def end_menu_phase(events):
     pass
 
 def anim(animation):
-    if(len(animation) == 0):
-        hover.draw(GlobalState.SCREEN)
-    else:
-        i=0
-        while(i<len(animation[0])):
-            animation[0][i].update()
-            if(animation[0][i].delay == 0):
-                animation[0][i].draw(GlobalState.SCREEN)
-            if(animation[0][i].actual_frame == animation[0][i].max_frame_duration):
-                animation[0].pop(i)
-            i+=1
-        if(len(animation) != 0 and len(animation[0]) == 0):
-            animation.pop(0)
+    if(len(animation) != 0 and animation[0].update()):
+        animation.pop(0)
+
+    if(len(animation) != 0):
+        animation[0].draw(GlobalState.SCREEN)

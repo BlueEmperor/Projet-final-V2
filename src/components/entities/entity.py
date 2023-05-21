@@ -22,19 +22,15 @@ class Entity(pygame.sprite.Sprite):
     def draw(self,SCREEN):
         SCREEN.blit(self.image, self.rect)
 
-    def meet(self,other, m):
-        if isinstance(other,Entity):
-            if other.health ==None:
-                other.isopening= True
-            elif (other.health > self.weapon.damage):
-                other.health-= self.weapon.damage
-            elif other.health < self.weapon.damage:
-                other.health = 0
-                other.kill()
-                m.rm(other)
+    def meet(self, target, m, animation):
+        target.health -= self.weapon.damage
+        if(self.weapon.animation != None):
+            animation.append(self.weapon.animation(self, target, m._player))
 
-        else:
-            return
+        if(target.health <= 0):
+            return(True)
+        
+        return(False)
     
     def can_attack(self,entity, m):
         dist=(entity.map_pos-self.map_pos)
@@ -46,3 +42,15 @@ class Entity(pygame.sprite.Sprite):
 
         elif (self.weapon.attack_type == "continuous"):
             return True
+        
+    
+    def teleport(self, coord):
+        self.map_pos = coord
+        self.absolute_pos = coord*48
+
+    
+    def heal(self, number):
+        if(self.health + number > self.max_health):
+            self.health = self.max_health
+        else:
+            self.health += number

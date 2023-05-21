@@ -41,10 +41,9 @@ class Monster(Entity):
         self.moving_tick = 12
        
     
-    def turn_action(self, m):
+    def turn_action(self, m, animation):
         if m.line_of_sight(self.map_pos, m._player.map_pos):
             if self.can_attack(m._player, m):
-                self.meet(m._player, m)
-                print(m._player.health)
+                self.meet(m._player, m, animation)
             else:
                 self.move(m)

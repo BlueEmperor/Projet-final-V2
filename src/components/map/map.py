@@ -381,29 +381,20 @@ class Map:
             self.tiles_sprites.append(L)
 
     #--------------------------- Events functions --------------------------------
-    def left_click_down_event(self):
+    def left_click_down_event(self, animation):
         if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
             return
         
         item = self.get_item(self.mouse_pos)
-        if(not(isinstance(item, Monster)) or not(self.line_of_sight(self._player.map_pos, self.mouse_pos))):
-            if isinstance(item,Monster):
-                if isinstance(self._player.weapon,Bow):
-                    self._player.meet(item,self)
-
-            elif isinstance(item,Chest):
-                item.isopening = True
-                self._player.meet(item,self)
-                #item.isopening=True
-            
+        if(not(isinstance(item,Monster))):
             return
         
-        if(not(self._player.can_attack(item, self))):
-            return
+        if(self._player.meet(item, self, animation)):
+            item.remove(self.monster_group)
+            self.rm(item)
         
-        self._player.meet(item, self)
         for monster in self.monster_group:
-            monster.turn_action(self)
+            monster.turn_action(self, animation)
 
     def f_down_event(self, inventory_ui):
         item = self.get_item(self.mouse_pos)
@@ -435,7 +426,7 @@ class Map:
                             self._player.map_pos += self.DIR[key]
                             self.put(self._player, self._player.map_pos)
                             for monster in self.monster_group:
-                                monster.turn_action(self)
+                                monster.turn_action(self, animation)
 
                             #Update the numbers of the tile to draw
                             self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
@@ -470,4 +461,5 @@ class Map:
 
         #Draw the monsters
         self.monster_group.draw(SCREEN)
+        #Draw chest
         self.box_group.draw(SCREEN)

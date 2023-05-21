@@ -56,24 +56,3 @@ class Player(Entity):
                     L[1].append(vec(j,i))
 
         return(L)
-
-    def teleport(self, coord):
-        self.map_pos = coord
-        self.absolute_pos = coord*48
-    
-    def meet(self,other, m):
-        if isinstance(other,Monster):
-            if (other.health > self.weapon.damage):
-                other.health-= self.weapon.damage
-            else:
-                other.health = 0
-                other.kill()
-                m.rm(other)
-        if isinstance(other,Chest):
-            other.isopening = True
-
-    def heal(self, number):
-        if(self.health + number > self.max_health):
-            self.health = self.max_health
-        else:
-            self.health += number
