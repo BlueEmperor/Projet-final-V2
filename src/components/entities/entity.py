@@ -28,7 +28,7 @@ class Entity(pygame.sprite.Sprite):
                 other.isopening= True
             elif (other.health > self.weapon.damage):
                 other.health-= self.weapon.damage
-            elif other.health < self.weapon.damage:
+            elif other.health <= self.weapon.damage:
                 other.health = 0
                 other.kill()
                 m.rm(other)

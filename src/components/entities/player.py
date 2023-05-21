@@ -88,11 +88,18 @@ class Player(Entity):
     def damage_boost(self,number,tour):
         pass
         #self.weapon.damage+=number
+        #while self.weapon.durability
         #while tour > 0:
             #pass
         #self.weapon.damage-=number
 
     def poison_attack(self,number,m):
         pass
+        #for i in m.get_item_room(self):
+         #   if isinstance(i,Entity) and i.health!=None:
+          #      if i.health<=number:
+           #         i.kill
+            #    elif i.health>number:
+             #       i.health-=number
     def invisibility(self,number):
         pass

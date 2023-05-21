@@ -11,6 +11,7 @@ from src.components.entities.monster import Monster
 from src.components.items.bow import Bow
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
+from src.components.items.potions import Potion
 from src.global_state import GlobalState
 from src.status import PlayerStatus
 from src.components.entities.entity import Entity
@@ -105,6 +106,19 @@ class Map:
             for room in self._rooms:
                 if object in room:
                     return room
+                
+    def get_item_room(self, object):
+        room=self.get_room(object)
+        items=[]
+        for i in range (int(room.c1.x - room.c2.x)):
+            for j in (int(room.c1.y - room.c2.y)):
+        #for i in room:
+                items.append(self.get_item(vec(i,j)))
+        return items
+
+
+
+
 
     
     #Get the pos of the element
@@ -422,6 +436,13 @@ class Map:
         if(isinstance(item, Chest)):
             if(((self._player.map_pos[0]-self.mouse_pos[0])**2+(self._player.map_pos[1]-self.mouse_pos[1])**2)**0.5<=1):
                 item.open_chest(self._player, inventory_ui)
+        #elif(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
+            #return
+        elif(isinstance(self._player.weapon,Potion)):
+            if self._player.weapon.usage == "Poison":
+                self._player.weapon.effect(self._player,self)
+            else:
+                self._player.weapon.effect(self._player)
 
 
     #--------------------------- Update functions --------------------------------
