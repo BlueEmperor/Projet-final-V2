@@ -23,6 +23,7 @@ class Wand(Item):
         self.name = name
         self.attack_type = "linear"
         self.description = "Un baton dangereux !"
+        self.type="wand"
         self.damage = damage
         self.durability = durability
         self.range = range

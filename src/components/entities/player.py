@@ -22,6 +22,7 @@ class Player(Entity):
         self.mana = 96
         self.max_mana = 100
         self.level = 1
+        self.armor = None
     
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()
@@ -56,3 +57,49 @@ class Player(Entity):
                     L[1].append(vec(j,i))
 
         return(L)
+
+    def teleport(self, coord):
+        self.map_pos = coord
+        self.absolute_pos = coord*48
+    
+    def meet(self,other, m):
+        if isinstance(other,Monster):
+            if (other.health > self.weapon.damage):
+                other.health-= self.weapon.damage
+            else:
+                other.health = 0
+                other.kill()
+                m.rm(other)
+        if isinstance(other,Chest):
+            other.isopening = True
+
+    def heal(self, number):
+        if(self.health + number > self.max_health):
+            self.health = self.max_health
+        else:
+            self.health += number
+
+    def armor_boost(self,number):
+        if self.armor.health + number > self.armor.max_health:
+            self.armor.health = self.armor.max_health
+        else:
+            self.armor.health += number
+
+    def damage_boost(self,number,tour):
+        pass
+        #self.weapon.damage+=number
+        #while self.weapon.durability
+        #while tour > 0:
+            #pass
+        #self.weapon.damage-=number
+
+    def poison_attack(self,number,m):
+        pass
+        #for i in m.get_item_room(self):
+         #   if isinstance(i,Entity) and i.health!=None:
+          #      if i.health<=number:
+           #         i.kill
+            #    elif i.health>number:
+             #       i.health-=number
+    def invisibility(self,number):
+        pass
