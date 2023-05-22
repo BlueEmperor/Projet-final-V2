@@ -83,12 +83,13 @@ class Player(Entity):
         #self.weapon.damage-=number
 
     def poison_attack(self,number,m):
-        pass
-        #for i in m.get_item_room(self):
-         #   if isinstance(i,Entity) and i.health!=None:
-          #      if i.health<=number:
-           #         i.kill
-            #    elif i.health>number:
-             #       i.health-=number
+        for i in m.get_item_room(self):
+            print(i)
+            if isinstance(i,Monster) and i.health!=None:
+                if i.health<=number:
+                    i.kill
+                elif i.health>number:
+                    i.health-=number
+
     def invisibility(self,number):
         pass

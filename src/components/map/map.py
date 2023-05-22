@@ -96,6 +96,7 @@ class Map:
         if(coord in self):
             return(self.map[int(coord[1])][int(coord[0])])
         return(Map.WALL)
+    
     #get the room that contains the coord or the element
     def get_room(self, object):
         if isinstance(object,Entity):
@@ -110,10 +111,13 @@ class Map:
     def get_item_room(self, object):
         room=self.get_room(object)
         items=[]
-        for i in range (int(room.c1.x - room.c2.x)):
-            for j in (int(room.c1.y - room.c2.y)):
+        for i in range(abs(int(room.c1.x - room.c2.x))):
+            for j in range(abs(int(room.c1.y - room.c2.y))):
         #for i in room:
-                items.append(self.get_item(vec(i,j)))
+                item = self.get_item(vec(i,j))
+                if(isinstance(item, Monster)):
+                    items.append(item)
+        print(items)
         return items
 
 
@@ -240,6 +244,7 @@ class Map:
                             #self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
                         #else:
                             #self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
+                            
     #--------------------------- Map generation --------------------------------
     def addRoom(self, room):
         self._roomsToReach.append(room)
@@ -413,6 +418,9 @@ class Map:
         
         item = self.get_item(self.mouse_pos)
         if(not(isinstance(item,Monster))):
+            return
+        
+        if(not(self._player.can_attack(item, self))):
             return
         
         if(self._player.meet(item, self, animation)):
