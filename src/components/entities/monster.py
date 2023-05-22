@@ -10,7 +10,7 @@ vec=pygame.math.Vector2
 
 class Monster(Entity):
     SQUELETTE = ("Squelette", 8, 1, Sword(*Sword.SKELETON_SWORD), [pygame.image.load(ASSETS_DIR / ("squelette.png")).convert_alpha(), pygame.image.load(ASSETS_DIR / ("squelette_hover.png")).convert_alpha()])
-    VAMPIRE = ("Vampire", 15, 1, Wand(*Wand.VAMPIRE_WAND), [pygame.image.load(ASSETS_DIR / ("vampire.png")).convert_alpha(), pygame.image.load(ASSETS_DIR / ("vampire_hover.png")).convert_alpha()])
+    VAMPIRE = ("Vampire", 15, 1, Wand(*Wand.COMMUNE_WAND), [pygame.image.load(ASSETS_DIR / ("vampire.png")).convert_alpha(), pygame.image.load(ASSETS_DIR / ("vampire_hover.png")).convert_alpha()])
     MONSTER_LIST = [SQUELETTE, VAMPIRE]
     
     def __init__(self,name,health,speed, weapon, image_list, pos):

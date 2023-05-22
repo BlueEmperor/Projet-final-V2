@@ -1,10 +1,7 @@
 import pygame
 
-import random
-from path import ASSETS_DIR
 from src.global_state import GlobalState
 GlobalState.load_main_screen()
-from src.components.animations.fireball_animation import FireballAnimation
 from src.components.map.map import Map
 from src.components.entities.player import Player
 from src.components.UI.inventory import InventoryUI
@@ -13,7 +10,7 @@ from src.components.UI.minimap import MiniMap
 from src.components.UI.hover import Hover
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
-from src.config import Config
+from src.components.items.potions import Potion
 
 vec = pygame.math.Vector2
 
@@ -29,18 +26,20 @@ animation = []
 
 for i in range(1):
     a=Sword(*Sword.LIST[0])
-    #a.damage = 1000
+    a.damage = 1000
+    a.range=[1,4]
     player.add_in_inventory(a, inventory_ui)
     b=Wand(*Wand.LIST[0])
-    b.damage = 700000
+    #b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
+    player.add_in_inventory(Potion(*Potion.POISON_POTION[0]), inventory_ui)
 
 def main_menu_phase(events):
     pass
 
 def gameplay_phase(events):
     global animation
-
+    global m
     GlobalState.SCREEN.fill((37,19,26)) # type: ignore
     if(len(animation) == 0):
         for event in events:
@@ -78,7 +77,6 @@ def gameplay_phase(events):
         m.update(animation)
         inventory_ui.update()
         hover.update(animation)
-        
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN)
 
