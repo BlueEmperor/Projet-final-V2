@@ -12,7 +12,7 @@ class Potion(Item):
     DAMAGE_BOOST_POTION = ((" Small Damage Potion",IMAGE,lambda hero : hero.damage_boost(20,10)),(" Rare Damage Potion",IMAGE,lambda hero : hero.damage_boost(20,20)),("Epic Damage Potion",IMAGE,lambda hero : hero.damage_boost(50,20)),(" Enormous Damage Potion",IMAGE,lambda hero : hero.damage_boost(100,20)))
     POISON_POTION = (("Commune Poison Potion",IMAGE,lambda hero,m : hero.poison_attack(5,m),1),("Rare Poison Potion",IMAGE,lambda hero,m : hero.poison_attack(10,m),1),("Epic Poison Potion",IMAGE,lambda hero,m : hero.poison_attack(20,m),1),("Legendary Poison Potion",IMAGE,lambda hero,m : hero.poison_attack(50,m),1))
     INVISIBILITY_POTION = (("Short Invisibility Potion",IMAGE,lambda hero: hero.invibility(3),1),("Rare Invisibility Potion",IMAGE,lambda hero: hero.invibility(5),1),("Epic Invisibility Potion",IMAGE,lambda hero: hero.invibility(10),1),("Legendary Invisibility Potion",IMAGE,lambda hero: hero.invibility(20),2))
-    LIST = [HEALTH_POTION,ARMOR_BOOST_POTION,DAMAGE_BOOST_POTION,INVISIBILITY_POTION,POISON_POTION]#[POISON_POTION]#
+    LIST = [HEALTH_POTION]#,ARMOR_BOOST_POTION,DAMAGE_BOOST_POTION,INVISIBILITY_POTION,POISON_POTION]#[POISON_POTION]#
     def __init__(self,name,image,effect, durability=1):
         super().__init__()
         self.name = name

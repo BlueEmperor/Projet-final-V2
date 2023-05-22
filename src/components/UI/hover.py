@@ -7,6 +7,7 @@ from src.components.entities.chest import Chest
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.components.items.potions import Potion
+from src.components.items.armor import Armor
 
 vec = pygame.math.Vector2
 
@@ -89,7 +90,8 @@ class Hover:
                     if isinstance(i, Potion):
                         SCREEN.blit(self.font.render(f"{(i.usage[0])}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
                         #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))
-                        
+                    elif isinstance(i, Armor):
+                        return    
                     else:
                         SCREEN.blit(self.font.render(f"{int(i.damage)}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
                     SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))
