@@ -423,9 +423,7 @@ class Map:
         if(not(self._player.can_attack(item, self))):
             return
         
-        if(self._player.meet(item, self, animation)):
-            item.remove(self.monster_group)
-            self.rm(item)
+        self._player.meet(item, self, animation)
         
         for monster in self.monster_group:
             monster.turn_action(self, animation)
