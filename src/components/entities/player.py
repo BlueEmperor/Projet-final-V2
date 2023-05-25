@@ -22,6 +22,8 @@ class Player(Entity):
         self.mana = 60
         self.max_mana = self.mana
         self.level = 1
+        self.experience = 0
+        self.experience_to_level_up = lambda: int((self.level-1)**1.7 + 12)
         self.armor = None
     
     def add_in_inventory(self, item, inventory_ui):
@@ -44,6 +46,12 @@ class Player(Entity):
         
         item.update(inventory_ui.inventory_rect.topleft, inventory_ui.hotbar_rect.topleft)
         return(True)
+
+    def add_experience(self, number):
+        self.experience += number
+        while(self.experience > self.experience_to_level_up()):
+            self.experience -= self.experience_to_level_up()
+            self.level += 1
 
     def empty_slots(self):
         L=[[],[]]

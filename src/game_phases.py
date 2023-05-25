@@ -40,6 +40,7 @@ def main_menu_phase(events):
 def gameplay_phase(events):
     global animation
     global m
+    global player
 
     GlobalState.SCREEN.fill((37,19,26)) # type: ignore
     if(len(animation) == 0):

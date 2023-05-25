@@ -22,7 +22,7 @@ class StatUI:
         pygame.draw.rect(SCREEN, (53,153,238), pygame.Rect(105,66,210*self._player.mana/self._player.max_mana,24))
         
         #Experience
-        pygame.draw.rect(SCREEN, (139,244,37), pygame.Rect(162,102,157,15))
+        pygame.draw.rect(SCREEN, (139,244,37), pygame.Rect(162,102,157*self._player.experience/self._player.experience_to_level_up(),15))
 
         SCREEN.blit(self.image, self.rect)
         SCREEN.blit(self._player.big_image_list[self._player.current_image], self.rect.topleft+vec(20,23))

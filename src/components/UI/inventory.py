@@ -108,6 +108,9 @@ class InventoryUI:
                 
             if(self.select_item != None and self.select_item.location == "i"):
                 self.select_item=None #Remove the select item
+            
+            if(self.right_click_item != None and self.right_click_item.location == "i"):
+                self.right_click_item = None
 
     def left_click_down_event(self, m):
         if(self.animation != 0):
@@ -135,14 +138,23 @@ class InventoryUI:
             button_list = []
             if(self.right_click_item.effect != None):
                 button_list.append(self.right_click_item.effect)
-            
+
+            if(self.right_click_item.effect == None):
+                taille = 1
+            else:
+                taille = 2
+
+            correct = 0
+            if(self.right_click_coord[1]+taille*30 > Config.HEIGHT):
+                correct = 30*taille
+
             for i in range(len(button_list)):
-                if(pygame.Rect(self.right_click_coord + vec(0, i*30), (105, 30)).collidepoint(pygame.mouse.get_pos())):
+                if(pygame.Rect(self.right_click_coord + vec(0, i*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
                     button_list[i](self._player, m)
                     self.remove(self.right_click_item.slot, self.right_click_item.location)
 
 
-            if(pygame.Rect(self.right_click_coord + vec(0, len(button_list)*30), (105, 30)).collidepoint(pygame.mouse.get_pos())):
+            if(pygame.Rect(self.right_click_coord + vec(0, len(button_list)*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
                 self.remove(self.right_click_item.slot, self.right_click_item.location)
 
             self.right_click_item = None
