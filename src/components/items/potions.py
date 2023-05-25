@@ -25,10 +25,10 @@ class Potion(Item):
     POISON_POTION = (("Commune Poison Potion",IMAGE,"Poison",lambda hero,m : hero.poison_attack(5,m),1),
                      ("Rare Poison Potion",IMAGE,"Poison",lambda hero,m : hero.poison_attack(10,m),1),("Epic Poison Potion",IMAGE,lambda hero,m : hero.poison_attack(20,m),1),("Legendary Poison Potion",IMAGE,lambda hero,m : hero.poison_attack(50,m),1))
     
-    INVISIBILITY_POTION = (("Short Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invibility(3),1),
-                           ("Rare Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invibility(5),1),
-                           ("Epic Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invibility(10),1),
-                           ("Legendary Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invibility(20),2))
+    INVISIBILITY_POTION = (("Short Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invisibility(3),1),
+                           ("Rare Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invisibility(5),1),
+                           ("Epic Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invisibility(10),1),
+                           ("Legendary Invisibility Potion",IMAGE,"Invisibility", lambda hero: hero.invisibility(20),2))
     
     LIST = [POISON_POTION]#[HEALTH_POTION,ARMOR_BOOST_POTION,DAMAGE_BOOST_POTION,INVISIBILITY_POTION,POISON_POTION]
     def __init__(self,name,image,usage,effect, durability=1):
@@ -44,5 +44,5 @@ class Potion(Item):
         self.description = "Une potion magique"
         self.type = "Potion"
         self.usage = usage
-
+        
 

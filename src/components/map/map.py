@@ -426,6 +426,18 @@ class Map:
         if(self._player.meet(item, self, animation)):
             item.remove(self.monster_group)
             self.rm(item)
+            if self._player.usage!=[]:
+                for i in range(len(self._player.usage)):
+                    if i=="Damage":
+                        self._player.duration[i]-=1
+                    if self._player.duration[i]==0:
+                        del(self._player.duration(i))
+            else:
+                self._player.weapon.durability -= 1
+                if self._player.weapon.durability==0:
+                    return
+                
+                return
         
         for monster in self.monster_group:
             monster.turn_action(self, animation)
@@ -438,10 +450,14 @@ class Map:
         #elif(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
             #return
         elif(isinstance(self._player.weapon,Potion)):
+            self._player.usage.append(self._player.weapon.usage)
+            
             if self._player.weapon.usage == "Poison":
-                self._player.weapon.effect(self._player,self)
+                a=self._player.weapon.effect(self._player,self)
+                self._player.duration.append(a)
             else:
-                self._player.weapon.effect(self._player)
+                a=self._player.weapon.effect(self._player)
+                self._player.duration.append(a)
 
 
     #--------------------------- Update functions --------------------------------
@@ -461,17 +477,24 @@ class Map:
                             #Is executed at every move of the player
                             self._player.ismoving=self.DIR[key]
                             self.moving_tick = 12
-
+                            
                             #Move the player on the map
                             self.rm(self._player)
                             self._player.map_pos += self.DIR[key]
                             self.put(self._player, self._player.map_pos)
+                            if self._player.usage!=[]:
+                                for i in range(len(self._player.usage)):
+                                    if not (self._player.usage[i] in ("Damage", "Armor")):
+                                        self._player.duration[i]-=1
+                                        if self._player.duration[i]==0:
+                                            del(self._player.duration(i))
+
                             for monster in self.monster_group:
                                 monster.turn_action(self, animation)
 
                             #Update the numbers of the tile to draw
                             self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
-                            return
+                            return 
 
         else:
             #Update the visual position of every entities

@@ -23,6 +23,9 @@ class Player(Entity):
         self.max_mana = 100
         self.level = 1
         self.armor = None
+        self.usage = []
+        self.durability = []
+        self.duration = []
     
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()
@@ -46,7 +49,7 @@ class Player(Entity):
         return(True)
 
     def empty_slots(self):
-        L=[[],[]]
+        L=[[],[]]#L= ()
         for i in range(len(self.hotbar)):
             if(not(self.hotbar[i])):
                 L[0].append((vec(i,0)))
@@ -54,11 +57,11 @@ class Player(Entity):
         for i in range(len(self.inventory)):
             for j in range(len(self.inventory[i])):
                 if(not(self.inventory[i][j])):
-                    L[1].append(vec(j,i))
+                    L[1].append(vec(j,i))#changer parce que ca pue un peu
 
         return(L)
 
-    def teleport(self, coord):
+    def teleport(self, coord): #mettre if il est riche ,le tp plus loin avec expovariate
         self.map_pos = coord
         self.absolute_pos = coord*48
 
@@ -75,7 +78,8 @@ class Player(Entity):
             self.armor.health += number
 
     def damage_boost(self,number,tour):
-        pass
+        return tour
+        
         #self.weapon.damage+=number
         #while self.weapon.durability
         #while tour > 0:

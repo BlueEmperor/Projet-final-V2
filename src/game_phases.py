@@ -30,7 +30,7 @@ for i in range(1):
     a.range=[1,4]
     player.add_in_inventory(a, inventory_ui)
     b=Wand(*Wand.LIST[0])
-    #b.damage = 700000
+    b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
     player.add_in_inventory(Potion(*Potion.POISON_POTION[0]), inventory_ui)
 
