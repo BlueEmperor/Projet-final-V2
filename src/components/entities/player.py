@@ -19,8 +19,8 @@ class Player(Entity):
         self.health = 15
         self.max_health = 20
         self.gold = 0
-        self.mana = 96
-        self.max_mana = 100
+        self.mana = 500
+        self.max_mana = self.mana
         self.level = 1
         self.armor = None
     

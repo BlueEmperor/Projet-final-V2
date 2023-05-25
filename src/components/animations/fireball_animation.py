@@ -13,7 +13,7 @@ class FireballAnimation(Animation):
         distance = (coord[0]**2+coord[1]**2)**0.5
         direction = coord/distance
         fireball_speed = 5
-        duration = int(distance/fireball_speed)-12 if(int(distance/fireball_speed)-12 >= 0) else 0
+        duration = int(distance/fireball_speed-165/2/fireball_speed) if(int(distance/fireball_speed-165/2/fireball_speed) >= 0) else 0
         relative_user_pos = user.absolute_pos - player.absolute_pos + vec(Config.WIDTH//2, Config.HEIGHT//2)
         relative_target_pos = target.absolute_pos - player.absolute_pos + vec(Config.WIDTH//2, Config.HEIGHT//2)
         
@@ -21,12 +21,12 @@ class FireballAnimation(Animation):
         EXPLOSION_IMAGE_LIST = [pygame.image.load(ASSETS_DIR / ("Explosion/Sprite-000"+str(i+1)+".png")).convert_alpha() for i in range(10)]
         
         super().__init__(images=[FIREBALL_IMAGE_LIST, EXPLOSION_IMAGE_LIST],
-                         speed=[5, 0],
+                         speed=[fireball_speed, 0],
                          delay=[0, duration],
-                         frame_duration=[duration, 50],
+                         frame_duration=[duration, 30],
                          coords=[relative_user_pos, relative_target_pos],
                          directions=[direction, vec(0,0)],
-                         framerate=5,
+                         framerate=3,
                          frame_until_damage=duration,
                          user=user,
                          target=target)

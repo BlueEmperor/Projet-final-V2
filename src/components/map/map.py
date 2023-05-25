@@ -69,6 +69,7 @@ class Map:
         self.monster_group.update(player)
         self.box_group.update(player)
         self.moving_tick = 0
+        self.turn = []
         print(self)
         
 
@@ -80,10 +81,18 @@ class Map:
     
     def __len__(self):
         return(len(self.map))
+    #--------------------------- Raise errors --------------------------------
+    @staticmethod
+    def check_entity(entity):
+        if(isinstance(entity, Entity)):
+            return
+        
+        raise TypeError(f"Not an entity : {entity}, {entity.__class__}")
     
     #--------------------------- Utilities functions --------------------------------
     #Remove the entity in the map
     def rm(self, entity):
+        Map.check_entity(entity)
         self.map[int(entity.map_pos[1])][int(entity.map_pos[0])] = Map.GROUND
 
     #Put the entity in the map at the coord
@@ -423,10 +432,16 @@ class Map:
         if(not(self._player.can_attack(item, self))):
             return
         
+        if(isinstance(self._player.weapon, Wand)):
+            if(self._player.mana - self._player.weapon.mana < 0):
+                return
+            
+            self._player.mana -= self._player.weapon.mana
+                
         self._player.meet(item, self, animation)
-        
+            
         for monster in self.monster_group:
-            monster.turn_action(self, animation)
+            self.turn.append(monster)
 
     def f_down_event(self, inventory_ui):
         item = self.get_item(self.mouse_pos)
@@ -445,10 +460,29 @@ class Map:
     #--------------------------- Update functions --------------------------------
     def update(self, animation):
         self.mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
-        if(len(animation) != 0):
-            return
+
+        self.monster_group.update(self._player)
+        self.box_group.update(self._player)
         
-        if(self._player.ismoving == False):
+        if(self._player.ismoving):
+            #Update the visual position of every entities
+            self._player.absolute_pos += self._player.ismoving*4
+            self.moving_tick-=1
+            if(self.moving_tick==0):
+                self._player.ismoving=False
+        else:
+            if(len(animation) != 0):
+                return
+        
+            if(len(self.turn) != 0):
+                while(len(animation) == 0 and len(self.turn) != 0):
+                    monster = self.turn.pop(0)
+                    print(monster.health)
+                    if(monster.health > 0):
+                        monster.turn_action(self, animation)
+
+                return
+            
             if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
                 #Check if a key is pressed
                 keys=pygame.key.get_pressed()
@@ -465,20 +499,13 @@ class Map:
                             self._player.map_pos += self.DIR[key]
                             self.put(self._player, self._player.map_pos)
                             for monster in self.monster_group:
-                                monster.turn_action(self, animation)
+                                self.turn.append(monster)
 
                             #Update the numbers of the tile to draw
                             self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
                             return
 
-        else:
-            #Update the visual position of every entities
-            self._player.absolute_pos += self._player.ismoving*4
-            self.moving_tick-=1
-            if(self.moving_tick==0):
-                self._player.ismoving=False
-        self.monster_group.update(self._player)
-        self.box_group.update(self._player)
+        
 
     #--------------------------- Draw functions --------------------------------
     def draw(self, SCREEN):

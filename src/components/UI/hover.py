@@ -47,7 +47,6 @@ class Hover:
         self.current_hover.image = self.current_hover.image_list[1]
 
     def draw(self, SCREEN):
-        item = self._map.get_item(self._map.mouse_pos)
         if(self.current_hover != None):
             SCREEN.blit(self.image, self.rect)
             if(isinstance(self.current_hover, Monster)):
@@ -88,7 +87,8 @@ class Hover:
                     #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(50+phase,h))
                     phase += 50
                     if isinstance(i, Potion):
-                        SCREEN.blit(self.font.render(f"{(i.usage[0])}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
+                        #T'avais mis i.usage[0] sauf que le usage dans potion c'est un texte, pas une liste donc fallait pas mettre le [0]
+                        SCREEN.blit(self.font.render(f"{(i.usage)}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
                         #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))
                     elif isinstance(i, Armor):
                         return    

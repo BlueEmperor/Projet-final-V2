@@ -35,6 +35,7 @@ class Monster(Entity):
         chemin=m.A_star(self.map_pos, m._player.map_pos)
         if(len(chemin) == 0):
             return
+        
         m.move(self.map_pos,chemin[-1])
         self.ismoving=(chemin[-1]-self.map_pos)*4
         self.map_pos=chemin[-1]

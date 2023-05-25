@@ -10,7 +10,8 @@ class Armor(Item):
     IRON_ARMOR = ("Iron Armor", IMAGE, 30)
     GOLD_ARMOR = ("Gold Armor", IMAGE, 50)
     DIAMOND_ARMOR = ("Diamond Armor", IMAGE, 75)
-    LIST = [WOOD_ARMOR, IRON_ARMOR, GOLD_ARMOR,DIAMOND_ARMOR]  
+    LIST = [WOOD_ARMOR, IRON_ARMOR, GOLD_ARMOR,DIAMOND_ARMOR]
+    
     def __init__(self,name,image,value):
         super().__init__()
         self.name = name
