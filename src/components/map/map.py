@@ -491,6 +491,10 @@ class Map:
                         #Check if the player can move
                         if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
                             #Is executed at every move of the player
+                            self._player.mana += 2
+                            if(self._player.max_mana < self._player.mana):
+                                self._player.mana = self._player.max_mana
+
                             self._player.ismoving=self.DIR[key]
                             self.moving_tick = 12
 
