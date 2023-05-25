@@ -443,6 +443,7 @@ class Map:
         for monster in self.monster_group:
             self.turn.append(monster)
 
+
     def f_down_event(self, inventory_ui):
         item = self.get_item(self.mouse_pos)
         if(isinstance(item, Chest)):

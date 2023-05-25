@@ -19,7 +19,7 @@ class Player(Entity):
         self.health = 15
         self.max_health = 20
         self.gold = 0
-        self.mana = 500
+        self.mana = 60
         self.max_mana = self.mana
         self.level = 1
         self.armor = None
@@ -63,10 +63,9 @@ class Player(Entity):
         self.absolute_pos = coord*48
 
     def heal(self, number):
-        if(self.health + number > self.max_health):
+        self.health += number
+        if(self.health > self.max_health):
             self.health = self.max_health
-        else:
-            self.health += number
 
     def armor_boost(self,number):
         if self.armor.health + number > self.armor.max_health:
