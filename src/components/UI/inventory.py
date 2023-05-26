@@ -79,7 +79,7 @@ class InventoryUI:
             item.location = location
             item.slot = coord
             item.kill()
-            item.add(self.inventory_group) if(location == "i") else item.add(self.hotbar_group)
+        item.add(self.inventory_group) if(location == "i") else item.add(self.hotbar_group) if(location == "h") else ""
 
         if(location == "i"):
             self._player.inventory[int(coord[1])][int(coord[0])] = item

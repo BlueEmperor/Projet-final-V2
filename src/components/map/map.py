@@ -374,11 +374,9 @@ class Map:
                 rect = pygame.Rect(0,0, 48,48)
                 rect.topleft=vec(i,j)*48 # type: ignore
                 if(not(self.get_item(vec(i,j)) in (Map.WALL, Map.STAIR))):
-                    print(self.get_item(vec(i,j)))
                     L.append(Tile(Map.GROUND_TILE[random.randint(0,14)], rect))
                 
                 elif(self.get_item(vec(i,j)) == Map.STAIR):
-                    print("ez")
                     L.append(Tile(Map.STAIR_TILE, rect))
 
                 elif(voisins==[1]*9):
@@ -452,22 +450,6 @@ class Map:
         if(not(self._player.can_attack(item, self))):
             return
         
-        if(self._player.meet(item, self, animation)):
-            item.remove(self.monster_group)
-            self.rm(item)
-            if self._player.usage!=[]:
-                for i in range(len(self._player.usage)):
-                    if self._player.usage[i][-1]=="Damage":
-                        self._player.duration[i][-1]-=1
-                    if self._player.duration[i][-1]==0:
-                        self._player.duration.pop(i)
-            else:
-                self._player.weapon.durability -= 1
-                if self._player.weapon.durability==0:
-                    return
-                
-                return
-        
         if(isinstance(self._player.weapon, Wand)):
             if(self._player.mana - self._player.weapon.mana < 0):
                 return
@@ -475,6 +457,22 @@ class Map:
             self._player.mana -= self._player.weapon.mana
 
         self._player.meet(item, self, animation)
+
+        i = 0
+        while(i < len(self._player.effects)):
+            if self._player.effects[i][2]=="Damage":
+                self._player.effects[i][1]-=1
+
+            if self._player.effects[i][1]==0:
+                self._player.effects.pop(i)
+                i -= 1
+
+            i += 1
+
+        
+        self._player.weapon.durability -= 1
+        if self._player.weapon.durability==0:
+            pass
             
         for monster in self.monster_group:
             self.turn.append(monster)
@@ -485,19 +483,14 @@ class Map:
         if(isinstance(item, Chest)):
             if(((self._player.map_pos[0]-self.mouse_pos[0])**2+(self._player.map_pos[1]-self.mouse_pos[1])**2)**0.5<=1):
                 item.open_chest(self._player, inventory_ui)
-        #elif(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
-            #return
+
         elif(isinstance(self._player.weapon,Potion)):
-            self._player.usage.append([self._player.weapon,self._player.weapon.usage])
-            
-            #if self._player.weapon.usage == "Poison":
-                #a=self._player.weapon.effect(self._player,self)
-                #self._player.duration.append(a)
-            if self._player.weapon.usage != ("Poison" or "Health"):
-                a=self._player.weapon.effect(self._player)
-                self._player.duration.append([self._player.weapon,a])
-            print(self._player.usage)
-        return item
+            pot = self._player.weapon
+            self._player.effects.append([pot.effect, pot.turn, pot.usage])
+            pot.durability -= 1
+            if(pot.durability == 0):
+                inventory_ui.remove(pot.slot, pot.location)
+            self._player.effect(self)
 
 
     #--------------------------- Update functions --------------------------------
@@ -546,14 +539,8 @@ class Map:
                             self.rm(self._player)
                             self._player.map_pos += self.DIR[key]
                             self.put(self._player, self._player.map_pos)
-                            if self._player.usage!=[]:
-                                for i in range(len(self._player.usage)):
-                                    #if not (self._player.usage[i][-1] in ("Damage", "Armor","Invisibility")):
-                                        self._player.use_durability(self._player.usage[i][0],inventory_ui)
-                                        print (self._player.usage)
-                                        #self._player.duration[i]-=1
-                                        #if self._player.duration[i]==0:
-                                            #self._player.duration.pop(i)
+
+                            self._player.effect(self)
 
                             for monster in self.monster_group:
                                 self.turn.append(monster)

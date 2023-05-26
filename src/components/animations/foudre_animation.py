@@ -30,3 +30,4 @@ class FireballAnimation(Animation):
                          frame_until_damage=duration,
                          user=user,
                          target=target)
+        

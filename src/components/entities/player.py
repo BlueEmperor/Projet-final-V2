@@ -15,30 +15,34 @@ class Player(Entity):
         self.big_image_list = [pygame.image.load(ASSETS_DIR / "player" / ("player" + str(i+1) + "_inv.png")).convert_alpha() for i in range(4)]
         super().__init__("player", vec(4,4), self.image_list)
         self.rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)
-        self.hotbar = [None for i in range(9)]
-        self.inventory = [[None for i in range(9)] for j in range(4)]
+        self.hotbar = [None for _ in range(9)]
+        self.inventory = [[None for _ in range(9)] for _ in range(4)]
+        self.armor = [None for _ in range(4)]
         self.health = 20
         self.max_health = 20
+        self.health_boost = 0
         self.gold = 0
         self.mana = 60
         self.max_mana = self.mana
+        self.mana_boost = 0
+        self.defense = 0
+        self.defense_boost = 0
         self.level = 1
         self.experience = 0
-        self.experience_to_level_up = lambda: int((self.level+1)**1.85 + 12)
+        self.experience_to_level_up = lambda: int((self.level+1)**2.2 + 12)
         self.xp = 0 #Juste pour que le jeu ne crash pas quand le player meurt, ne sert pas sinon
-        self.armor = None
-        self.usage = []
-        self.durability = []
-        self.duration = []
+        self.effects = [] #[[function lambda, duration, name of the effect], ...]
     
     #def get_item(self,n):
-    def use_durability(self,item, inventory_ui):
-        if item.usage!=("Poison" or "Health"):
-            pass
-            
-        item.durability-=1
-        if item.durability==0:
-            self.remove_inventory(item,inventory_ui)
+    def effect(self, m):
+        i = 0
+        while(i < len(self.effects)):
+            self.effects[i][1] -= 1
+            self.effects[i][0](self, m)
+            if(self.effects[i][1] == 0):
+                self.effects.pop(0)
+                i -= 1
+            i += 1
 
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()
@@ -60,19 +64,6 @@ class Player(Entity):
         
         item.update(inventory_ui.inventory_rect.topleft, inventory_ui.hotbar_rect.topleft)
         return(True)
-    
-    def remove_inventory(self, item,inventory_ui):
-        if isinstance(item, Item):
-            self.inventory.remove(item)
-            if item in inventory_ui.inventory_group:
-                item.remove(inventory_ui.inventory_group)
-
-            item.remove(inventory_ui.hotbar_group)
-            item.location = None
-
-        else:
-            pass
-        item.update(inventory_ui.inventory_rect.topleft, inventory_ui.hotbar_rect.topleft)
 
 
     def add_experience(self, number):
@@ -108,13 +99,10 @@ class Player(Entity):
             self.health = self.max_health
 
     def armor_boost(self,number):
-        if self.armor.health + number > self.armor.max_health:
-            self.armor.health = self.armor.max_health
-        else:
-            self.armor.health += number
+        self.defense += number
 
-    def damage_boost(self,number,tour):
-        pass
+    def damage_boost(self,function,tour):
+        self.effects.append([])
         
         #self.weapon.damage+=number
         #while self.weapon.durability
