@@ -27,11 +27,12 @@ class Entity(pygame.sprite.Sprite):
         if(self.weapon.animation != None):
             animation.append(self.weapon.animation(self, target, m._player))
     
-    def damage(self, damage, m):
+    def damage(self, damage, m, player):
         self.health -= damage
         if(self.health <= 0):
             self.remove(m.monster_group)
             m.rm(self)
+            player.add_experience(self.xp)
 
     def can_attack(self,entity, m):
         dist=(entity.map_pos-self.map_pos)

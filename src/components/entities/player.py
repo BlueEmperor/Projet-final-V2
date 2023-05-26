@@ -1,8 +1,8 @@
 import pygame
 
-from src.components.entities.entity import Entity
 from path import ASSETS_DIR
 from src.config import Config
+from src.components.entities.entity import Entity
 from src.components.entities.chest import Chest
 from src.components.entities.monster import Monster
 
@@ -16,14 +16,14 @@ class Player(Entity):
         self.rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)
         self.hotbar = [None for i in range(9)]
         self.inventory = [[None for i in range(9)] for j in range(4)]
-        self.health = 15
+        self.health = 20
         self.max_health = 20
         self.gold = 0
         self.mana = 60
         self.max_mana = self.mana
         self.level = 1
         self.experience = 0
-        self.experience_to_level_up = lambda: int((self.level-1)**1.7 + 12)
+        self.experience_to_level_up = lambda: int((self.level+1)**1.85 + 12)
         self.armor = None
     
     def add_in_inventory(self, item, inventory_ui):
@@ -49,7 +49,7 @@ class Player(Entity):
 
     def add_experience(self, number):
         self.experience += number
-        while(self.experience > self.experience_to_level_up()):
+        while(self.experience >= self.experience_to_level_up()):
             self.experience -= self.experience_to_level_up()
             self.level += 1
 
@@ -91,7 +91,6 @@ class Player(Entity):
 
     def poison_attack(self,number,m):
         for i in m.get_item_room(self):
-            print(i)
             if isinstance(i,Monster) and i.health!=None:
                 if i.health<=number:
                     i.kill

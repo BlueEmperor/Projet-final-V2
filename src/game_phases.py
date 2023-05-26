@@ -95,7 +95,7 @@ def end_menu_phase(events):
     pass
 
 def anim(animation):
-    if(len(animation) != 0 and animation[0].update(m)):
+    if(len(animation) != 0 and animation[0].update(m, player)):
         animation.pop(0)
 
     if(len(animation) != 0):

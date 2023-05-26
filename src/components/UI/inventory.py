@@ -7,6 +7,7 @@ from src.status import PlayerStatus
 from src.components.items.bow import Bow
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
+
 vec = pygame.math.Vector2
 
 class InventoryUI:

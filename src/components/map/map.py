@@ -126,7 +126,6 @@ class Map:
                 item = self.get_item(vec(i,j))
                 if(isinstance(item, Monster)):
                     items.append(item)
-        print(items)
         return items
 
 
@@ -338,7 +337,6 @@ class Map:
                 box=Chest(vec(x,y),self._player)
                 self.put(box, vec(x,y))
                 box.add(self.box_group)
-                print(self.box_group)
 
 
 
@@ -475,7 +473,6 @@ class Map:
             if(len(self.turn) != 0):
                 while(len(animation) == 0 and len(self.turn) != 0):
                     monster = self.turn.pop(0)
-                    print(monster.health)
                     if(monster.health > 0):
                         monster.turn_action(self, animation)
 
