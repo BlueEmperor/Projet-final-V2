@@ -24,6 +24,7 @@ class Player(Entity):
         self.level = 1
         self.experience = 0
         self.experience_to_level_up = lambda: int((self.level+1)**1.85 + 12)
+        self.xp = 0 #Juste pour que le jeu ne crash pas quand le player meurt, ne sert pas sinon
         self.armor = None
     
     def add_in_inventory(self, item, inventory_ui):

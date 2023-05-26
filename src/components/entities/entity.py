@@ -20,8 +20,9 @@ class Entity(pygame.sprite.Sprite):
     def __repr__(self):
         return(self.name[0])
     
-    def draw(self,SCREEN):
-        SCREEN.blit(self.image, self.rect)
+    def draw(self,SCREEN, m):
+        if(m.see_map[int(self.map_pos[1])][int(self.map_pos[0])] == m.GROUND):
+            SCREEN.blit(self.image, self.rect)
 
     def meet(self, target, m, animation):
         if(self.weapon.animation != None):

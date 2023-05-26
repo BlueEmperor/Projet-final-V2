@@ -78,7 +78,7 @@ def gameplay_phase(events):
         inventory_ui.update()
         hover.update(animation)
         m.draw(GlobalState.SCREEN)
-        player.draw(GlobalState.SCREEN)
+        player.draw(GlobalState.SCREEN, m)
 
         #ANIMATION /!\ NE PAS TOUCHER OU CA EXPLOSE /!\
         anim(animation)

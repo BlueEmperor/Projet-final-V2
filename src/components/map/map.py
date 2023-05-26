@@ -51,6 +51,7 @@ class Map:
     def __init__(self, player, size=50, nbrooms=20):
         self._player = player
         self.map = [[self.WALL]*size for _ in range(size)]
+        self.see_map = [[self.WALL]*size for _ in range(size)]
         self.monster_group = pygame.sprite.Group()
         self.box_group = pygame.sprite.Group()
         self.attack_tile = []
@@ -70,6 +71,7 @@ class Map:
         self.box_group.update(player)
         self.moving_tick = 0
         self.turn = []
+        self.update_see_map()
         print(self)
         
 
@@ -356,8 +358,11 @@ class Map:
                 self.image = image
                 self.rect = rect
             
-            def draw(self, SCREEN, m):
-                SCREEN.blit(self.image, (self.rect.topleft[0]-m._player.absolute_pos[0]+Config.WIDTH/2-24, self.rect.topleft[1]-m._player.absolute_pos[1]+Config.HEIGHT/2-24))
+            def update(self, m, pos):
+                self.rect.topleft = (pos[0]*48-m._player.absolute_pos[0]+Config.WIDTH/2-24, pos[1]*48-m._player.absolute_pos[1]+Config.HEIGHT/2-24)
+
+            def draw(self, SCREEN):
+                SCREEN.blit(self.image, self.rect)
 
         for j in range(len(m)):
             L=[]
@@ -416,7 +421,16 @@ class Map:
 
                 else:
                     L.append(Tile(Map.NOT_DEFINED_TILE, rect))
+                
+                if(L[-1] != None):
+                    L[-1].update(self, vec(i, j))
             self.tiles_sprites.append(L)
+
+    def update_see_map(self):
+        for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
+            for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
+                if(self.tiles_sprites[j][i]!=None and (vec(i,j) == self._player.map_pos or self.line_of_sight(vec(i,j), self._player.map_pos))):
+                    self.see_map[j][i] = Map.GROUND
 
     #--------------------------- Events functions --------------------------------
     def left_click_down_event(self, animation):
@@ -463,6 +477,11 @@ class Map:
         if(self._player.ismoving):
             #Update the visual position of every entities
             self._player.absolute_pos += self._player.ismoving*4
+            for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
+                for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
+                    if(self.tiles_sprites[j][i]!=None):
+                        self.tiles_sprites[j][i].update(self, vec(i,j))
+
             self.moving_tick-=1
             if(self.moving_tick==0):
                 self._player.ismoving=False
@@ -500,6 +519,7 @@ class Map:
                             for monster in self.monster_group:
                                 self.turn.append(monster)
 
+                            self.update_see_map()
                             #Update the numbers of the tile to draw
                             self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
                             return
@@ -513,9 +533,10 @@ class Map:
         #Draw the map
         for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
             for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
-                if(self.tiles_sprites[j][i]!=None):
-                    self.tiles_sprites[j][i].draw(SCREEN, self)
-        
+                if(self.tiles_sprites[j][i]!=None and self.see_map[j][i] == Map.GROUND):
+                    self.tiles_sprites[j][i].draw(SCREEN)
+
+
         #Draw attack tiles
         if(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
             for tile in self.attack_tile:
@@ -527,6 +548,8 @@ class Map:
                     SCREEN.blit(Map.HOVER_TILE, self.mouse_pos*48-self._player.absolute_pos+self._player.rect.topleft)
 
         #Draw the monsters
-        self.monster_group.draw(SCREEN)
+        for monster in self.monster_group:
+            monster.draw(SCREEN, self)
         #Draw chest
-        self.box_group.draw(SCREEN)
+        for chest in self.box_group:
+            chest.draw(SCREEN, self)
