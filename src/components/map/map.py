@@ -461,9 +461,6 @@ class Map:
     #--------------------------- Update functions --------------------------------
     def update(self, animation):
         self.mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
-
-        self.monster_group.update(self._player)
-        self.box_group.update(self._player)
         
         if(self._player.ismoving):
             #Update the visual position of every entities
@@ -509,7 +506,9 @@ class Map:
                             #Update the numbers of the tile to draw
                             self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
                             return
-
+        
+        self.monster_group.update(self._player)
+        self.box_group.update(self._player)
         
 
     #--------------------------- Draw functions --------------------------------
