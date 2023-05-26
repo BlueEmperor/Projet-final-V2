@@ -23,7 +23,7 @@ class Animation:
         self.user_weapon = user.weapon
         self.target = target
 
-    def update(self, m):
+    def update(self, m, player):
         if(self.user.health <= 0):
             return(True)
             
@@ -47,7 +47,7 @@ class Animation:
                 self.images_rect[i].center += self.directions[i]*self.speed[i]
         
         if(self.frame_until_damage == 0):
-            self.target.damage(self.user_weapon.damage, m)
+            self.target.damage(self.user_weapon.damage, m, player)
         self.frame_until_damage -= 1
 
         if(len(self.images) == 0):

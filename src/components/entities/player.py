@@ -1,8 +1,8 @@
 import pygame
 
-from src.components.entities.entity import Entity
 from path import ASSETS_DIR
 from src.config import Config
+from src.components.entities.entity import Entity
 from src.components.entities.chest import Chest
 from src.components.entities.monster import Monster
 from src.components.items.item import Item
@@ -17,12 +17,15 @@ class Player(Entity):
         self.rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)
         self.hotbar = [None for i in range(9)]
         self.inventory = [[None for i in range(9)] for j in range(4)]
-        self.health = 15
+        self.health = 20
         self.max_health = 20
         self.gold = 0
-        self.mana = 96
-        self.max_mana = 100
+        self.mana = 60
+        self.max_mana = self.mana
         self.level = 1
+        self.experience = 0
+        self.experience_to_level_up = lambda: int((self.level+1)**1.85 + 12)
+        self.xp = 0 #Juste pour que le jeu ne crash pas quand le player meurt, ne sert pas sinon
         self.armor = None
         self.usage = []
         self.durability = []
@@ -72,6 +75,16 @@ class Player(Entity):
         item.update(inventory_ui.inventory_rect.topleft, inventory_ui.hotbar_rect.topleft)
 
 
+    def add_experience(self, number):
+        self.experience += number
+        while(self.experience >= self.experience_to_level_up()):
+            self.experience -= self.experience_to_level_up()
+            self.level += 1
+            self.max_health += 3
+            self.health += 3
+            self.mana += 20
+            self.max_mana += 20
+
     def empty_slots(self):
         L=[[],[]]#L= ()
         for i in range(len(self.hotbar)):
@@ -90,10 +103,9 @@ class Player(Entity):
         self.absolute_pos = coord*48
 
     def heal(self, number):
-        if(self.health + number > self.max_health):
+        self.health += number
+        if(self.health > self.max_health):
             self.health = self.max_health
-        else:
-            self.health += number
 
     def armor_boost(self,number):
         if self.armor.health + number > self.armor.max_health:
@@ -113,7 +125,6 @@ class Player(Entity):
     def poison_attack(self,number,m=None):
         item=m.get_item(m.mouse_pos)
         for i in m.get_item_room(self):
-            print(i)
             if isinstance(i,Monster) and i.health!=None:
                 if i.health<=number:
                     i.kill

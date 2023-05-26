@@ -13,6 +13,7 @@ class Sword(Item):
     EPIC_SWORD = ("Timozob' sword", IMAGE, 10, 50, vec(1,1))
     LEGENDARY_SWORD = ("3 FROMAGES' Sword", IMAGE, 15, 100, vec(1,2))
     LIST = [COMMUNE_SWORD,RARE_SWORD,EPIC_SWORD,LEGENDARY_SWORD]
+    
     def __init__(self, name, image, damage, durability, range, animation = None):
         super().__init__()
         self.image = pygame.transform.scale(image, (72,72))

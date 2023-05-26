@@ -32,14 +32,14 @@ for i in range(1):
     b=Wand(*Wand.LIST[0])
     b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
-    player.add_in_inventory(Potion(*Potion.POISON_POTION[0]), inventory_ui)
+    player.add_in_inventory(Potion(*Potion.HEALTH_POTION[0]), inventory_ui)
 
 def main_menu_phase(events):
     pass
 
 def gameplay_phase(events):
     global animation
-    global m
+
     GlobalState.SCREEN.fill((37,19,26)) # type: ignore
     if(len(animation) == 0):
         for event in events:
@@ -47,7 +47,7 @@ def gameplay_phase(events):
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 1):
                     m.left_click_down_event(animation)
-                    inventory_ui.left_click_down_event()
+                    inventory_ui.left_click_down_event(m)
 
                 elif(event.button == 3):
                     inventory_ui.right_click_down_event()
@@ -78,7 +78,7 @@ def gameplay_phase(events):
         inventory_ui.update()
         hover.update(animation)
         m.draw(GlobalState.SCREEN)
-        player.draw(GlobalState.SCREEN)
+        player.draw(GlobalState.SCREEN, m)
 
         #ANIMATION /!\ NE PAS TOUCHER OU CA EXPLOSE /!\
         anim(animation)
@@ -88,14 +88,14 @@ def gameplay_phase(events):
         GlobalState.SCREEN.blit(Map.DARK_EFFECT, (0,0))
         stat_ui.draw(GlobalState.SCREEN)
         inventory_ui.draw(GlobalState.SCREEN)
-
+    
     minimap.draw(GlobalState.SCREEN)
     
 def end_menu_phase(events):
     pass
 
 def anim(animation):
-    if(len(animation) != 0 and animation[0].update(m)):
+    if(len(animation) != 0 and animation[0].update(m, player)):
         animation.pop(0)
 
     if(len(animation) != 0):

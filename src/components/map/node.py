@@ -5,7 +5,7 @@ vec = pygame.math.Vector2
 class Node:
     def __init__(self, coord, g_cost_before, end_coord, parent=None):
         self.g_cost=g_cost_before+1
-        self.h_cost=pygame.math.Vector2.distance_to(end_coord,coord)
+        self.h_cost=vec.distance_to(end_coord,coord)
         self.total_cost=self.g_cost+self.h_cost
         self.parent=parent
         self.coord=vec(coord)

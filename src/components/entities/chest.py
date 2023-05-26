@@ -30,9 +30,7 @@ class Chest(Entity):
         self.RARITY = self.RARITY_CHEST[self.rarity(player)]
         self.RARITY_NUMBER = Chest.RARITY_TABLE[self.RARITY]
         self.name = self.RARITY
-        print (self.RARITY)
         self.inventory_creation()
-        print (self.inventory)
 
         #for i in range(random.randint(1,3)):
             #item = random.choice(self.ITEM_LIST)
@@ -64,7 +62,6 @@ class Chest(Entity):
         for i in self.inventory:
             player.add_in_inventory(i, inventory_ui)
         self.inventory = []
-        print(self.inventory)
         
     def update(self, player):
         self.rect.topleft = vec(player.rect.topleft)-player.absolute_pos+self.absolute_pos

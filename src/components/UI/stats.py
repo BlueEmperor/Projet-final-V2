@@ -13,7 +13,7 @@ class StatUI:
         self._player = player
 
     def draw(self, SCREEN):
-        pygame.draw.rect(SCREEN, [55]*3, pygame.Rect(105,36,225,81))
+        pygame.draw.rect(SCREEN, [55]*3, pygame.Rect(105,36,225,87))
 
         #Health
         pygame.draw.rect(SCREEN, (244,45,66), pygame.Rect(105,36,225*self._player.health/self._player.max_health,24))
@@ -22,7 +22,7 @@ class StatUI:
         pygame.draw.rect(SCREEN, (53,153,238), pygame.Rect(105,66,210*self._player.mana/self._player.max_mana,24))
         
         #Experience
-        pygame.draw.rect(SCREEN, (139,244,37), pygame.Rect(162,102,157,15))
+        pygame.draw.rect(SCREEN, (139,244,37), pygame.Rect(162,102,157*self._player.experience/self._player.experience_to_level_up(),21))
 
         SCREEN.blit(self.image, self.rect)
         SCREEN.blit(self._player.big_image_list[self._player.current_image], self.rect.topleft+vec(20,23))
@@ -34,4 +34,5 @@ class StatUI:
         SCREEN.blit(self.font.render(f"{int(self._player.mana)}/{int(self._player.max_mana)}",True,(255, 255, 255)), (110, 67))
         
         #Experience
-        SCREEN.blit(self.font.render(f"LV.{int(self._player.level)}",True,(255, 255, 255)), (104, 99))
+        SCREEN.blit(self.font.render(f"LV.{int(self._player.level)}",True,(255, 255, 255)), (104, 102))
+        SCREEN.blit(self.font.render(f"{int(self._player.experience)}/{int(self._player.experience_to_level_up())}",True,(255, 255, 255)), (170,102))

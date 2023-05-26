@@ -21,10 +21,14 @@ vec = pygame.math.Vector2
 
 class Map:
     DIR={pygame.K_z: vec(0,-1), pygame.K_s: vec(0,1), pygame.K_d: vec(1,0), pygame.K_q: vec(-1,0)}
+
     GROUND = "."
     WALL = "x"
+    STAIR = "E"
+
     GROUND_TILE = [pygame.image.load(MAP_DIR / "ground" / ("ground"+str(i)+".png")).convert_alpha() for i in range(15)]
     WALL_TILE = pygame.image.load(MAP_DIR / "wall.png").convert_alpha()
+    STAIR_TILE = pygame.image.load(MAP_DIR / "stair.png").convert_alpha()
     TOP_WALL_TILE = pygame.image.load(MAP_DIR / "top_wall.png").convert_alpha()
     LEFT_WALL_TILE = pygame.image.load(MAP_DIR / "left_wall.png").convert_alpha()
     RIGHT_WALL_TILE = pygame.image.load(MAP_DIR / "right_wall.png").convert_alpha()
@@ -41,17 +45,18 @@ class Map:
     DUAL_INTERN_CORNER_TILE = pygame.image.load(MAP_DIR / "dual_intern_corner.png").convert_alpha()
     LEFT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "left_wall_and_corner.png").convert_alpha()
     RIGHT_WALL_AND_CORNER_TILE = pygame.image.load(MAP_DIR / "right_wall_and_corner.png").convert_alpha()
-    NOT_DEFINED_TILE = pygame.image.load(MAP_DIR / "rien.png").convert_alpha()
     ATTACK_TILE_BLUE = pygame.image.load(ASSETS_DIR / "attack_tile_blue.png").convert_alpha()
     ATTACK_TILE_RED = pygame.image.load(ASSETS_DIR / "attack_tile_red.png").convert_alpha()
     ATTACK_TILE_LIGHT_BLUE = pygame.image.load(ASSETS_DIR / "attack_tile_light_blue.png").convert_alpha()
     ATTACK_TILE_LIGHT_RED = pygame.image.load(ASSETS_DIR / "attack_tile_light_red.png").convert_alpha()
     HOVER_TILE = pygame.image.load(ASSETS_DIR / "hover_tile.png").convert_alpha()
+    NOT_DEFINED_TILE = pygame.image.load(MAP_DIR / "rien.png").convert_alpha()
     DARK_EFFECT = pygame.image.load(ASSETS_DIR / "dark_effect.png").convert_alpha()
 
     def __init__(self, player, size=50, nbrooms=20):
         self._player = player
         self.map = [[self.WALL]*size for _ in range(size)]
+        self.see_map = [[self.WALL]*size for _ in range(size)]
         self.monster_group = pygame.sprite.Group()
         self.box_group = pygame.sprite.Group()
         self.attack_tile = []
@@ -64,12 +69,16 @@ class Map:
         self.put(player,self._rooms[0].center())
         self.tiles_sprites = []
         self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
+        coord = self._rooms[-1].center()
+        self.put(Map.STAIR, coord)
         self.create_draw_map(self.map)
         self.monster_zob()
         self.coffre_zob()
         self.monster_group.update(player)
         self.box_group.update(player)
         self.moving_tick = 0
+        self.turn = []
+        self.update_see_map()
         print(self)
         
 
@@ -81,10 +90,18 @@ class Map:
     
     def __len__(self):
         return(len(self.map))
+    #--------------------------- Raise errors --------------------------------
+    @staticmethod
+    def check_entity(entity):
+        if(isinstance(entity, Entity)):
+            return
+        
+        raise TypeError(f"Not an entity : {entity}, {entity.__class__}")
     
     #--------------------------- Utilities functions --------------------------------
     #Remove the entity in the map
     def rm(self, entity):
+        Map.check_entity(entity)
         self.map[int(entity.map_pos[1])][int(entity.map_pos[0])] = Map.GROUND
 
     #Put the entity in the map at the coord
@@ -118,14 +135,8 @@ class Map:
                 item = self.get_item(vec(i,j))
                 if(isinstance(item, Monster)):
                     items.append(item)
-        print(items)
         return items
 
-
-
-
-
-    
     #Get the pos of the element
     def pos(self, element):
         for i in range(len(self)):
@@ -182,7 +193,7 @@ class Map:
             list.append([round(x),round(y)])
 
         for i in list:
-            if(not(self.map[int(i[1])][int(i[0])]==self.GROUND or i in (coord1,coord2))):
+            if(not(self.map[int(i[1])][int(i[0])] in (Map.GROUND, Map.STAIR) or i in (coord1,coord2))):
                 return(False)
         return(True)
     
@@ -197,13 +208,13 @@ class Map:
                     item = self.get_item(c)
                     if(vec(c) in self and item != Map.WALL):
                         if(self.line_of_sight(c, coord)):
-                            if(item == Map.GROUND):
+                            if(item in (Map.GROUND, Map.STAIR)):
                                 self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
                             else:
                                 self.attack_tile.append((c,Map.ATTACK_TILE_RED))
                         
                         else:
-                            if(item == Map.GROUND):
+                            if(item in (Map.GROUND, Map.STAIR)):
                                 self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
                             else:
                                 self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
@@ -218,13 +229,13 @@ class Map:
                             item = self.get_item(c)
                             if(vec(c) in self and item != Map.WALL):
                                 if(self.line_of_sight(c, coord)):
-                                    if(item == Map.GROUND):
+                                    if(item in (Map.GROUND, Map.STAIR)):
                                         self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
                                     else:
                                         self.attack_tile.append((c,Map.ATTACK_TILE_RED))
                                 
                                 else:
-                                    if(item == Map.GROUND):
+                                    if(item in (Map.GROUND, Map.STAIR)):
                                         self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
                                     else:
                                         self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
@@ -235,7 +246,7 @@ class Map:
                     c = vec(round(sin(pi/2*i)*j+coord[0]),round(cos(pi/2*i)*j+coord[1]))
                     item = self.get_item(c)
                     if(vec(c) in self and item != Map.WALL):
-                        if(item == Map.GROUND):
+                        if(item in (Map.GROUND, Map.STAIR)):
                             self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
                         else:
                             self.attack_tile.append((c,Map.ATTACK_TILE_RED))
@@ -302,10 +313,11 @@ class Map:
             r=self.randRoom()
             if(self.intersectNone(r)):
                 self.addRoom(r)
+        
     
     def monster_zob(self):
         for room in self._rooms:
-            for i in range(random.randint(1,3)):
+            for _ in range(random.randint(1,3)):
                 x=random.randint(room.c1.x,room.c2.x-1)
                 y=random.randint(room.c1.y,room.c2.y-1)
                 #Try to put the monster in the room until the pos is empty
@@ -330,7 +342,6 @@ class Map:
                 box=Chest(vec(x,y),self._player)
                 self.put(box, vec(x,y))
                 box.add(self.box_group)
-                print(self.box_group)
 
 
 
@@ -350,8 +361,11 @@ class Map:
                 self.image = image
                 self.rect = rect
             
-            def draw(self, SCREEN, m):
-                SCREEN.blit(self.image, (self.rect.topleft[0]-m._player.absolute_pos[0]+Config.WIDTH/2-24, self.rect.topleft[1]-m._player.absolute_pos[1]+Config.HEIGHT/2-24))
+            def update(self, m, pos):
+                self.rect.topleft = (pos[0]*48-m._player.absolute_pos[0]+Config.WIDTH/2-24, pos[1]*48-m._player.absolute_pos[1]+Config.HEIGHT/2-24)
+
+            def draw(self, SCREEN):
+                SCREEN.blit(self.image, self.rect)
 
         for j in range(len(m)):
             L=[]
@@ -359,8 +373,13 @@ class Map:
                 voisins = self.get_voisins(vec(i,j))
                 rect = pygame.Rect(0,0, 48,48)
                 rect.topleft=vec(i,j)*48 # type: ignore
-                if(self.get_item(vec(i,j))!=Map.WALL):
+                if(not(self.get_item(vec(i,j)) in (Map.WALL, Map.STAIR))):
+                    print(self.get_item(vec(i,j)))
                     L.append(Tile(Map.GROUND_TILE[random.randint(0,14)], rect))
+                
+                elif(self.get_item(vec(i,j)) == Map.STAIR):
+                    print("ez")
+                    L.append(Tile(Map.STAIR_TILE, rect))
 
                 elif(voisins==[1]*9):
                     L.append(None)
@@ -410,7 +429,16 @@ class Map:
 
                 else:
                     L.append(Tile(Map.NOT_DEFINED_TILE, rect))
+                
+                if(L[-1] != None):
+                    L[-1].update(self, vec(i, j))
             self.tiles_sprites.append(L)
+
+    def update_see_map(self):
+        for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
+            for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
+                if(self.tiles_sprites[j][i]!=None and (vec(i,j) == self._player.map_pos or self.line_of_sight(vec(i,j), self._player.map_pos))):
+                    self.see_map[j][i] = Map.GROUND
 
     #--------------------------- Events functions --------------------------------
     def left_click_down_event(self, animation):
@@ -440,8 +468,17 @@ class Map:
                 
                 return
         
+        if(isinstance(self._player.weapon, Wand)):
+            if(self._player.mana - self._player.weapon.mana < 0):
+                return
+            
+            self._player.mana -= self._player.weapon.mana
+
+        self._player.meet(item, self, animation)
+            
         for monster in self.monster_group:
-            monster.turn_action(self, animation)
+            self.turn.append(monster)
+
 
     def f_down_event(self, inventory_ui):
         item = self.get_item(self.mouse_pos)
@@ -466,18 +503,42 @@ class Map:
     #--------------------------- Update functions --------------------------------
     def update(self, animation):
         self.mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
-        if(len(animation) != 0):
-            return
         
-        if(self._player.ismoving == False):
+        if(self._player.ismoving):
+            #Update the visual position of every entities
+            self._player.absolute_pos += self._player.ismoving*4
+            for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
+                for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
+                    if(self.tiles_sprites[j][i]!=None):
+                        self.tiles_sprites[j][i].update(self, vec(i,j))
+
+            self.moving_tick-=1
+            if(self.moving_tick==0):
+                self._player.ismoving=False
+        else:
+            if(len(animation) != 0):
+                return
+        
+            if(len(self.turn) != 0):
+                while(len(animation) == 0 and len(self.turn) != 0):
+                    monster = self.turn.pop(0)
+                    if(monster.health > 0):
+                        monster.turn_action(self, animation)
+
+                return
+            
             if(GlobalState.PLAYER_STATE == PlayerStatus.MOVEMENT):
                 #Check if a key is pressed
                 keys=pygame.key.get_pressed()
                 for key in self.DIR.keys():
                     if(keys[key]):
                         #Check if the player can move
-                        if(self.get_item(self._player.map_pos+self.DIR[key])==self.GROUND):
+                        if(self.get_item(self._player.map_pos+self.DIR[key])==Map.GROUND):
                             #Is executed at every move of the player
+                            self._player.mana += 2
+                            if(self._player.max_mana < self._player.mana):
+                                self._player.mana = self._player.max_mana
+
                             self._player.ismoving=self.DIR[key]
                             self.moving_tick = 12
                             
@@ -495,29 +556,31 @@ class Map:
                                             #self._player.duration.pop(i)
 
                             for monster in self.monster_group:
-                                monster.turn_action(self, animation)
+                                self.turn.append(monster)
+                                if(self.line_of_sight(self._player.map_pos, monster.map_pos)):
+                                    monster.aggro = True
 
+                            self.update_see_map()
                             #Update the numbers of the tile to draw
                             self.coords_draw = [(max(0,int(self._player.map_pos[0])-Config.WIDTH//96-2),max(0,int(self._player.map_pos[1])-Config.HEIGHT//96-2)),(min(len(self.map[0]),int(self._player.map_pos[0])+Config.WIDTH//96+2),min(len(self.map),int(self._player.map_pos[1])+Config.HEIGHT//96+3))]
-                            return 
+                            return
+                        
+                        elif(self.get_item(self._player.map_pos+self.DIR[key]) == Map.STAIR):
+                            self.__init__(self._player)
 
-        else:
-            #Update the visual position of every entities
-            self._player.absolute_pos += self._player.ismoving*4
-            self.moving_tick-=1
-            if(self.moving_tick==0):
-                self._player.ismoving=False
         self.monster_group.update(self._player)
         self.box_group.update(self._player)
+        
 
     #--------------------------- Draw functions --------------------------------
     def draw(self, SCREEN):
         #Draw the map
         for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
             for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
-                if(self.tiles_sprites[j][i]!=None):
-                    self.tiles_sprites[j][i].draw(SCREEN, self)
-        
+                if(self.tiles_sprites[j][i]!=None and self.see_map[j][i] == Map.GROUND):
+                    self.tiles_sprites[j][i].draw(SCREEN)
+
+
         #Draw attack tiles
         if(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK):
             for tile in self.attack_tile:
@@ -529,6 +592,8 @@ class Map:
                     SCREEN.blit(Map.HOVER_TILE, self.mouse_pos*48-self._player.absolute_pos+self._player.rect.topleft)
 
         #Draw the monsters
-        self.monster_group.draw(SCREEN)
+        for monster in self.monster_group:
+            monster.draw(SCREEN, self)
         #Draw chest
-        self.box_group.draw(SCREEN)
+        for chest in self.box_group:
+            chest.draw(SCREEN, self)

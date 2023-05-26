@@ -20,18 +20,20 @@ class Entity(pygame.sprite.Sprite):
     def __repr__(self):
         return(self.name[0])
     
-    def draw(self,SCREEN):
-        SCREEN.blit(self.image, self.rect)
+    def draw(self,SCREEN, m):
+        if(m.see_map[int(self.map_pos[1])][int(self.map_pos[0])] == m.GROUND):
+            SCREEN.blit(self.image, self.rect)
 
     def meet(self, target, m, animation):
         if(self.weapon.animation != None):
             animation.append(self.weapon.animation(self, target, m._player))
     
-    def damage(self, damage, m):
+    def damage(self, damage, m, player):
         self.health -= damage
         if(self.health <= 0):
             self.remove(m.monster_group)
             m.rm(self)
+            player.add_experience(self.xp)
 
     def can_attack(self,entity, m):
         dist=(entity.map_pos-self.map_pos)

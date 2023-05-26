@@ -7,6 +7,7 @@ class Item(pygame.sprite.Sprite):
         super().__init__()
         self.slot = None
         self.location = None
+        self.effect = None
 
     def update(self, inventory_topleft, hotbar_topleft):
         if(self.location == "h"):

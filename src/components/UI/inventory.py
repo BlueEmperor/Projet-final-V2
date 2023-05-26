@@ -31,6 +31,7 @@ class InventoryUI:
         self.font2 = pygame.font.Font(ASSETS_DIR / "font.ttf", 36)
 
         self._player = player
+    
         self.inventory_group = pygame.sprite.Group()
         self.hotbar_group = pygame.sprite.Group()
         
@@ -49,6 +50,10 @@ class InventoryUI:
 
         #selected item
         self.select_item = None
+
+        #right clicked item
+        self.right_click_item = None
+        self.right_click_coord = vec(0,0)
 
         #select rectangle when hover
         self.select_surface = pygame.Surface((69,69), pygame.SRCALPHA)
@@ -85,8 +90,10 @@ class InventoryUI:
     #Replace an item with None on the location
     def remove(self, coord, location) -> None:
         if(location == "i"):
+            self._player.inventory[int(coord[1])][int(coord[0])].remove(self.inventory_group)
             self._player.inventory[int(coord[1])][int(coord[0])] = None
         elif(location == "h"):
+            self._player.hotbar[int(coord[0])].remove(self.hotbar_group)
             self._player.hotbar[int(coord[0])] = None
             
     #--------------------------- Events functions --------------------------------
@@ -102,9 +109,15 @@ class InventoryUI:
                 
             if(self.select_item != None and self.select_item.location == "i"):
                 self.select_item=None #Remove the select item
+            
+            if(self.right_click_item != None and self.right_click_item.location == "i"):
+                self.right_click_item = None
 
-    def left_click_down_event(self):
-        if(self.animation==0):
+    def left_click_down_event(self, m):
+        if(self.animation != 0):
+            return
+        
+        if(self.right_click_item == None):
             GlobalState.PLAYER_STATE = PlayerStatus.MOVEMENT
             #Make the select item default to None
             self.select_item = None
@@ -121,10 +134,35 @@ class InventoryUI:
             #Set the offset with the mouse
             if(self.drag_item!=None):
                 self.drag_offset = vec(pygame.mouse.get_pos())-self.drag_item.rect.topleft
+        
+        else:
+            button_list = []
+            if(self.right_click_item.effect != None):
+                button_list.append(self.right_click_item.effect)
+
+            if(self.right_click_item.effect == None):
+                taille = 1
+            else:
+                taille = 2
+
+            correct = 0
+            if(self.right_click_coord[1]+taille*30 > Config.HEIGHT):
+                correct = 30*taille
+
+            for i in range(len(button_list)):
+                if(pygame.Rect(self.right_click_coord + vec(0, i*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
+                    button_list[i](self._player, m)
+                    self.remove(self.right_click_item.slot, self.right_click_item.location)
+
+
+            if(pygame.Rect(self.right_click_coord + vec(0, len(button_list)*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
+                self.remove(self.right_click_item.slot, self.right_click_item.location)
+
+            self.right_click_item = None
     
     def left_click_up_event(self, m):
         if(self.drag_item!=None):
-            if(self.hover_object):
+            if(self.hover_object != None):
                 hover_item = self.get_item(self.hover_coord, self.hover_object)
 
                 #Exchange the 2 items slots
@@ -148,7 +186,11 @@ class InventoryUI:
             self.drag_item = None
 
     def right_click_down_event(self):
-        pass
+        if(isinstance(self.get_item(self.hover_coord, self.hover_object), str)):
+            return
+        
+        self.right_click_item = self.get_item(self.hover_coord, self.hover_object)
+        self.right_click_coord = pygame.mouse.get_pos()
 
     def right_click_up_event(self):
         pass
@@ -237,6 +279,25 @@ class InventoryUI:
         elif(self.select_item!=None):
             #Draw select image if there is not an item dragged
             SCREEN.blit(InventoryUI.SELECT_IMAGE, self.select_item.rect)
+        
+        if(self.right_click_item!=None):
+            L = ["Destroy"]
+            correct = 0
+            if(self.right_click_item.effect == None):
+                taille = 1
+            else:
+                taille = 2
+                L.insert(0, "use")
+
+            if(self.right_click_coord[1]+taille*30 > Config.HEIGHT):
+                correct = 30*taille
+                
+            pygame.draw.rect(SCREEN, (30,30, 30), pygame.Rect(self.right_click_coord + vec(0,-correct), (105, taille*30)))
+            for i in range(taille):
+                if(pygame.Rect(self.right_click_coord + vec(0, i*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
+                    pygame.draw.rect(SCREEN, (80,80,80), pygame.Rect(self.right_click_coord + vec(0,i*30-correct), (105, 30)))
+                SCREEN.blit(self.font2.render(L[i],True,(255, 255, 255)), self.right_click_coord + vec(8, 1+i*30-correct))
+
 
     #Draw the information of the select item
     def draw_select_information(self, SCREEN):
