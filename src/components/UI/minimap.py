@@ -26,8 +26,9 @@ class MiniMap:
             for i in range(taille):
                 for j in range(taille):
                     if(self._map.see_map[j][i] == self._map.GROUND and self._map.map[j][i] != self._map.WALL):
-                        print("ez")
                         pygame.draw.rect(SCREEN, (200,150,70), pygame.Rect(Config.WIDTH/2-r*taille/2+i*r, Config.HEIGHT/2-r*taille/2+j*r, r, r)) # type: ignore
+            
+            pygame.draw.rect(SCREEN, (0, 255, 0), pygame.Rect(Config.WIDTH/2-r*taille/2+self._map._player.map_pos[0]*r, Config.HEIGHT/2-r*taille/2+self._map._player.map_pos[1]*r, r, r))
         else:
             return
             pygame.draw.rect(SCREEN, [220]*3, self.rect)

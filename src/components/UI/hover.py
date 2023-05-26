@@ -27,7 +27,9 @@ class Hover:
         self.font = pygame.font.Font(ASSETS_DIR / "font.ttf", 36)
         
     def update(self, animation):
+        
         item = self._map.get_item(self._map.mouse_pos)
+
         if(self.current_hover != None):
             self.current_hover.image=self.current_hover.image_list[0]
         self.current_hover = None
@@ -37,9 +39,11 @@ class Hover:
         if(item in (self._map.GROUND, self._map.WALL)):
             return
         
-        if(isinstance(item, Player)):
+        if(isinstance(item, (Player, str))):
             return
         
+        if(self._map.see_map[int(self._map.mouse_pos[1])][int(self._map.mouse_pos[0])] == self._map.WALL):
+            return
         self.current_hover = item
         self.rect.center = self.current_hover.rect.center + vec(0, -85)
         #self._map._player.meet(self.current_hover,self._map)

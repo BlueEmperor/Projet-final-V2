@@ -18,7 +18,7 @@ class Monster(Entity):
         super().__init__(name, pos,image_list, health)
         self.speed = speed
         self.weapon = weapon
-        self.aggro = True
+        self.aggro = False
         self.xp = xp
 
     def update(self, player):
@@ -31,7 +31,7 @@ class Monster(Entity):
     
     def move(self,m):
         coord = (self.map_pos-m._player.map_pos)
-        if((coord[0]**2+coord[1]**2)**0.5>8 or not(self.aggro)):
+        if((coord[0]**2+coord[1]**2)**0.5>8 and not(m.line_of_sight(self.map_pos, m._player.map_pos))):
             return
         
         chemin=m.A_star(self.map_pos, m._player.map_pos)
@@ -45,7 +45,7 @@ class Monster(Entity):
        
     
     def turn_action(self, m, animation):
-        if m.line_of_sight(self.map_pos, m._player.map_pos):
+        if(self.aggro):
             if self.can_attack(m._player, m):
                 self.meet(m._player, m, animation)
             else:

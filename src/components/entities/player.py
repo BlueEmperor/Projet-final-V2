@@ -53,6 +53,10 @@ class Player(Entity):
         while(self.experience >= self.experience_to_level_up()):
             self.experience -= self.experience_to_level_up()
             self.level += 1
+            self.max_health += 3
+            self.health += 3
+            self.mana += 20
+            self.max_mana += 20
 
     def empty_slots(self):
         L=[[],[]]
