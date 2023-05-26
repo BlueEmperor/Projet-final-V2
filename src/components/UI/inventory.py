@@ -7,6 +7,7 @@ from src.status import PlayerStatus
 from src.components.items.bow import Bow
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
+from src.components.items.potions import Potion
 vec = pygame.math.Vector2
 
 class InventoryUI:
@@ -243,4 +244,9 @@ class InventoryUI:
             if(isinstance(self.select_item, (Bow, Sword, Wand))):
                 SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
                 SCREEN.blit(self.font2.render("Damage : " + str(self.select_item.damage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
+                SCREEN.blit(self.font2.render("Durability : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))
+
+            elif (isinstance(self.select_item,Potion)):
+                SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
+                SCREEN.blit(self.font2.render(self.select_item.name + str(self.select_item.effect),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
                 SCREEN.blit(self.font2.render("Durability : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))

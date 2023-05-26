@@ -26,5 +26,8 @@ class FireballAnimation(Animation):
                          frame_duration=[duration, 50],
                          coords=[relative_user_pos, relative_target_pos],
                          directions=[direction, vec(0,0)],
-                         framerate=5)
+                         framerate=5,
+                         frame_until_damage=duration,
+                         user=user,
+                         target=target)
         

@@ -5,6 +5,7 @@ from path import ASSETS_DIR
 from src.config import Config
 from src.components.entities.chest import Chest
 from src.components.entities.monster import Monster
+from src.components.items.item import Item
 
 vec = pygame.math.Vector2
 
@@ -27,6 +28,15 @@ class Player(Entity):
         self.durability = []
         self.duration = []
     
+    #def get_item(self,n):
+    def use_durability(self,item, inventory_ui):
+        if item.usage!=("Poison" or "Health"):
+            pass
+            
+        item.durability-=1
+        if item.durability==0:
+            self.remove_inventory(item,inventory_ui)
+
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()
         
@@ -47,6 +57,20 @@ class Player(Entity):
         
         item.update(inventory_ui.inventory_rect.topleft, inventory_ui.hotbar_rect.topleft)
         return(True)
+    
+    def remove_inventory(self, item,inventory_ui):
+        if isinstance(item, Item):
+            self.inventory.remove(item)
+            if item in inventory_ui.inventory_group:
+                item.remove(inventory_ui.inventory_group)
+
+            item.remove(inventory_ui.hotbar_group)
+            item.location = None
+
+        else:
+            pass
+        item.update(inventory_ui.inventory_rect.topleft, inventory_ui.hotbar_rect.topleft)
+
 
     def empty_slots(self):
         L=[[],[]]#L= ()
@@ -78,7 +102,7 @@ class Player(Entity):
             self.armor.health += number
 
     def damage_boost(self,number,tour):
-        return tour
+        pass
         
         #self.weapon.damage+=number
         #while self.weapon.durability
@@ -86,7 +110,8 @@ class Player(Entity):
             #pass
         #self.weapon.damage-=number
 
-    def poison_attack(self,number,m):
+    def poison_attack(self,number,m=None):
+        item=m.get_item(m.mouse_pos)
         for i in m.get_item_room(self):
             print(i)
             if isinstance(i,Monster) and i.health!=None:
@@ -94,6 +119,8 @@ class Player(Entity):
                     i.kill
                 elif i.health>number:
                     i.health-=number
+        self.remove_inventory(item)
+        return number
 
     def invisibility(self,number):
-        pass
+        return number

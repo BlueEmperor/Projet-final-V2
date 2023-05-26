@@ -88,7 +88,7 @@ class Hover:
                     #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(50+phase,h))
                     phase += 50
                     if isinstance(i, Potion):
-                        SCREEN.blit(self.font.render(f"{(i.usage[0])}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
+                        SCREEN.blit(self.font.render(f"{(i.usage[0][-1])}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
                         #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))
                     elif isinstance(i, Armor):
                         return    

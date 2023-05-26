@@ -5,6 +5,7 @@ from math import cos, sin, pi
 from src.components.entities.chest import Chest
 from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
+from src.components.UI.inventory import InventoryUI
 from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.monster import Monster
@@ -428,10 +429,10 @@ class Map:
             self.rm(item)
             if self._player.usage!=[]:
                 for i in range(len(self._player.usage)):
-                    if i=="Damage":
-                        self._player.duration[i]-=1
-                    if self._player.duration[i]==0:
-                        del(self._player.duration(i))
+                    if self._player.usage[i][-1]=="Damage":
+                        self._player.duration[i][-1]-=1
+                    if self._player.duration[i][-1]==0:
+                        self._player.duration.pop(i)
             else:
                 self._player.weapon.durability -= 1
                 if self._player.weapon.durability==0:
@@ -450,14 +451,16 @@ class Map:
         #elif(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
             #return
         elif(isinstance(self._player.weapon,Potion)):
-            self._player.usage.append(self._player.weapon.usage)
+            self._player.usage.append([self._player.weapon,self._player.weapon.usage])
             
-            if self._player.weapon.usage == "Poison":
-                a=self._player.weapon.effect(self._player,self)
-                self._player.duration.append(a)
-            else:
+            #if self._player.weapon.usage == "Poison":
+                #a=self._player.weapon.effect(self._player,self)
+                #self._player.duration.append(a)
+            if self._player.weapon.usage != ("Poison" or "Health"):
                 a=self._player.weapon.effect(self._player)
-                self._player.duration.append(a)
+                self._player.duration.append([self._player.weapon,a])
+            print(self._player.usage)
+        return item
 
 
     #--------------------------- Update functions --------------------------------
@@ -484,10 +487,12 @@ class Map:
                             self.put(self._player, self._player.map_pos)
                             if self._player.usage!=[]:
                                 for i in range(len(self._player.usage)):
-                                    if not (self._player.usage[i] in ("Damage", "Armor")):
-                                        self._player.duration[i]-=1
-                                        if self._player.duration[i]==0:
-                                            del(self._player.duration(i))
+                                    #if not (self._player.usage[i][-1] in ("Damage", "Armor","Invisibility")):
+                                        self._player.use_durability(self._player.usage[i][0],inventory_ui)
+                                        print (self._player.usage)
+                                        #self._player.duration[i]-=1
+                                        #if self._player.duration[i]==0:
+                                            #self._player.duration.pop(i)
 
                             for monster in self.monster_group:
                                 monster.turn_action(self, animation)

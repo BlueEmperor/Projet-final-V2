@@ -24,15 +24,15 @@ class Entity(pygame.sprite.Sprite):
         SCREEN.blit(self.image, self.rect)
 
     def meet(self, target, m, animation):
-        target.health -= self.weapon.damage
         if(self.weapon.animation != None):
             animation.append(self.weapon.animation(self, target, m._player))
-
-        if(target.health <= 0):
-            return(True)
-        
-        return(False)
     
+    def damage(self, damage, m):
+        self.health -= damage
+        if(self.health <= 0):
+            self.remove(m.monster_group)
+            m.rm(self)
+
     def can_attack(self,entity, m):
         dist=(entity.map_pos-self.map_pos)
         if(self.weapon.attack_type == "linear"):
