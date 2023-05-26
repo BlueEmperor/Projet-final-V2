@@ -26,7 +26,7 @@ class Map:
     WALL = "x"
     STAIR = "E"
 
-    GROUND_TILE = [pygame.image.load(MAP_DIR / "ground" / ("ground"+str(i)+".png")).convert_alpha() for i in range(15)]
+    GROUND_TILE = [pygame.image.load(MAP_DIR / "ground" / ("ground"+str(i)+".png")).convert_alpha() for i in range(16)]
     WALL_TILE = pygame.image.load(MAP_DIR / "wall.png").convert_alpha()
     STAIR_TILE = pygame.image.load(MAP_DIR / "stair.png").convert_alpha()
     TOP_WALL_TILE = pygame.image.load(MAP_DIR / "top_wall.png").convert_alpha()
@@ -374,7 +374,7 @@ class Map:
                 rect = pygame.Rect(0,0, 48,48)
                 rect.topleft=vec(i,j)*48 # type: ignore
                 if(not(self.get_item(vec(i,j)) in (Map.WALL, Map.STAIR))):
-                    L.append(Tile(Map.GROUND_TILE[random.randint(0,14)], rect))
+                    L.append(Tile(random.choice(Map.GROUND_TILE), rect))
                 
                 elif(self.get_item(vec(i,j)) == Map.STAIR):
                     L.append(Tile(Map.STAIR_TILE, rect))

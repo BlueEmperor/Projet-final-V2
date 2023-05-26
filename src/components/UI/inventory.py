@@ -79,7 +79,7 @@ class InventoryUI:
             item.location = location
             item.slot = coord
             item.kill()
-        item.add(self.inventory_group) if(location == "i") else item.add(self.hotbar_group) if(location == "h") else ""
+            item.add(self.inventory_group) if(location == "i") else item.add(self.hotbar_group) if(location == "h") else ""
 
         if(location == "i"):
             self._player.inventory[int(coord[1])][int(coord[0])] = item
@@ -309,5 +309,5 @@ class InventoryUI:
 
             elif (isinstance(self.select_item,Potion)):
                 SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
-                SCREEN.blit(self.font2.render(self.select_item.name + str(self.select_item.effect),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
-                SCREEN.blit(self.font2.render("Durability : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))
+                SCREEN.blit(self.font2.render(self.select_item.name + str(self.select_item.usage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
+                SCREEN.blit(self.font2.render("Nombre d'utilisation(s) restante(s) : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))
