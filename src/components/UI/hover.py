@@ -92,7 +92,8 @@ class Hover:
                     phase += 50
                     if isinstance(i, Potion):
                         #T'avais mis i.usage[0] sauf que le usage dans potion c'est un texte, pas une liste donc fallait pas mettre le [0]
-                        SCREEN.blit(self.font.render(f"{(i.usage)}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
+                        #SCREEN.blit(self.font.render(f"{(i.usage)}",True,(255, 255, 255)), self.rect.topleft + vec(5+phase, h+30))
+                        SCREEN.blit(i.inventory_effect, vec(self.rect.topleft)+vec(phase, h+30))
                         #SCREEN.blit(i.image_icon, vec(self.rect.topleft)+vec(phase,h))
                     elif isinstance(i, Armor):
                         return    

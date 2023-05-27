@@ -14,6 +14,7 @@ class InventoryUI:
     SELECTED_SOUND = pygame.mixer.Sound(AUDIO_DIR / "sounds" / "select_sound.mp3")
     SELECTED_SOUND.set_volume(0.08)
     SELECT_IMAGE = pygame.image.load(ASSETS_DIR / "blue_hotbar.png").convert_alpha()
+    CLOCK_ICON = pygame.image.load(ASSETS_DIR / "clock_icon.png").convert_alpha()
 
     def __init__(self, player):
         #inventory image and rect
@@ -308,6 +309,9 @@ class InventoryUI:
                 SCREEN.blit(self.font2.render("Durability : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))
 
             elif (isinstance(self.select_item,Potion)):
-                SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
-                SCREEN.blit(self.font2.render(self.select_item.name + str(self.select_item.usage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
+                SCREEN.blit(self.select_item.inventory_effect, vec (self.inventory_rect.topleft)+vec(600,334))
+                SCREEN.blit(self.CLOCK_ICON, vec (self.inventory_rect.topleft)+vec (800,334))
+                SCREEN.blit(self.font2.render(str(self.select_item.turn), True, (255, 255, 255)), vec(self.inventory_rect.topleft)+vec(848,334))
+                SCREEN.blit(self.font2.render(self.select_item.name + " :" ,True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
+                SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
                 SCREEN.blit(self.font2.render("Nombre d'utilisation(s) restante(s) : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))
