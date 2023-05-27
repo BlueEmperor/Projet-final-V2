@@ -33,6 +33,7 @@ for i in range(1):
     b.damage = 700000
     player.add_in_inventory(b, inventory_ui)
     player.add_in_inventory(Potion(*Potion.HEALTH_POTION[0]), inventory_ui)
+    player.add_in_inventory(Potion(*Potion.DAMAGE_BOOST_POTION[1]),inventory_ui)
 
 def main_menu_phase(events):
     pass
