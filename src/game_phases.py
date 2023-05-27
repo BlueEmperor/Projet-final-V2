@@ -1,5 +1,6 @@
 import pygame
 
+from path import ASSETS_DIR
 from src.global_state import GlobalState
 GlobalState.load_main_screen()
 from src.components.map.map import Map
@@ -11,6 +12,8 @@ from src.components.UI.hover import Hover
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.components.items.potions import Potion
+from src.message_display import MessageDisplay
+from src.config import Config
 
 vec = pygame.math.Vector2
 
@@ -22,7 +25,8 @@ stat_ui = StatUI(player)
 m = Map(player)
 minimap = MiniMap(m)
 hover = Hover(m)
-animation = []
+animations = []
+messages = []
 
 for i in range(1):
     a=Sword(*Sword.LIST[0])
@@ -39,15 +43,15 @@ def main_menu_phase(events):
     pass
 
 def gameplay_phase(events):
-    global animation
+    global animations
 
     GlobalState.SCREEN.fill((37,19,26)) # type: ignore
-    if(len(animation) == 0):
+    if(len(animations) == 0):
         for event in events:
             #Mouses events
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 1):
-                    m.left_click_down_event(animation)
+                    m.left_click_down_event(animations)
                     inventory_ui.left_click_down_event(m)
 
                 elif(event.button == 3):
@@ -75,29 +79,42 @@ def gameplay_phase(events):
                 pass
     
     if(not(minimap.open)):
-        m.update(animation)
+        m.update(animations)
         inventory_ui.update()
-        hover.update(animation)
+        hover.update(animations)
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN, m)
 
         #ANIMATION /!\ NE PAS TOUCHER OU CA EXPLOSE /!\
-        anim(animation)
+        anim(animations)
 
         # ------------------------------------------
         hover.draw(GlobalState.SCREEN)
         GlobalState.SCREEN.blit(Map.DARK_EFFECT, (0,0))
         stat_ui.draw(GlobalState.SCREEN)
         inventory_ui.draw(GlobalState.SCREEN)
+
+        mess(messages)
     
     minimap.draw(GlobalState.SCREEN)
     
 def end_menu_phase(events):
     pass
 
-def anim(animation):
-    if(len(animation) != 0 and animation[0].update(m, player)):
-        animation.pop(0)
+def anim(animations):
+    global messages
+    if(len(animations) != 0 and animations[0].update(m, player, messages)):
+        animations.pop(0)
 
-    if(len(animation) != 0):
-        animation[0].draw(GlobalState.SCREEN)
+    if(len(animations) != 0):
+        animations[0].draw(GlobalState.SCREEN)
+
+def mess(messages):
+    i = 0
+    while(i < len(messages)):
+        messages[i].update()
+        messages[i].draw(GlobalState.SCREEN)
+        if(messages[i].timer == 0):
+            messages.pop(i)
+            i -= 1
+        i += 1

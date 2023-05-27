@@ -1,7 +1,14 @@
 import pygame
 import random
+
+from src.message_display import MessageDisplay
+from path import ASSETS_DIR
+
 #from src.components.entities.monster import Monster
 #from src.components.entities.coffre import Coffre
+
+vec = pygame.math.Vector2
+
 class Entity(pygame.sprite.Sprite):
     def __init__(self,name,pos, image_list, health=0):
         super().__init__()
@@ -30,7 +37,16 @@ class Entity(pygame.sprite.Sprite):
         if(self.weapon.animation != None):
             animation.append(self.weapon.animation(self, target, m._player))
     
-    def damage(self, damage, m, player):
+    def damage(self, damage, m, player, messages):
+        messages.append(MessageDisplay(text = str(damage),
+                                       color = (255, 0, 0),
+                                       font = pygame.font.Font(ASSETS_DIR / "font.ttf", 48),
+                                       top_left_pos = self.rect.center-vec(len(str(damage))*9,0),
+                                       start_alpha = 255,
+                                       start_speed = vec(random.random()*4-2, 3),
+                                       lambda_alpha = lambda alpha: alpha - 4,
+                                       lambda_speed = lambda speed: speed - vec(0,0.1),
+                                       timer = 60))
         self.health -= damage
         if(self.health <= 0):
             self.remove(m.monster_group)
