@@ -13,6 +13,7 @@ from src.components.items.bow import Bow
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.components.items.potions import Potion
+from src.components.items.armor import Armor
 from src.global_state import GlobalState
 from src.status import PlayerStatus
 from src.components.entities.entity import Entity
@@ -207,7 +208,7 @@ class Map:
     
     
     def create_attack_zone(self, coord, weapon):
-        if(not(isinstance(weapon, (Bow, Sword, Wand)))):
+        if(isinstance(weapon, (Potion, Armor))):
            return
         
         self.attack_tile = []

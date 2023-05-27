@@ -8,6 +8,8 @@ from src.components.items.bow import Bow
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.components.items.potions import Potion
+from src.components.items.armor import Armor
+
 vec = pygame.math.Vector2
 
 class InventoryUI:
@@ -178,7 +180,7 @@ class InventoryUI:
             
             if(self.drag_item.location == "h"):
                 self._player.weapon = self.drag_item
-                if(isinstance(self._player.weapon, (Bow, Sword, Wand))):
+                if(not(isinstance(self._player.weapon, (Armor, Potion)))):
                     GlobalState.PLAYER_STATE = PlayerStatus.ATTACK # type: ignore
                     m.create_attack_zone(self._player.map_pos, self._player.weapon)
 

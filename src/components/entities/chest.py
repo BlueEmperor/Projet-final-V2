@@ -9,6 +9,7 @@ from src.components.items.bow import Bow
 from src.components.items.potions import Potion
 from src.components.items.armor import Armor
 from src.components.items.item import Item
+from src.components.items.throw_dagger import ThrowableDager
 vec = pygame.math.Vector2
 
 class Chest(Entity):
@@ -16,7 +17,7 @@ class Chest(Entity):
     CLOSE_CHEST = [[pygame.image.load(ASSETS_DIR / "chest/close_chest.png").convert_alpha()], [pygame.image.load(ASSETS_DIR / "chest/close_chest_hover.png")]]
     RARITY_CHEST = ["Coffre Commun"]*10 + ["Coffre Rare"]*5 + ["Coffre Epique"]*3 + ["Coffre Legendaire"]
     RARITY_TABLE = {"Coffre Commun":0, "Coffre Rare":1, "Coffre Epique":2, "Coffre Legendaire":3}
-    ITEM_LIST = (Sword,Wand,Bow,Potion,Armor)
+    ITEM_LIST = (Sword,Wand,Bow,Potion,Armor, ThrowableDager)
     def __init__(self,pos, player, open_time=1):
         super().__init__("coffre",pos,self.CLOSE_CHEST[0],health=0)
         self.hover_list = self.CLOSE_CHEST[1]

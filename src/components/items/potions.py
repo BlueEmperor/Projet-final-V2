@@ -12,6 +12,7 @@ class Potion(Item):
     rare_damage_inventory_effect = pygame.image.load(CARAC_DIR / "rare_damage1.png").convert_alpha()
     epic_damage_inventory_effect = pygame.image.load(CARAC_DIR / "epic_damage1.png").convert_alpha()
     legendary_damage_inventory_effect =pygame.image.load(CARAC_DIR / "legendary_damage1.png").convert_alpha()
+    
     HEALTH_POTION = (("PCSI Health Potion",IMAGE,"Health",lambda hero, m: hero.heal(5), 1, health_inventory_effect, 1,  " Up the health by 5") ,
                      ("Rare Health Potion",IMAGE,"Health",lambda hero, m: hero.heal(10), 1, health_inventory_effect,1, " Up the health by 5") ,
                      ("Epic Health Potion",IMAGE, "Health",lambda hero, m: hero.heal(20), 1, health_inventory_effect,1," Up the health by 5"),
@@ -37,7 +38,7 @@ class Potion(Item):
                            ("Epic Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 10),
                            ("Legendary Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 20, 2))
     
-    LIST = [ DAMAGE_BOOST_POTION]#[HEALTH_POTION,ARMOR_BOOST_POTION,DAMAGE_BOOST_POTION,INVISIBILITY_POTION,POISON_POTION]
+    LIST = [DAMAGE_BOOST_POTION]#[HEALTH_POTION,ARMOR_BOOST_POTION,DAMAGE_BOOST_POTION,INVISIBILITY_POTION,POISON_POTION]
 
     def __init__(self,name,image,usage,effect, turn,inventory_effect=None, durability=1, description=None):
         super().__init__()
@@ -53,10 +54,3 @@ class Potion(Item):
         self.description = description
         self.usage = usage
         self.turn = turn
-        
-
-
-
-    
-
-
