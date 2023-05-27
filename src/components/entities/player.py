@@ -11,9 +11,10 @@ vec = pygame.math.Vector2
 
 class Player(Entity):
     def __init__(self):
-        self.image_list = [pygame.image.load(ASSETS_DIR / "player" / ("player" + str(i+1) + ".png")).convert_alpha() for i in range(4)]
-        self.big_image_list = [pygame.image.load(ASSETS_DIR / "player" / ("player" + str(i+1) + "_inv.png")).convert_alpha() for i in range(4)]
+        self.image_list = [pygame.image.load(ASSETS_DIR / ("entities/player/player" + str(i+1) + ".png")).convert_alpha() for i in range(4)]
+        self.big_image_list = [pygame.image.load(ASSETS_DIR / ("entities/player/player" + str(i+1) + "_inv.png")).convert_alpha() for i in range(4)]
         super().__init__("player", vec(4,4), self.image_list)
+        
         self.rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)
         self.hotbar = [None for _ in range(9)]
         self.inventory = [[None for _ in range(9)] for _ in range(4)]
@@ -123,3 +124,13 @@ class Player(Entity):
 
     def invisibility(self,number):
         return number
+
+    def update(self):
+        if(self.actual_frame == 0):
+            self.actual_frame = 15
+            self.current_image += 1
+            if(self.current_image >= len(self.image_list)):
+                self.current_image = 0
+            self.image = self.image_list[self.current_image]
+            
+        self.actual_frame -= 1

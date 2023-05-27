@@ -12,13 +12,14 @@ from src.components.items.item import Item
 vec = pygame.math.Vector2
 
 class Chest(Entity):
-    OPEN_CHEST = [pygame.image.load(ASSETS_DIR / "chest/open_chest.png").convert_alpha(), pygame.image.load(ASSETS_DIR / "chest/open_chest_hover.png")]
-    CLOSE_CHEST = [pygame.image.load(ASSETS_DIR / "chest/close_chest.png").convert_alpha(), pygame.image.load(ASSETS_DIR / "chest/close_chest_hover.png")]
+    OPEN_CHEST = [[pygame.image.load(ASSETS_DIR / "chest/open_chest.png").convert_alpha()], [pygame.image.load(ASSETS_DIR / "chest/open_chest_hover.png")]]
+    CLOSE_CHEST = [[pygame.image.load(ASSETS_DIR / "chest/close_chest.png").convert_alpha()], [pygame.image.load(ASSETS_DIR / "chest/close_chest_hover.png")]]
     RARITY_CHEST = ["Coffre Commun"]*10 + ["Coffre Rare"]*5 + ["Coffre Epique"]*3 + ["Coffre Legendaire"]
     RARITY_TABLE = {"Coffre Commun":0, "Coffre Rare":1, "Coffre Epique":2, "Coffre Legendaire":3}
     ITEM_LIST = (Sword,Wand,Bow,Potion,Armor)
     def __init__(self,pos, player, open_time=1):
-        super().__init__("coffre",pos,self.CLOSE_CHEST,health=0)
+        super().__init__("coffre",pos,self.CLOSE_CHEST[0],health=0)
+        self.hover_list = self.CLOSE_CHEST[1]
         self.description = "Un coffre"
         self.inventory=[]
         if self.health==0:
@@ -57,8 +58,9 @@ class Chest(Entity):
         if self.inventory==[]:
             return
         
-        self.image = self.OPEN_CHEST[0]
-        self.image_list = self.OPEN_CHEST
+        self.image = self.OPEN_CHEST[0][0]
+        self.image_list = self.OPEN_CHEST[0]
+        self.hover_list = self.OPEN_CHEST[1]
         for i in self.inventory:
             player.add_in_inventory(i, inventory_ui)
         self.inventory = []

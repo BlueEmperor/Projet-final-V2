@@ -90,6 +90,7 @@ class Map:
     
     def __len__(self):
         return(len(self.map))
+     
     #--------------------------- Raise errors --------------------------------
     @staticmethod
     def check_entity(entity):
@@ -179,7 +180,7 @@ class Map:
             current=current.parent
         return(list[1:])
     
-    def line_of_sight(self, coord1, coord2):
+    def line_of_sight(self, coord1, coord2, entity = True):
         list = []
         x1,y1,x2,y2 = coord1[0], coord1[1], coord2[0], coord2[1]
         x,y = x1,y1
@@ -192,14 +193,23 @@ class Map:
             y += dy
             list.append([round(x),round(y)])
 
-        for i in list:
-            if(not(self.map[int(i[1])][int(i[0])] in (Map.GROUND, Map.STAIR) or i in (coord1,coord2))):
-                return(False)
+        if(entity):
+            for i in list:
+                if(not(self.map[int(i[1])][int(i[0])] in (Map.GROUND, Map.STAIR) or i in (coord1,coord2))):
+                    return(False)
+        
+        else:
+            for i in list:
+                if(self.map[int(i[1])][int(i[0])] == Map.WALL and not(i in (coord1,coord2))):
+                    return(False)
+                
         return(True)
+    
     
     def create_attack_zone(self, coord, weapon):
         if(not(isinstance(weapon, (Bow, Sword, Wand)))):
            return
+        
         self.attack_tile = []
         if(weapon.attack_type == "linear"):
             for i in range(4):
@@ -435,7 +445,7 @@ class Map:
     def update_see_map(self):
         for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
             for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
-                if(self.tiles_sprites[j][i]!=None and (vec(i,j) == self._player.map_pos or self.line_of_sight(vec(i,j), self._player.map_pos))):
+                if(self.tiles_sprites[j][i]!=None and (vec(i,j) == self._player.map_pos or self.line_of_sight(vec(i,j), self._player.map_pos, False))):
                     self.see_map[j][i] = Map.GROUND
 
     #--------------------------- Events functions --------------------------------
@@ -554,7 +564,8 @@ class Map:
                         
                         elif(self.get_item(self._player.map_pos+self.DIR[key]) == Map.STAIR):
                             self.__init__(self._player)
-
+        
+        self._player.update()
         self.monster_group.update(self._player)
         self.box_group.update(self._player)
         

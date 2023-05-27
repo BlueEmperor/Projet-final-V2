@@ -10,20 +10,43 @@ from src.components.items.wand import Wand
 vec=pygame.math.Vector2
 
 class Monster(Entity):
-    SQUELETTE = ("Squelette", 8, 1, Sword(*Sword.SKELETON_SWORD), [pygame.image.load(ASSETS_DIR / ("squelette.png")).convert_alpha(), pygame.image.load(ASSETS_DIR / ("squelette_hover.png")).convert_alpha()], 8)
-    VAMPIRE = ("Vampire", 15, 1, Wand(*Wand.COMMUNE_WAND), [pygame.image.load(ASSETS_DIR / ("vampire.png")).convert_alpha(), pygame.image.load(ASSETS_DIR / ("vampire_hover.png")).convert_alpha()], 12)
+    SQUELETTE = ("Squelette",
+                 8,
+                 1,
+                 Sword(*Sword.SKELETON_SWORD),
+                 [[pygame.image.load(ASSETS_DIR / ("entities/squelette/idle/squelette_" + str(i) + ".png")).convert_alpha() for i in range(4)],
+                  [pygame.image.load(ASSETS_DIR / ("entities/squelette/idle/squelette_hover_" + str(i) + ".png")).convert_alpha() for i in range(4)]],
+                  8)
+    
+    VAMPIRE = ("Vampire",
+               15,
+               1,
+               Wand(*Wand.COMMUNE_WAND),
+               [[pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_" + str(i) + ".png")).convert_alpha() for i in range(4)],
+                [pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_hover_" + str(i) + ".png")).convert_alpha() for i in range(4)]],
+               12)
     MONSTER_LIST = [SQUELETTE, VAMPIRE]
     
     def __init__(self,name,health,speed, weapon, image_list, xp, pos):
-        super().__init__(name, pos,image_list, health)
+        super().__init__(name, pos,image_list[0], health)
+        self.hover_list = image_list[1]
         self.speed = speed
         self.weapon = weapon
         self.aggro = False
         self.xp = xp
 
     def update(self, player):
+        if(self.actual_frame == 0):
+            self.actual_frame = 15
+            self.current_image += 1
+            if(self.current_image >= len(self.image_list)):
+                self.current_image = 0
+            self.image = self.image_list[self.current_image]
+
+        self.actual_frame -= 1
+
         self.rect.topleft = vec(player.rect.topleft)-player.absolute_pos+self.absolute_pos
-        if self.ismoving !=False:
+        if self.ismoving != False:
             self.absolute_pos += self.ismoving
             self.moving_tick-=1
             if(self.moving_tick==0):

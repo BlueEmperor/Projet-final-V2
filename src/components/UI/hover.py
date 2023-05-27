@@ -48,7 +48,7 @@ class Hover:
         self.rect.center = self.current_hover.rect.center + vec(0, -85)
         #self._map._player.meet(self.current_hover,self._map)
         #self.current_hover.update(self._map._player)
-        self.current_hover.image = self.current_hover.image_list[1]
+        self.current_hover.image = self.current_hover.hover_list[self.current_hover.current_image]
 
     def draw(self, SCREEN):
         if(self.current_hover != None):

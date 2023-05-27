@@ -1,4 +1,5 @@
 import pygame
+import random
 #from src.components.entities.monster import Monster
 #from src.components.entities.coffre import Coffre
 class Entity(pygame.sprite.Sprite):
@@ -11,6 +12,7 @@ class Entity(pygame.sprite.Sprite):
         self.image_list = image_list
         self.rect = self.image.get_rect()
         self.current_image = 0
+        self.actual_frame = random.randint(0,15)
         self.ismoving = False
         self.moving_tick=0
         self.health = health
