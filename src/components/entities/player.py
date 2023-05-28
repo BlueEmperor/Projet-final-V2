@@ -24,7 +24,6 @@ class Player(Entity):
         self.gold = 0
         self.mana = 60
         self.max_mana = self.mana
-        self.defense = 0
         self.level = 1
         self.experience = 0
         self.experience_to_level_up = lambda: int((self.level+1)**2.2 + 12)
