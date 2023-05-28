@@ -17,6 +17,7 @@ from src.components.items.armor import Armor
 from src.global_state import GlobalState
 from src.status import PlayerStatus
 from src.components.entities.entity import Entity
+from src.components.animations.stair_animation import StairAnimation
 
 vec = pygame.math.Vector2
 
@@ -80,6 +81,7 @@ class Map:
         self.moving_tick = 0
         self.turn = []
         self.update_see_map()
+        self.timer = -1
         print(self)
         
 
@@ -503,7 +505,10 @@ class Map:
     #--------------------------- Update functions --------------------------------
     def update(self, animation):
         self.mouse_pos = (vec(pygame.mouse.get_pos())-self._player.rect.topleft+self._player.absolute_pos)//48
-        
+        self.timer -= 1
+        if(self.timer == 0):
+            self.__init__(self._player)
+            
         if(self._player.ismoving):
             #Update the visual position of every entities
             self._player.absolute_pos += self._player.ismoving*4
@@ -560,8 +565,8 @@ class Map:
                             return
                         
                         elif(self.get_item(self._player.map_pos+self.DIR[key]) == Map.STAIR):
-                            self.__init__(self._player)
-        
+                            animation.append(StairAnimation(0, 0, 0))
+                            self.timer = 65
         self._player.update()
         self.monster_group.update(self._player)
         self.box_group.update(self._player)

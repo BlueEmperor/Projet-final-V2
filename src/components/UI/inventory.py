@@ -38,6 +38,7 @@ class InventoryUI:
     
         self.inventory_group = pygame.sprite.Group()
         self.hotbar_group = pygame.sprite.Group()
+        self.armor_group = pygame.sprite.Group()
         
         #open and close variable
         self.isopen = False
@@ -75,6 +76,10 @@ class InventoryUI:
         elif(location == "h"):
             item = self._player.hotbar[int(coord[0])]
             return(item)
+        elif(location == "a"):
+            item = self._player.armor[int(coord[1])][int(coord[0])]
+            return(item)
+        
         return(None)
     
     #Put an item in the location without checking if an item was already present
@@ -83,22 +88,31 @@ class InventoryUI:
             item.location = location
             item.slot = coord
             item.kill()
-            item.add(self.inventory_group) if(location == "i") else item.add(self.hotbar_group) if(location == "h") else ""
+            print(location)
+            item.add(self.inventory_group) if(location == "i") else item.add(self.hotbar_group) if(location == "h") else item.add(self.armor_group) if(location == "a") else ""
 
         if(location == "i"):
             self._player.inventory[int(coord[1])][int(coord[0])] = item
 
         elif(location == "h"):
             self._player.hotbar[int(coord[0])] = item
+        
+        elif(location == "a"):
+            self._player.armor[int(coord[1])][int(coord[0])] = item
     
     #Replace an item with None on the location
     def remove(self, coord, location) -> None:
         if(location == "i"):
             self._player.inventory[int(coord[1])][int(coord[0])].remove(self.inventory_group)
             self._player.inventory[int(coord[1])][int(coord[0])] = None
+
         elif(location == "h"):
             self._player.hotbar[int(coord[0])].remove(self.hotbar_group)
             self._player.hotbar[int(coord[0])] = None
+
+        elif(location == "a"):
+            self._player.armor[int(coord[1])][int(coord[0])].remove(self.armor_group)
+            self._player.armor[int(coord[1])][int(coord[0])] = None
             
     #--------------------------- Events functions --------------------------------
     def e_down_event(self):
@@ -111,10 +125,10 @@ class InventoryUI:
                 self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
                 self.drag_item=None #Remove the drag item
                 
-            if(self.select_item != None and self.select_item.location == "i"):
+            if(self.select_item != None and self.select_item.location in ("i", "a")):
                 self.select_item=None #Remove the select item
             
-            if(self.right_click_item != None and self.right_click_item.location == "i"):
+            if(self.right_click_item != None and self.right_click_item.location in ("i", "a")):
                 self.right_click_item = None
 
     def left_click_down_event(self, m):
@@ -173,6 +187,28 @@ class InventoryUI:
     def left_click_up_event(self, m):
         if(self.drag_item!=None):
             if(self.hover_object != None):
+                self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
+                if(not(isinstance(self.drag_item, Armor)) and self.hover_object == "a"):
+                    self.drag_item = None
+                    return
+                
+                if(isinstance(self.drag_item, Armor)):
+                    if(self.hover_coord == vec(0, 0) and self.drag_item.category != "Helmet"):
+                        self.drag_item = None
+                        return
+                        
+                    if(self.hover_coord == vec(0, 1) and self.drag_item.category != "Chestplate"):
+                        self.drag_item = None
+                        return
+                        
+                    if(self.hover_coord == vec(1, 0) and self.drag_item.category != "Legging"):
+                        self.drag_item = None
+                        return
+                        
+                    if(self.hover_coord == vec(1, 1) and self.drag_item.category != "Boot"):
+                        self.drag_item = None
+                        return                
+                
                 hover_item = self.get_item(self.hover_coord, self.hover_object)
 
                 #Exchange the 2 items slots
@@ -194,6 +230,7 @@ class InventoryUI:
             self.drag_item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
 
             self.drag_item = None
+            self._player.update_defense()
 
     def right_click_down_event(self):
         if(isinstance(self.get_item(self.hover_coord, self.hover_object), str)):
@@ -235,8 +272,29 @@ class InventoryUI:
                     self.hover_object = "i"
             
             else:
-                #Armor equipment
-                pass
+                self.hover_object = "a"
+                
+                rect = pygame.Rect(self.inventory_rect.topleft + vec(22, 49), (75, 75))
+                if(rect.collidepoint(mouse_pos)):
+                    self.hover_coord = vec(0, 0)
+                    return
+                
+                rect.topleft = self.inventory_rect.topleft + vec(22, 160)
+                if(rect.collidepoint(mouse_pos)):
+                    self.hover_coord = vec(0,1)
+                    return
+                
+                rect.topleft = self.inventory_rect.topleft + vec(212, 49)
+                if(rect.collidepoint(mouse_pos)):
+                    self.hover_coord = vec(1, 0)
+                    return
+                
+                rect.topleft = self.inventory_rect.topleft + vec(212, 160)
+                if(rect.collidepoint(mouse_pos)):
+                    self.hover_coord = vec(1, 1)
+                    return
+                
+                self.hover_object = None
 
         #If mouse collide with hotbar
         elif(self.hotbar_rect.collidepoint(mouse_pos)):
@@ -276,8 +334,14 @@ class InventoryUI:
             #gold
             SCREEN.blit(self.font.render(f"{self._player.gold}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(195,391))
 
+            #defense
+            SCREEN.blit(self.font.render(f"{int(self._player.defense)}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(151,320))
+
             #inventory items draw
             self.inventory_group.draw(SCREEN)
+
+            #armor items draw
+            self.armor_group.draw(SCREEN)
         
         #hotbar items draw
         self.hotbar_group.draw(SCREEN)

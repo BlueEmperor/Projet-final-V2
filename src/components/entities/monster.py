@@ -40,6 +40,7 @@ class Monster(Entity):
         self.weapon = weapon
         self.aggro = False
         self.xp = xp
+        self.defense = 0
 
     def update(self, player):
         if(self.actual_frame == 0):

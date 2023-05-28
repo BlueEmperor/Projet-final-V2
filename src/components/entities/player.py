@@ -18,13 +18,12 @@ class Player(Entity):
         self.rect.center=vec(Config.WIDTH/2, Config.HEIGHT/2)
         self.hotbar = [None for _ in range(9)]
         self.inventory = [[None for _ in range(9)] for _ in range(4)]
-        self.armor = [None for _ in range(4)]
+        self.armor = [[None for _ in range(2)] for _ in range(2)]
         self.health = 20
         self.max_health = 20
         self.gold = 0
         self.mana = 60
         self.max_mana = self.mana
-        self.defense = 0
         self.level = 1
         self.experience = 0
         self.experience_to_level_up = lambda: int((self.level+1)**2.2 + 12)
@@ -109,6 +108,12 @@ class Player(Entity):
 
     def invisibility(self,number):
         pass
+    
+    def update_defense(self):
+        self.defense = 0
+        for i in range(2):
+            for j in range(2):
+                self.defense += self.armor[j][i].defense if(self.armor[j][i] != None) else 0
 
     def update(self):
         if(self.actual_frame == 0):
