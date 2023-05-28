@@ -154,12 +154,18 @@ class InventoryUI:
 
             for i in range(len(button_list)):
                 if(pygame.Rect(self.right_click_coord + vec(0, i*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
-                    button_list[i](self._player, m)
-                    self.remove(self.right_click_item.slot, self.right_click_item.location)
+                    pot = self.right_click_item
+                    self._player.effects.append([pot.effect, pot.turn, pot.usage])
+                    pot.durability -= 1
+                    if(pot.durability == 0):
+                        self.remove(pot.slot, pot.location)
+                    self._player.effect(self)
+                    self.select_item = None
 
 
             if(pygame.Rect(self.right_click_coord + vec(0, len(button_list)*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
                 self.remove(self.right_click_item.slot, self.right_click_item.location)
+                self.select_item = None
 
             self.right_click_item = None
     
@@ -258,7 +264,7 @@ class InventoryUI:
                 SCREEN.blit(self.select_surface, vec(324, 36) + vec(self.inventory_rect.topleft) + self.hover_coord*72)
             
             #player sprite draw
-            SCREEN.blit(self._player.big_image_list[self._player.current_image], self.inventory_rect.topleft+vec(130,210))
+            SCREEN.blit(self._player.big_image_list[self._player.current_image], self.inventory_rect.topleft+vec(130,205))
 
             #Draw the information of the select item
             self.draw_select_information(SCREEN)

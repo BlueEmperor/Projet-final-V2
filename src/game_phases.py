@@ -37,12 +37,13 @@ for i in range(1):
     player.add_in_inventory(a, inventory_ui)
     b=Wand(*Wand.LIST[0])
     b.damage = 700000
+    b.durability = 3
     player.add_in_inventory(b, inventory_ui)
     for j in range(4):
-        player.add_in_inventory(Armor(*Armor.PLASTRON_LIST[j]),inventory_ui)
-        player.add_in_inventory(Armor(*Armor.LEGS_LIST[j]),inventory_ui)
-    for k in range(3):
-        player.add_in_inventory(Armor(*Armor.HELMET_LIST[k]),inventory_ui)
+        player.add_in_inventory(Armor(*Armor.CHESTPLATE[j]),inventory_ui)
+        player.add_in_inventory(Armor(*Armor.LEGGING[j]),inventory_ui)
+        player.add_in_inventory(Armor(*Armor.HELMET[j]),inventory_ui)
+        player.add_in_inventory(Potion(*Potion.LIST[j][2]), inventory_ui)
 
     #player.add_in_inventory(Armor(*Armor.WOOD_PLASTRON),inventory_ui)
 
@@ -59,7 +60,7 @@ def gameplay_phase(events):
             #Mouses events
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 1):
-                    m.left_click_down_event(animations)
+                    m.left_click_down_event(animations, inventory_ui)
                     inventory_ui.left_click_down_event(m)
 
                 elif(event.button == 3):

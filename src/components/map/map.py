@@ -450,8 +450,9 @@ class Map:
                     self.see_map[j][i] = Map.GROUND
 
     #--------------------------- Events functions --------------------------------
-    def left_click_down_event(self, animation):
+    def left_click_down_event(self, animation, inventory_ui):
         if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
+            print("not in attack mode")
             return
         
         item = self.get_item(self.mouse_pos)
@@ -469,23 +470,16 @@ class Map:
             
             self._player.mana -= self._player.weapon.mana
 
-        self._player.meet(item, self, animation)
         print(item, self._player.weapon, random.randint(0, 1000))
-        i = 0
-        while(i < len(self._player.effects)):
-            if self._player.effects[i][2]=="Damage":
-                self._player.effects[i][1]-=1
+        self._player.effect(self)
 
-            if self._player.effects[i][1]==0:
-                self._player.effects.pop(i)
-                i -= 1
+        self._player.meet(item, self, animation)
 
-            i += 1
 
         
         self._player.weapon.durability -= 1
         if self._player.weapon.durability==0:
-            pass
+            inventory_ui.remove(self._player.weapon.slot, self._player.weapon.location)
             
         for monster in self.monster_group:
             self.turn.append(monster)
@@ -497,13 +491,13 @@ class Map:
             if(((self._player.map_pos[0]-self.mouse_pos[0])**2+(self._player.map_pos[1]-self.mouse_pos[1])**2)**0.5<=1):
                 item.open_chest(self._player, inventory_ui)
 
-        elif(isinstance(self._player.weapon,Potion)):
-            pot = self._player.weapon
-            self._player.effects.append([pot.effect, pot.turn, pot.usage])
-            pot.durability -= 1
-            if(pot.durability == 0):
-                inventory_ui.remove(pot.slot, pot.location)
-            self._player.effect(self)
+        #elif(isinstance(self._player.weapon,Potion)):
+        #    pot = self._player.weapon
+         #   self._player.effects.append([pot.effect, pot.turn, pot.usage])
+          #  pot.durability -= 1
+           # if(pot.durability == 0):
+            #    inventory_ui.remove(pot.slot, pot.location)
+            #self._player.effect(self)
 
 
     #--------------------------- Update functions --------------------------------

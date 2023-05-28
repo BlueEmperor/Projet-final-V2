@@ -25,7 +25,11 @@ class Entity(pygame.sprite.Sprite):
         self.health = health
         self.max_health = health
         self.weapon = None
-        
+        self.defense_boost = 1
+        self.damage_boost = 1
+        self.mana_boost = 1
+        self.health_boost = 1
+
     def __repr__(self):
         return(self.name[0])
     
