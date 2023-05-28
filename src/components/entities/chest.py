@@ -16,7 +16,7 @@ class Chest(Entity):
     CLOSE_CHEST = [[pygame.image.load(ASSETS_DIR / "chest/close_chest.png").convert_alpha()], [pygame.image.load(ASSETS_DIR / "chest/close_chest_hover.png")]]
     RARITY_CHEST = ["Coffre Commun"]*10 + ["Coffre Rare"]*5 + ["Coffre Epique"]*3 + ["Coffre Legendaire"]
     RARITY_TABLE = {"Coffre Commun":0, "Coffre Rare":1, "Coffre Epique":2, "Coffre Legendaire":3}
-    ITEM_LIST = (Sword,Wand,Bow,Potion,Armor)
+    ITEM_LIST = (Sword,Wand,Bow,Potion)#,Armor)
     def __init__(self,pos, player, open_time=1):
         super().__init__("coffre",pos,self.CLOSE_CHEST[0],health=0)
         self.hover_list = self.CLOSE_CHEST[1]
@@ -45,11 +45,12 @@ class Chest(Entity):
         for i in range(2):#(random.randint(2,3)):
             #a=random.randint(0,3)
             item=random.choice(self.ITEM_LIST)
-            if item==Potion:
-                b=random.choice(Potion.LIST)
+            if item==(Potion):# or Armor):
+                b=random.choice(item.LIST)
                 #print(a(*b[self.RARITY_NUMBER]))
                 self.inventory.append(item(*b[self.RARITY_NUMBER]))
                 continue
+
             
             self.inventory.append(item(*item.LIST[self.RARITY_NUMBER]))
 

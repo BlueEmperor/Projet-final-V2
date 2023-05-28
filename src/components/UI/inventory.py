@@ -309,7 +309,7 @@ class InventoryUI:
                 SCREEN.blit(self.font2.render("Durability : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))
 
             elif (isinstance(self.select_item,Potion)):
-                SCREEN.blit(self.select_item.inventory_effect, vec (self.inventory_rect.topleft)+vec(600,334))
+                SCREEN.blit(self.select_item.image_icon, vec (self.inventory_rect.topleft)+vec(600,334))
                 SCREEN.blit(self.CLOCK_ICON, vec (self.inventory_rect.topleft)+vec (800,334))
                 SCREEN.blit(self.font2.render(str(self.select_item.turn), True, (255, 255, 255)), vec(self.inventory_rect.topleft)+vec(848,334))
                 SCREEN.blit(self.font2.render(self.select_item.name + " :" ,True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
