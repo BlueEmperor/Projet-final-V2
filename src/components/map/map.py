@@ -456,9 +456,11 @@ class Map:
         
         item = self.get_item(self.mouse_pos)
         if(not(isinstance(item,Monster))):
+            print("not a monster")
             return
         
         if(not(self._player.can_attack(item, self))):
+            print("you can't attack")
             return
         
         if(isinstance(self._player.weapon, Wand)):
@@ -468,7 +470,7 @@ class Map:
             self._player.mana -= self._player.weapon.mana
 
         self._player.meet(item, self, animation)
-
+        print(item, self._player.weapon, random.randint(0, 1000))
         i = 0
         while(i < len(self._player.effects)):
             if self._player.effects[i][2]=="Damage":
