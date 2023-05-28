@@ -22,7 +22,11 @@ class Armor(Item):
                ("Golden Legs", pygame.image.load(ARMOR_DIR / "golden_legs.png").convert_alpha(), 50, "Legging"),
                ("Diamond Legs", pygame.image.load(ARMOR_DIR / "diamond_legs.png").convert_alpha(), 75, "Legging")]
 
-    LIST =  [CHESTPLATE, HELMET, LEGGING]
+    BOOTS = [("Wood Boots", pygame.image.load(ARMOR_DIR / "silver_boot.png").convert_alpha(), 15, "Boot"),
+             ("Silver Boots", pygame.image.load(ARMOR_DIR / "silver_boot.png").convert_alpha(), 15, "Boot"),
+             ("Golden Boots", pygame.image.load(ARMOR_DIR / "golden_boot.png").convert_alpha(), 15, "Boot"),
+             ("Diamond Boots", pygame.image.load(ARMOR_DIR / "diamond_boot.png").convert_alpha(), 15, "Boot")]
+    LIST =  [CHESTPLATE, HELMET, LEGGING, BOOTS]
     def __init__(self,name,image,defense, category):
         super().__init__()
         self.name = name

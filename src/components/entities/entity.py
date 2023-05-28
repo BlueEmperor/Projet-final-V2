@@ -40,6 +40,8 @@ class Entity(pygame.sprite.Sprite):
     def meet(self, target, m, animation):
         if(self.weapon.animation != None):
             animation.append(self.weapon.animation(self, target, m._player))
+        #else:
+        #    target.health-=self.weapon.damage
     
     def damage(self, damage, m, player, messages):
         messages.append(MessageDisplay(text = str(damage),

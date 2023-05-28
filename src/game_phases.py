@@ -45,6 +45,7 @@ for i in range(1):
         player.add_in_inventory(Armor(*Armor.CHESTPLATE[j]),inventory_ui)
         player.add_in_inventory(Armor(*Armor.LEGGING[j]),inventory_ui)
         player.add_in_inventory(Armor(*Armor.HELMET[j]),inventory_ui)
+        player.add_in_inventory(Armor(*Armor.BOOTS[j]),inventory_ui)
         player.add_in_inventory(Ak(*Ak.LIST[j]), inventory_ui)
         player.add_in_inventory(Sword(*Sword.LIST[j]), inventory_ui)
     for j in range(3):
