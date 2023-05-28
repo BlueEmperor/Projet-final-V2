@@ -58,7 +58,7 @@ class Potion(Item):
                            ("Epic Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 10),
                            ("Legendary Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 20, 2))
     
-    LIST = [ DAMAGE_BOOST_POTION]#[HEALTH_POTION,ARMOR_BOOST_POTION,DAMAGE_BOOST_POTION,INVISIBILITY_POTION,POISON_POTION]
+    LIST = [DAMAGE_BOOST_POTION]#[HEALTH_POTION,ARMOR_BOOST_POTION,DAMAGE_BOOST_POTION,INVISIBILITY_POTION,POISON_POTION]
 
     def __init__(self,name,image,usage,effect, turn,inventory_effect=None, durability=1, description=None):
         super().__init__()
@@ -73,10 +73,3 @@ class Potion(Item):
         self.description = description
         self.usage = usage
         self.turn = turn
-        
-
-
-
-    
-
-

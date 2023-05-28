@@ -15,6 +15,7 @@ from src.components.items.potions import Potion
 from src.components.items.armor import Armor
 from src.message_display import MessageDisplay
 from src.config import Config
+from src.components.items.throw_dagger import ThrowableDager
 
 vec = pygame.math.Vector2
 
