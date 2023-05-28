@@ -25,7 +25,7 @@ class StatUI:
         pygame.draw.rect(SCREEN, (139,244,37), pygame.Rect(162,102,157*self._player.experience/self._player.experience_to_level_up(),21))
 
         SCREEN.blit(self.image, self.rect)
-        SCREEN.blit(self._player.big_image_list[self._player.current_image], self.rect.topleft+vec(20,23))
+        SCREEN.blit(self._player.big_image_list[self._player.current_image], self.rect.topleft+vec(20,20))
         
         #Health
         SCREEN.blit(self.font.render(f"{int(self._player.health)}/{int(self._player.max_health)}",True,(255, 255, 255)), (110, 37))

@@ -13,10 +13,10 @@ class DaggerAnimation(Animation):
         distance = (coord[0]**2+coord[1]**2)**0.5
         direction = coord/distance
         dagger_speed = 5
-        duration = int(distance/dagger_speed) if(int(distance/dagger_speed) >= 0) else 0
+        duration = int(distance/dagger_speed-4) if(int(distance/dagger_speed-4) >= 0) else 0
         relative_user_pos = user.absolute_pos - player.absolute_pos + vec(Config.WIDTH//2, Config.HEIGHT//2)
         
-        DAGGER_IMAGE_LIST = [pygame.transform.rotate(pygame.image.load(ASSETS_DIR / ("thrown_dagger.png")).convert_alpha(), (atan2(direction[1], direction[0])-2*pi/3)*180/pi)]
+        DAGGER_IMAGE_LIST = [pygame.transform.rotate(pygame.image.load(ASSETS_DIR / ("thrown_dagger.png")).convert_alpha(), (pi/2-atan2(direction[1], direction[0]))*180/pi)]
         
         super().__init__(images=[DAGGER_IMAGE_LIST],
                          speed=[dagger_speed],

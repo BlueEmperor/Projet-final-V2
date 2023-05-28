@@ -21,13 +21,10 @@ class Player(Entity):
         self.armor = [None for _ in range(4)]
         self.health = 20
         self.max_health = 20
-        self.health_boost = 0
         self.gold = 0
         self.mana = 60
         self.max_mana = self.mana
-        self.mana_boost = 0
         self.defense = 0
-        self.defense_boost = 0
         self.level = 1
         self.experience = 0
         self.experience_to_level_up = lambda: int((self.level+1)**2.2 + 12)
@@ -36,6 +33,8 @@ class Player(Entity):
     
     #def get_item(self,n):
     def effect(self, m):
+        self.health_boost, self.defense_boost, self.damage_boost, self.mana_boost = 1, 1, 1, 1
+
         i = 0
         while(i < len(self.effects)):
             self.effects[i][1] -= 1
@@ -99,31 +98,17 @@ class Player(Entity):
         if(self.health > self.max_health):
             self.health = self.max_health
 
-    def armor_boost(self,number):
-        self.defense += number
+    def armor_bonus(self,number):
+        self.defense_boost = number
 
-    def damage_boost(self,function,tour):
-        self.effects.append([])
-        
-        #self.weapon.damage+=number
-        #while self.weapon.durability
-        #while tour > 0:
-            #pass
-        #self.weapon.damage-=number
+    def damage_bonus(self,number):
+        self.damage_boost = number
 
-    def poison_attack(self,number,m=None):
-        item=m.get_item(m.mouse_pos)
-        for i in m.get_item_room(self):
-            if isinstance(i,Monster) and i.health!=None:
-                if i.health<=number:
-                    i.kill
-                elif i.health>number:
-                    i.health-=number
-        self.remove_inventory(item)
-        return number
+    def poison_attack(self,number):
+        pass
 
     def invisibility(self,number):
-        return number
+        pass
 
     def update(self):
         if(self.actual_frame == 0):
