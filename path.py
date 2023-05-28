@@ -7,4 +7,6 @@ MAP_DIR = ASSETS_DIR / "Map"
 AUDIO_DIR = DATA_DIR / "audio"
 CARAC_DIR = ASSETS_DIR / "carac"
 ARMOR_DIR = ASSETS_DIR / "armor"
+WEAPON_DIR = ASSETS_DIR / "weapons"
+
 

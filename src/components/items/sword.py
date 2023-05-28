@@ -1,20 +1,24 @@
 import pygame
 
-from path import ASSETS_DIR, AUDIO_DIR
+from path import ASSETS_DIR, AUDIO_DIR,WEAPON_DIR
 from src.components.items.item import Item
 
 vec = pygame.math.Vector2
 
 class Sword(Item):
     IMAGE = pygame.image.load(ASSETS_DIR / "sword_item.png").convert_alpha()
-    SKELETON_SWORD =("Skeleton sword",IMAGE, 4, 200, vec(1,1) )
-    COMMUNE_SWORD = ("Jesus sword", IMAGE, 5, 50, vec(1,1))
-    RARE_SWORD = ("SEXYSEB's sword", IMAGE, 8, 20, vec(1,1))
-    EPIC_SWORD = ("Timozob' sword", IMAGE, 10, 50, vec(1,1))
-    LEGENDARY_SWORD = ("3 FROMAGES' Sword", IMAGE, 15, 100, vec(1,2))
+    wood_sword = pygame.image.load(WEAPON_DIR / "wood_sword.png").convert_alpha()
+    silver_sword = pygame.image.load(WEAPON_DIR / "silver_sword.png").convert_alpha()
+    golden_sword = pygame.image.load(WEAPON_DIR / "golden_sword.png").convert_alpha()
+    diamond_sword = pygame.image.load(WEAPON_DIR / "diamond_sword.png").convert_alpha()
+    SKELETON_SWORD =("Skeleton sword",IMAGE, 4, 200, vec(1,1),0 )
+    COMMUNE_SWORD = ("Jesus sword", wood_sword, 5, 50, vec(1,1),10)
+    RARE_SWORD = ("SEXYSEB's sword", silver_sword, 8, 20, vec(1,1),10)
+    EPIC_SWORD = ("Timozob' sword", golden_sword, 10, 50, vec(1,1),20)
+    LEGENDARY_SWORD = ("3 FROMAGES' Sword", diamond_sword, 15, 100, vec(1,2),50)
     LIST = [COMMUNE_SWORD,RARE_SWORD,EPIC_SWORD,LEGENDARY_SWORD]
     
-    def __init__(self, name, image, damage, durability, range, animation = None):
+    def __init__(self, name, image, damage, durability, range,mana, animation = None):
         super().__init__()
         self.image = pygame.transform.scale(image, (72,72))
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
@@ -27,4 +31,5 @@ class Sword(Item):
         self.range = range
         self.wall_ability = False
         self.animation = animation
+        self.mana= mana
  

@@ -13,6 +13,7 @@ from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.components.items.potions import Potion
 from src.components.items.armor import Armor
+from src.components.items.ak47 import Ak
 from src.message_display import MessageDisplay
 from src.config import Config
 from src.components.items.throw_dagger import ThrowableDager
@@ -39,10 +40,13 @@ for i in range(1):
     b.damage = 700000
     b.durability = 100000
     player.add_in_inventory(b, inventory_ui)
+    
     for j in range(4):
         player.add_in_inventory(Armor(*Armor.CHESTPLATE[j]),inventory_ui)
         player.add_in_inventory(Armor(*Armor.LEGGING[j]),inventory_ui)
         player.add_in_inventory(Armor(*Armor.HELMET[j]),inventory_ui)
+        player.add_in_inventory(Ak(*Ak.LIST[j]), inventory_ui)
+        player.add_in_inventory(Sword(*Sword.LIST[j]), inventory_ui)
     for j in range(3):
         player.add_in_inventory(Potion(*Potion.LIST[j][2]), inventory_ui)
 
