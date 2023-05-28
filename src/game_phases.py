@@ -37,12 +37,13 @@ for i in range(1):
     player.add_in_inventory(a, inventory_ui)
     b=Wand(*Wand.LIST[0])
     b.damage = 700000
-    b.durability = 3
+    b.durability = 100000
     player.add_in_inventory(b, inventory_ui)
     for j in range(4):
         player.add_in_inventory(Armor(*Armor.CHESTPLATE[j]),inventory_ui)
         player.add_in_inventory(Armor(*Armor.LEGGING[j]),inventory_ui)
         player.add_in_inventory(Armor(*Armor.HELMET[j]),inventory_ui)
+    for j in range(3):
         player.add_in_inventory(Potion(*Potion.LIST[j][2]), inventory_ui)
 
     #player.add_in_inventory(Armor(*Armor.WOOD_PLASTRON),inventory_ui)
