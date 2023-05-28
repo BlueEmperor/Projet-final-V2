@@ -21,7 +21,7 @@ class Monster(Entity):
     VAMPIRE = ("Vampire",
                15,
                1,
-               Wand(*Wand.COMMUNE_WAND),
+               Wand(*Wand.VAMPIRE_WAND),
                [[pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_" + str(i) + ".png")).convert_alpha() for i in range(4)],
                 [pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_hover_" + str(i) + ".png")).convert_alpha() for i in range(4)]],
                12)

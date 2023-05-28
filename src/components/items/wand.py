@@ -9,7 +9,7 @@ vec = pygame.math.Vector2
 
 class Wand(Item):
     IMAGE = pygame.image.load(ASSETS_DIR / "bdf_staff.png").convert_alpha()
-    VAMPIRE_WAND = ("Vampire's wand", IMAGE, 2, 30 ,vec(1,4), 0)
+    VAMPIRE_WAND = ("Vampire's wand", IMAGE, 2, 30 ,vec(1,2), 0)
     COMMUNE_WAND =("Harry Potter's wand", IMAGE, 2, 30 ,vec(1,5), 25, FireballAnimation)
     RARE_WAND =("Hermione's wand", IMAGE, 5, 50 ,vec(1,3), 30)
     EPIC_WAND =("APAGNAN's wand", IMAGE, 10, 50 ,vec(1,4), 40)
