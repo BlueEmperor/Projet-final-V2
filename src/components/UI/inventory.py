@@ -388,3 +388,6 @@ class InventoryUI:
                 SCREEN.blit(self.font2.render(self.select_item.name + " :" ,True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
                 SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
                 SCREEN.blit(self.font2.render("Nombre d'utilisation(s) restante(s) : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))
+            elif(isinstance(self.select_item, Armor)):
+                SCREEN.blit(self.font2.render("Name : " + str(self.select_item.name),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
+                SCREEN.blit(self.font2.render("Defense : " + str(self.select_item.defense),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))

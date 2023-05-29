@@ -21,7 +21,6 @@ class Player(Entity):
         self.armor = [[None for _ in range(2)] for _ in range(2)]
         self.health = 20
         self.max_health = 20
-        self.defense = 0
         self.gold = 0
         self.mana = 60
         self.max_mana = self.mana

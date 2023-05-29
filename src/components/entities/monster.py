@@ -25,12 +25,15 @@ class Monster(Entity):
                [[pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_" + str(i) + ".png")).convert_alpha() for i in range(4)],
                 [pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_hover_" + str(i) + ".png")).convert_alpha() for i in range(4)]],
                12)
+    
     SNAKE = ("Snake",
              12,
              1,
              Sword(*Sword.RARE_SWORD),
-             [[pygame.image.load(ASSETS_DIR / ("entities/snake/face_snake.png")).convert_alpha() for i in range (4)]for j in range(2)],
+             [[pygame.image.load(ASSETS_DIR / ("entities/snake/face_snake_"+str(i+1)+".png")).convert_alpha() for i in range (4)],
+              [pygame.image.load(ASSETS_DIR / ("entities/snake/face_snake_hover_"+str(i+1)+".png")).convert_alpha() for i in range (4)]],
              15)
+    
     MONSTER_LIST = [SQUELETTE, VAMPIRE,SNAKE]
     
     def __init__(self,name,health,speed, weapon, image_list, xp, pos):
@@ -40,7 +43,6 @@ class Monster(Entity):
         self.weapon = weapon
         self.aggro = False
         self.xp = xp
-        self.defense = 0
 
     def update(self, player):
         if(self.actual_frame == 0):

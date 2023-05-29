@@ -29,6 +29,7 @@ class Entity(pygame.sprite.Sprite):
         self.damage_boost = 1
         self.mana_boost = 1
         self.health_boost = 1
+        self.defense = 0
 
     def __repr__(self):
         return(self.name[0])

@@ -48,7 +48,7 @@ class Animation:
         
         if(self.frame_until_damage == 0):
             X = 100
-            self.target.damage(self.user_weapon.damage*self.user.damage_boost*X/(X + self.user.defense*self.user.defense_boost), m, player, messages)
+            self.target.damage(int(self.user_weapon.damage*self.user.damage_boost*X/(X + self.target.defense*self.target.defense_boost)), m, player, messages)
         self.frame_until_damage -= 1
 
         if(len(self.images) == 0):
