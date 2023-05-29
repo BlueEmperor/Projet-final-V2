@@ -13,8 +13,9 @@ class Button(pygame.sprite.Sprite):
     def update(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.rect.collidepoint(pygame.mouse.get_pos()):
-                    self.function()
+                if(event.button == 1):
+                    if self.rect.collidepoint(pygame.mouse.get_pos()):
+                        self.function()
     
     def draw(self, SCREEN):
         self.image = pygame.Surface(self.size)
