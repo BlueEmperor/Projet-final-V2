@@ -10,7 +10,7 @@ vec = pygame.math.Vector2
 
 class MainMenu:
     def __init__(self):
-        self.image = pygame.image.load(ASSETS_DIR / "menu/menu.png").convert_alpha()
+        self.image = pygame.image.load(ASSETS_DIR / "menu/gt4rs.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (Config.WIDTH, Config.HEIGHT))
         self.rect = self.image.get_rect()
         self.rect.x = 0
