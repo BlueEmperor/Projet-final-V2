@@ -45,6 +45,8 @@ class Entity(pygame.sprite.Sprite):
         #    target.health-=self.weapon.damage
     
     def damage(self, damage, m, player, messages):
+        X = 100
+        damage = int(damage*X/(X + self.defense*self.defense_boost))
         messages.append(MessageDisplay(text = str(damage),
                                        color = (255, 0, 0),
                                        font = pygame.font.Font(ASSETS_DIR / "font.ttf", 48),
@@ -85,3 +87,8 @@ class Entity(pygame.sprite.Sprite):
             self.health = self.max_health
         else:
             self.health += number
+    
+    def damage_area(self, damage, m, player, messages, radius):
+        for monster in m.monster_group:
+            if((monster.map_pos - self.map_pos).length() <= radius):
+                monster.damage(damage, m, player, messages)

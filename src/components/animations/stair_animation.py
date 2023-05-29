@@ -21,5 +21,6 @@ class StairAnimation(Animation):
                          directions=[vec(0, 0)],
                          framerate=10,
                          frame_until_damage=0,
+                         function = lambda user, user_weapon, target, m, messages: None,
                          user=Monster(*Monster.SQUELETTE, vec(0, 0)),
                          target=Monster(*Monster.SQUELETTE, vec(0, 0)))

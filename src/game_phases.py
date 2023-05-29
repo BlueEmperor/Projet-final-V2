@@ -18,6 +18,8 @@ from src.components.items.rocket_launcher import Rocket_launcher
 from src.message_display import MessageDisplay
 from src.config import Config
 from src.components.items.throw_dagger import ThrowableDager
+from src.global_state import GameStatus
+from src.components.UI.main_menu import MainMenu
 
 vec = pygame.math.Vector2
 
@@ -29,6 +31,7 @@ stat_ui = StatUI(player)
 m = Map(player)
 minimap = MiniMap(m)
 hover = Hover(m)
+main_menu = MainMenu()
 animations = []
 messages = []
 
@@ -57,7 +60,8 @@ for i in range(1):
 
 
 def main_menu_phase(events):
-    pass
+    main_menu.update(events)
+    main_menu.draw(GlobalState.SCREEN)
 
 def gameplay_phase(events):
     global animations
