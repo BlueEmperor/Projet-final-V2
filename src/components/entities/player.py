@@ -103,10 +103,13 @@ class Player(Entity):
     def damage_bonus(self,number):
         self.damage_boost = number
 
-    def poison_attack(self,number):
-        pass
+    def poison(self,number):
+        self.health -= number
+        if(self.health <= 0):
+            return(True)
+        return(False)
 
-    def invisibility(self,number):
+    def invisibility(self, number):
         pass
     
     def update_defense(self):

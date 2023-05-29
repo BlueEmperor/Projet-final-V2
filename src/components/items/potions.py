@@ -48,10 +48,10 @@ class Potion(Item):
                            ("Epic Damage Potion",epic_damage,"Damage",lambda hero, m: hero.damage_bonus(1.5), 20,epic_damage, 2,"Increases the damages by 50%" ),
                            ("Enormous Damage Potion",legendary_damage,"Damage",lambda hero : hero.damage_bonus(2), 20,legendary_damage, 2,"Increases the damages by 100%")]
     
-    POISON_POTION = [("Commune Poison Potion",commune_poison,"Poison",lambda hero, m : hero.poison_attack(5,m), 1),
-                     ("Rare Poison Potion",rare_poison,"Poison",lambda hero, m : hero.poison_attack(10,m), 1),
-                     ("Epic Poison Potion",epic_poison,"Poison", lambda hero, m : hero.poison_attack(20,m),1),
-                     ("Legendary Poison Potion",legendary_poison,"Poison", lambda hero, m : hero.poison_attack(50,m), 1)]
+    POISON_POTION = [("Commune Poison Potion",commune_poison,"Poison",lambda hero, m : hero.poison(5,m), 1),
+                     ("Rare Poison Potion",rare_poison,"Poison",lambda hero, m : hero.poison(10,m), 1),
+                     ("Epic Poison Potion",epic_poison,"Poison", lambda hero, m : hero.poison(20,m),1),
+                     ("Legendary Poison Potion",legendary_poison,"Poison", lambda hero, m : hero.poison(50,m), 1)]
     
     INVISIBILITY_POTION = [("Short Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 3),
                            ("Rare Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 5),

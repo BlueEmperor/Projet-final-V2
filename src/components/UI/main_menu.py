@@ -17,8 +17,8 @@ class MainMenu:
         self.rect.y = 0
         self.active = True
         self.buttons = []
-        self.buttons.append(Button("Jouer", vec(Config.WIDTH/2, Config.HEIGHT/2-50), vec(200, 50), self.play))
-        self.buttons.append(Button("Quitter", vec(Config.WIDTH/2, Config.HEIGHT/2+50), vec(200, 50), self.quit))
+        self.buttons.append(Button("Jouer", vec(Config.WIDTH/2, Config.HEIGHT/2-50), vec(200, 50), self.play, (255, 100, 0)))
+        self.buttons.append(Button("Quitter", vec(Config.WIDTH/2, Config.HEIGHT/2+50), vec(200, 50), self.quit, (10, 150, 255)))
     
     def play(self):
         GlobalState.GAME_STATE = GameStatus.GAMEPLAY
