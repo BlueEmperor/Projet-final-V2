@@ -65,16 +65,17 @@ class Entity(pygame.sprite.Sprite):
     def can_attack(self,entity, m):
         dist=(entity.map_pos-self.map_pos)
         if(self.weapon.attack_type == "linear"):
-            m.line_of_sight(entity.map_pos,self.map_pos)
-            return((dist[0]==0 or dist[1]==0) and abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
+            if(m.line_of_sight(entity.map_pos,self.map_pos)):
+                return((dist[0]==0 or dist[1]==0) and abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
         
         elif(self.weapon.attack_type == "zone"):
-            m.line_of_sight(entity.map_pos,self.map_pos)
-            return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
+            if(m.line_of_sight(entity.map_pos,self.map_pos)):
+                return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
 
         elif (self.weapon.attack_type == "continuous"):
 
             return True
+        return(False)
         
     
     def teleport(self, coord):
