@@ -11,6 +11,8 @@ from src.components.items.potions import Potion
 from src.components.items.armor import Armor
 from src.components.items.ak47 import Ak
 from src.components.items.rocket_launcher import Rocket_launcher
+from src.components.items.sword import Sword
+
 vec = pygame.math.Vector2
 
 class InventoryUI:
@@ -63,6 +65,8 @@ class InventoryUI:
         #select rectangle when hover
         self.select_surface = pygame.Surface((69,69), pygame.SRCALPHA)
         self.select_surface.fill((25,212,255, 100))
+
+        self._player.add_in_inventory(Sword(*Sword.LIST[0]), self)
 
     def __repr__(self) -> str:
         return("\n################################################\n\n"+"\n".join("".join(j.name[0] if(j) else "." for j in self._player.inventory[i]) for i in range(len(self._player.inventory)))+"\n\n"+"".join(i.name[0] if(i) else "." for i in self._player.hotbar))
