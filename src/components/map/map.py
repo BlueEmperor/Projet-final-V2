@@ -59,6 +59,7 @@ class Map:
         self._player = player
         self.map = [[self.WALL]*size for _ in range(size)]
         self.see_map = [[self.WALL]*size for _ in range(size)]
+        self.see_map_entities = [[self.WALL]*size for _ in range(size)]
         self.monster_group = pygame.sprite.Group()
         self.box_group = pygame.sprite.Group()
         self.attack_tile = []
@@ -450,6 +451,12 @@ class Map:
             for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
                 if(self.tiles_sprites[j][i]!=None and (vec(i,j) == self._player.map_pos or self.line_of_sight(vec(i,j), self._player.map_pos, False))):
                     self.see_map[j][i] = Map.GROUND
+        
+        self.see_map_entities = [[self.WALL]*len(self.map) for _ in range(len(self.map))]
+        for i in range(self.coords_draw[0][0], self.coords_draw[1][0]):
+            for j in range(self.coords_draw[0][1], self.coords_draw[1][1]):
+                if(self.tiles_sprites[j][i]!=None and (vec(i,j) == self._player.map_pos or self.line_of_sight(vec(i,j), self._player.map_pos))):
+                    self.see_map_entities[j][i] = Map.GROUND
 
     #--------------------------- Events functions --------------------------------
     def left_click_down_event(self, animation, inventory_ui):

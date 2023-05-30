@@ -35,7 +35,7 @@ class Entity(pygame.sprite.Sprite):
         return(self.name[0])
     
     def draw(self,SCREEN, m):
-        if(m.see_map[int(self.map_pos[1])][int(self.map_pos[0])] == m.GROUND):
+        if(m.see_map_entities[int(self.map_pos[1])][int(self.map_pos[0])] == m.GROUND):
             SCREEN.blit(self.image, self.rect)
 
     def meet(self, target, m, animation):

@@ -67,8 +67,15 @@ def gameplay_phase(events):
     global animations
 
     GlobalState.SCREEN.fill((37,19,26)) # type: ignore
-    if(len(animations) == 0):
-        for event in events:
+    for event in events:
+        if(event.type == pygame.MOUSEBUTTONUP):
+            if(event.button == 1):
+                inventory_ui.left_click_up_event(m)
+
+            elif(event.button == 3):
+                inventory_ui.right_click_up_event()
+
+        if(len(animations) == 0):
             #Mouses events
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 1):
@@ -78,12 +85,6 @@ def gameplay_phase(events):
                 elif(event.button == 3):
                     inventory_ui.right_click_down_event()
 
-            elif(event.type == pygame.MOUSEBUTTONUP):
-                if(event.button == 1):
-                    inventory_ui.left_click_up_event(m)
-
-                elif(event.button == 3):
-                    inventory_ui.right_click_up_event()
             
             #keyboard events
             elif(event.type == pygame.KEYDOWN):
