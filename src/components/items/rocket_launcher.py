@@ -33,3 +33,4 @@ class Rocket_launcher(Item):
         self.range = range
         self.wall_ability = False
         self.animation = animation
+    

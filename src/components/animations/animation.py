@@ -6,7 +6,7 @@ from path import ASSETS_DIR
 vec = pygame.math.Vector2
 
 class Animation:
-    def __init__(self, images, speed, delay, frame_duration, coords, directions, framerate, frame_until_damage, function, user, target):
+    def __init__(self, images, speed, delay, frame_duration, coords, directions, framerate, frame_until_damage, function, user, target,sound=None):
         self.images = images
         self.images_rect = [i[0].get_rect() for i in self.images]
         for i in range(len(self.images_rect)):
@@ -23,11 +23,13 @@ class Animation:
         self.user = user
         self.user_weapon = user.weapon
         self.target = target
+        self.sound = sound
+
 
     def update(self, m, player, messages):
         if(self.user.health <= 0):
             return(True)
-            
+        
         i = 0
         while(i < len(self.images)):
             if(self.actual_frame[i] == self.frame_duration[i]):
