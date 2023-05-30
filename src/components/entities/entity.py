@@ -73,8 +73,9 @@ class Entity(pygame.sprite.Sprite):
                 return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
 
         elif (self.weapon.attack_type == "continuous"):
+            return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
 
-            return True
+
         return(False)
         
     
