@@ -1,6 +1,6 @@
 import pygame
 from sys import exit
-import os
+
 pygame.init()
 
 from src.config import Config
@@ -17,7 +17,6 @@ def update_game_display():
 
 def main():
     while 1:
-        os.fork()
         events = pygame.event.get()
         if GlobalState.GAME_STATE == GameStatus.MAIN_MENU:
             main_menu_phase(events)

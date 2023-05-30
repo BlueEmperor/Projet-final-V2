@@ -2,6 +2,7 @@ import pygame
 
 from path import ASSETS_DIR, AUDIO_DIR,WEAPON_DIR
 from src.components.items.item import Item
+from src.components.animations.fire_shot_animation import FireShotAnimation
 
 vec = pygame.math.Vector2
 
@@ -12,11 +13,11 @@ class Ak(Item):
     golden_ak = pygame.image.load(WEAPON_DIR / "golden_ak.png").convert_alpha()
     bluegem_ak = pygame.image.load(WEAPON_DIR / "bluegem_ak.png").convert_alpha()
 
-    SKELETON_AK =("timothée's ak",IMAGE, 20, 200, vec(1,1) )
-    COMMUNE_AK = ("Marseille ak", classic_ak, 20, 50, vec(1,8))
-    RARE_AK = ("terrorist ak", silver_ak, 50, 20, vec(1,8))
-    EPIC_AK = ("quiet kid's ak", golden_ak, 100, 50, vec(1,8))
-    LEGENDARY_AK = ("Iran ak", bluegem_ak, 200, 100, vec(1,8))
+    #SKELETON_AK =("timothée's ak",IMAGE, 20, 200, vec(1,1),FireShotAnimation)
+    COMMUNE_AK = ("Marseille ak", classic_ak, 20, 50, vec(1,8),FireShotAnimation)
+    RARE_AK = ("terrorist ak", silver_ak, 50, 20, vec(1,8),FireShotAnimation)
+    EPIC_AK = ("quiet kid's ak", golden_ak, 100, 50, vec(1,8),FireShotAnimation)
+    LEGENDARY_AK = ("Iran ak", bluegem_ak, 200, 100, vec(1,8),FireShotAnimation)
     LIST = [COMMUNE_AK,RARE_AK,EPIC_AK,LEGENDARY_AK]
     
     def __init__(self, name, image, damage, durability, range, animation = None):
@@ -25,7 +26,7 @@ class Ak(Item):
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
         self.name = name
-        self.attack_type = "linear"
+        self.attack_type = "zone"
         self.description = "Si je sors la AK je sais qu ils feront tous caca"
         self.damage = damage
         self.durability = durability
