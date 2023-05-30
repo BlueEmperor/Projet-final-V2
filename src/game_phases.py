@@ -20,6 +20,7 @@ from src.config import Config
 from src.components.items.throw_dagger import ThrowableDager
 from src.global_state import GameStatus
 from src.components.UI.main_menu import MainMenu
+from src.components.UI.death_menu import DeathMenu
 
 vec = pygame.math.Vector2
 
@@ -34,6 +35,7 @@ hover = Hover(m)
 main_menu = MainMenu()
 animations = []
 messages = []
+death_menu = DeathMenu(m, player, animations, messages, inventory_ui, stat_ui, minimap, hover)
 
 for i in range(1):
     a=Sword(*Sword.LIST[0])
@@ -121,7 +123,8 @@ def gameplay_phase(events):
     minimap.draw(GlobalState.SCREEN)
     
 def end_menu_phase(events):
-    pass
+    death_menu.update(events)
+    death_menu.draw(GlobalState.SCREEN)
 
 def anim(animations):
     global messages

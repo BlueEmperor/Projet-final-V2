@@ -6,6 +6,8 @@ from src.components.entities.entity import Entity
 from src.components.entities.chest import Chest
 from src.components.entities.monster import Monster
 from src.components.items.item import Item
+from src.global_state import GlobalState
+from src.status import GameStatus
 
 vec = pygame.math.Vector2
 
@@ -127,3 +129,5 @@ class Player(Entity):
             self.image = self.image_list[self.current_image]
             
         self.actual_frame -= 1
+        if(self.health <= 0):
+            GlobalState.GAME_STATE = GameStatus.GAME_END
