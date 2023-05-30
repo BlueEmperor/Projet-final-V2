@@ -254,7 +254,24 @@ class Map:
                                     else:
                                         self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
 
-        elif (weapon.attack_type=="continuous"):
+        elif(weapon.attack_type == "continuous"):
+            for i in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
+                for j in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
+                    c = vec(i+coord[0], j+coord[1])
+                    if(c in self and self.get_item(c) != Map.WALL):
+                        diff = c - coord
+                        if(weapon.range[0]<=abs(diff[0])+abs(diff[1])<=weapon.range[1]):
+                            item = self.get_item(c)
+                            if(vec(c) in self and item != Map.WALL):
+                                #if(self.line_of_sight(c, coord)):
+                                if(item in (Map.GROUND, Map.STAIR)):
+                                    self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
+                                else:
+                                    self.attack_tile.append((c,Map.ATTACK_TILE_RED))
+                                
+
+
+        elif (weapon.attack_type==None):
             for i in range(4):
                 for j in range(int(weapon.range[0]), int(weapon.range[1])+1):
                     c = vec(round(sin(pi/2*i)*j+coord[0]),round(cos(pi/2*i)*j+coord[1]))
