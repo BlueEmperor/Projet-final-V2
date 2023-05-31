@@ -38,6 +38,11 @@ class Potion(Item):
                      ("Epic Health Potion",epic_health, "Health",lambda hero, m: hero.heal(20), 1, health,1," Up the health by 5"),
                      ("Legendary Health Potion",legendary_health,"Health",lambda hero, m: hero.heal(hero.max_health), 1, health, 2," Up the health by 5")]
     
+    REGENERATION_POTION = [("Commune Regeneration Potion",commune_health,"Health",lambda hero, m: hero.heal(1), 5, health, 1,  "Régénère 1 point de vie par tour") ,
+                           ("Rare Regeneration Potion",rare_health,"Health",lambda hero, m: hero.heal(2), 5, health,1, "Régénère 2 points de vie par tour") ,
+                           ("Epic Regeneration Potion",epic_health, "Health",lambda hero, m: hero.heal(4), 7, health,1," Régenère 4 points de vie par tour"),
+                           ("Legendary Regeneration Potion",legendary_health,"Health",lambda hero, m: hero.heal(hero.max_health/5),7, health, 2,"Régenère 1/5 des points de vie par tour")]
+    
     ARMOR_BOOST_POTION = [("Classic Armor Potion",commune_armor,"Armor",lambda hero, m: hero.armor_bonus(1.1), 10),
                           ("Rare Armor Potion",rare_armor,"Armor",lambda hero, m: hero.armor_bonus(1.2), 10),
                           ("Epic Armor Potion",epic_armor,"Armor",lambda hero, m: hero.armor_bonus(1.3),10),
@@ -58,7 +63,7 @@ class Potion(Item):
                            ("Epic Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 10),
                            ("Legendary Invisibility Potion",IMAGE,"Invisibility", lambda hero, m: hero.invibility(), 20, 2)]
     
-    LIST = [HEALTH_POTION, ARMOR_BOOST_POTION, DAMAGE_BOOST_POTION] #, POISON_POTION, INVISIBILITY_POTION]
+    LIST = [HEALTH_POTION, REGENERATION_POTION, ARMOR_BOOST_POTION, DAMAGE_BOOST_POTION] #, POISON_POTION, INVISIBILITY_POTION]
 
     def __init__(self,name,image,usage,effect, turn,inventory_effect=None, durability=1, description=None):
         super().__init__()

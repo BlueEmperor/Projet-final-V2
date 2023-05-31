@@ -55,7 +55,7 @@ for i in range(1):
         player.add_in_inventory(Ak(*Ak.LIST[j]), inventory_ui)
         player.add_in_inventory(Sword(*Sword.LIST[j]), inventory_ui)
         player.add_in_inventory(Rocket_launcher(*Rocket_launcher.LIST[j]), inventory_ui)
-    for j in range(3):
+    for j in range(4):
         player.add_in_inventory(Potion(*Potion.LIST[j][2]), inventory_ui)
 
     #player.add_in_inventory(Armor(*Armor.WOOD_PLASTRON),inventory_ui)
