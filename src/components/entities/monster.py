@@ -16,7 +16,8 @@ class Monster(Entity):
                  Sword(*Sword.SKELETON_SWORD),
                  [[pygame.image.load(ASSETS_DIR / ("entities/squelette/idle/squelette_" + str(i) + ".png")).convert_alpha() for i in range(4)],
                   [pygame.image.load(ASSETS_DIR / ("entities/squelette/idle/squelette_hover_" + str(i) + ".png")).convert_alpha() for i in range(4)]],
-                  8)
+                  8,
+                  3)
     
     VAMPIRE = ("Vampire",
                15,
@@ -24,7 +25,8 @@ class Monster(Entity):
                Wand(*Wand.VAMPIRE_WAND),
                [[pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_" + str(i) + ".png")).convert_alpha() for i in range(4)],
                 [pygame.image.load(ASSETS_DIR / ("entities/vampire/idle/vampire_hover_" + str(i) + ".png")).convert_alpha() for i in range(4)]],
-               12)
+               12,
+               10)
     
     SNAKE = ("Snake",
              12,
@@ -32,7 +34,8 @@ class Monster(Entity):
              Sword(*Sword.RARE_SWORD),
              [[pygame.image.load(ASSETS_DIR / ("entities/snake/face_snake_"+str(i+1)+".png")).convert_alpha() for i in range (4)],
               [pygame.image.load(ASSETS_DIR / ("entities/snake/face_snake_hover_"+str(i+1)+".png")).convert_alpha() for i in range (4)]],
-             15)
+             15,
+             20)
     
     BIG_GUY = ("Big boy",
                50,
@@ -40,16 +43,18 @@ class Monster(Entity):
                Sword(*Sword.EPIC_SWORD),
                [[pygame.image.load(ASSETS_DIR/("entities/Big guy/face_big_guy_"+ str(i+1)+ ".png")).convert_alpha() for i in range(4)],
                 [pygame.image.load(ASSETS_DIR/("entities/Big guy/face_big_guy_"+ str(i+1)+ ".png")).convert_alpha() for i in range(4)]],
+               50,
                50)
     MONSTER_LIST = [SQUELETTE, VAMPIRE,SNAKE, BIG_GUY]
     
-    def __init__(self,name,health,speed, weapon, image_list, xp, pos):
+    def __init__(self,name,health,speed, weapon, image_list, xp, gold, pos):
         super().__init__(name, pos,image_list[0], health)
         self.hover_list = image_list[1]
         self.speed = speed
         self.weapon = weapon
         self.aggro = False
         self.xp = xp
+        self.gold = gold
 
     def update(self, player):
         if(self.actual_frame == 0):

@@ -260,6 +260,9 @@ class InventoryUI:
             #Update inventory items while in animation
             for item in self.inventory_group:
                 item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
+            
+            for item in self.armor_group:
+                item.update(self.inventory_rect.topleft, self.hotbar_rect.topleft)
         
         else:
             #If an item is dragged, put his center at the mouse position
@@ -333,13 +336,13 @@ class InventoryUI:
             self.draw_select_information(SCREEN)
 
             #health
-            SCREEN.blit(self.font.render(f"{int(self._player.health)}/{int(self._player.max_health)}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(60,391))
+            SCREEN.blit(self.font.render(f"{int(self._player.health*self._player.health_boost)}/{int(self._player.max_health*self._player.health_boost)}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(60,391))
 
             #gold
             SCREEN.blit(self.font.render(f"{self._player.gold}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(195,391))
 
             #defense
-            SCREEN.blit(self.font.render(f"{int(self._player.defense)}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(151,320))
+            SCREEN.blit(self.font.render(f"{int(self._player.defense*self._player.defense_boost)}",True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(151,320))
 
             #inventory items draw
             self.inventory_group.draw(SCREEN)

@@ -61,6 +61,7 @@ class Entity(pygame.sprite.Sprite):
             self.remove(m.monster_group)
             m.rm(self)
             player.add_experience(self.xp)
+            player.gold += self.gold
 
     def can_attack(self,entity, m):
         dist=(entity.map_pos-self.map_pos)
