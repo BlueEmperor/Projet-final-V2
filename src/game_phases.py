@@ -15,6 +15,7 @@ from src.components.items.potions import Potion
 from src.components.items.armor import Armor
 from src.components.items.ak47 import Ak
 from src.components.items.rocket_launcher import Rocket_launcher
+from src.components.items.awp import Awp
 from src.message_display import MessageDisplay
 from src.config import Config
 from src.components.items.throw_dagger import ThrowableDager
@@ -55,6 +56,7 @@ for i in range(1):
         player.add_in_inventory(Ak(*Ak.LIST[j]), inventory_ui)
         player.add_in_inventory(Sword(*Sword.LIST[j]), inventory_ui)
         player.add_in_inventory(Rocket_launcher(*Rocket_launcher.LIST[j]), inventory_ui)
+        player.add_in_inventory(Awp(*Awp.LIST[j]), inventory_ui)
     for j in range(3):
         player.add_in_inventory(Potion(*Potion.LIST[j][2]), inventory_ui)
 
