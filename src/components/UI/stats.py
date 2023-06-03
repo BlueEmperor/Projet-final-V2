@@ -78,7 +78,6 @@ class StatUI:
                 if vec(1200,800)[1]<= self.image2_rect.bottomright[1]+pygame.mouse.get_pos()[1]:
                     return self
                 return
-        print("prout")
         return None
     
     def update(self):

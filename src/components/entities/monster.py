@@ -81,9 +81,8 @@ class Monster(Entity):
         if(len(chemin) == 0):
             return
         
-        m.move(self.map_pos,chemin[-1])
         self.ismoving=(chemin[-1]-self.map_pos)*4
-        self.map_pos=chemin[-1]
+        m.move(self,chemin[-1])
         self.moving_tick = 12
        
     

@@ -41,7 +41,6 @@ class Player(Entity):
                 self.effects.pop(i)
                 i -= 1
             i += 1
-        print(self.effects)
 
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()

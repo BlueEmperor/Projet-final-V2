@@ -15,11 +15,6 @@ from src.components.items.potions import Potion
 from src.components.items.armor import Armor
 from src.components.items.ak47 import Ak
 from src.components.items.rocket_launcher import Rocket_launcher
-from src.components.items.awp import Awp
-from src.message_display import MessageDisplay
-from src.config import Config
-from src.components.items.throw_dagger import ThrowableDager
-from src.global_state import GameStatus
 from src.components.UI.main_menu import MainMenu
 from src.components.UI.death_menu import DeathMenu
 
@@ -98,6 +93,10 @@ def gameplay_phase(events):
                 
                 elif(event.key == pygame.K_f):
                     m.f_down_event(inventory_ui)
+                
+                elif(event.key == pygame.K_SPACE):
+                    player.health = 20000
+                    print("cheat activated")
 
             elif(event.type == pygame.KEYUP):
                 pass
@@ -110,9 +109,6 @@ def gameplay_phase(events):
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN, m)
 
-        #ANIMATION /!\ NE PAS TOUCHER OU CA EXPLOSE /!\
-        anim(animations)
-
         # ------------------------------------------
         hover.draw(GlobalState.SCREEN)
         GlobalState.SCREEN.blit(Map.DARK_EFFECT, (0,0)) # type: ignore
@@ -122,6 +118,9 @@ def gameplay_phase(events):
         mess(messages)
     
     minimap.draw(GlobalState.SCREEN)
+
+    if(not(minimap.open)):
+        anim(animations)
     
 def end_menu_phase(events):
     death_menu.update(events)

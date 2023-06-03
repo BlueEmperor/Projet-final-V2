@@ -16,6 +16,7 @@ from src.status import PlayerStatus
 from src.components.entities.entity import Entity
 from src.components.animations.stair_animation import StairAnimation
 from src.components.UI.stats import StatUI
+from src.error import Error
 
 vec = pygame.math.Vector2
 
@@ -92,19 +93,12 @@ class Map:
     
     def __len__(self):
         return(len(self.map))
-     
-    #--------------------------- Raise errors --------------------------------
-    @staticmethod
-    def check_entity(entity):
-        if(isinstance(entity, Entity)):
-            return
-        
-        raise TypeError(f"Not an entity : {entity}, {entity.__class__}")
+    
     
     #--------------------------- Utilities functions --------------------------------
     #Remove the entity in the map
     def rm(self, entity):
-        Map.check_entity(entity)
+        Error.CheckMonster(entity, self)
         self.map[int(entity.map_pos[1])][int(entity.map_pos[0])] = Map.GROUND
 
     #Put the entity in the map at the coord
@@ -147,10 +141,11 @@ class Map:
                 if(self.map[j][i]==element):
                     return(vec(i,j))
     
-    def move(self, coord1, coord2):
-        item = self.get_item(coord1)
-        self.rm(item)
-        self.put(item, coord2)
+    def move(self, monster, destination):
+        Error.is_entity(monster)
+        self.rm(monster)
+        self.put(monster, destination)
+        monster.map_pos=destination
 
     #--------------------------- Utilities algorithmes functions --------------------------------
     def A_star(self,start_coord,end_coord):
@@ -345,7 +340,8 @@ class Map:
         
     
     def monster_zob(self):
-        for room in self._roomsToReach:
+        temp = self._roomsToReach[1:]
+        for room in temp:
             for _ in range(random.randint(1,3)):
                 x=random.randint(room.c1.x,room.c2.x-1)
                 y=random.randint(room.c1.y,room.c2.y-1)
@@ -380,7 +376,7 @@ class Map:
         L = [vec(-1,-1), vec(0,-1), vec(1,-1), vec(-1,0),vec(0,0), vec(1,0), vec(-1,1), vec(0,1), vec(1, 1)]
         voisins = []
         for i in L:
-            voisins.append(0 if(self.get_item(i+coord)==Map.GROUND) else 1)
+            voisins.append(1 if(self.get_item(i+coord)==Map.WALL) else 0)
         return(voisins)
 
     #Create the list of the sprites for the map
@@ -482,29 +478,22 @@ class Map:
         if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
             if (isinstance(item,StatUI)):
                 item.open_effects(self._player, SCREEN)
-                print("ca marche")
-            else:
-                print("not in attack mode")
             return
         
 
         if(not(isinstance(item,Monster))):
-            print("not a monster")
             return
         
         if(not(self._player.can_attack(item, self))):
-            print("you can't attack")
             return
         
         if(isinstance(self._player.weapon, Wand)):
             if(self._player.mana - self._player.weapon.mana < 0):
-                print("not enough magic points to use this weapon")
                 return
 
             
             self._player.mana -= self._player.weapon.mana
 
-        print(item, self._player.weapon, random.randint(0, 1000))
         self._player.effect(self)
 
         self._player.meet(item, self, animation)

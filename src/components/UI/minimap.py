@@ -29,7 +29,15 @@ class MiniMap:
             
             pygame.draw.rect(SCREEN, (0, 255, 0), pygame.Rect(Config.WIDTH/2-r*taille/2+self._map._player.map_pos[0]*r, Config.HEIGHT/2-r*taille/2+self._map._player.map_pos[1]*r, r, r))
         else:
-            return
-            pygame.draw.rect(SCREEN, [220]*3, self.rect)
-            pygame.draw.rect(SCREEN, [20]*3, self.rect2)
-        
+            taille = len(self._map.see_map)
+            r = 4
+            pos = vec(Config.WIDTH-r*50, 0)
+            #pygame.draw.rect(SCREEN, [240]*3, self.rect)
+            #pygame.draw.rect(SCREEN, (100,70,30), self.rect2)
+            for i in range(taille):
+                for j in range(taille):
+                    if(self._map.see_map[j][i] == self._map.GROUND and self._map.map[j][i] != self._map.WALL):
+                        pygame.draw.rect(SCREEN, (200,150,70), pygame.Rect(pos.x+i*r, pos.y+j*r, r, r))
+
+            pygame.draw.rect(SCREEN, (0, 255, 0), pygame.Rect(pos.x+self._map._player.map_pos[0]*r, pos.y+self._map._player.map_pos[1]*r, r, r))
+            
