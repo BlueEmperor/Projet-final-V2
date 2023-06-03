@@ -40,10 +40,11 @@ class Player(Entity):
         while(i < len(self.effects)):
             self.effects[i][1] -= 1
             self.effects[i][0](self, m)
-            if(self.effects[i][1] == 0):
-                self.effects.pop(0)
+            if(self.effects[i][1] <= 0):
+                self.effects.pop(i)
                 i -= 1
             i += 1
+        print(self.effects)
 
     def add_in_inventory(self, item, inventory_ui):
         slots=self.empty_slots()
