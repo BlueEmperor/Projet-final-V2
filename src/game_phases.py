@@ -15,6 +15,7 @@ from src.components.items.potions import Potion
 from src.components.items.armor import Armor
 from src.components.items.ak47 import Ak
 from src.components.items.rocket_launcher import Rocket_launcher
+from src.components.items.awp import Awp
 from src.message_display import MessageDisplay
 from src.config import Config
 from src.components.items.throw_dagger import ThrowableDager
@@ -55,7 +56,6 @@ for i in range(1):
         player.add_in_inventory(Ak(*Ak.LIST[j]), inventory_ui)
         player.add_in_inventory(Sword(*Sword.LIST[j]), inventory_ui)
         player.add_in_inventory(Rocket_launcher(*Rocket_launcher.LIST[j]), inventory_ui)
-    for j in range(4):
         player.add_in_inventory(Potion(*Potion.LIST[j][2]), inventory_ui)
 
     #player.add_in_inventory(Armor(*Armor.WOOD_PLASTRON),inventory_ui)
@@ -81,7 +81,7 @@ def gameplay_phase(events):
             #Mouses events
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 1):
-                    m.left_click_down_event(animations, inventory_ui)
+                    m.left_click_down_event(animations, inventory_ui,GlobalState.SCREEN,stat_ui)
                     inventory_ui.left_click_down_event(m)
 
                 elif(event.button == 3):
@@ -105,6 +105,7 @@ def gameplay_phase(events):
     if(not(minimap.open)):
         m.update(animations)
         inventory_ui.update()
+        stat_ui.update()
         hover.update(animations)
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN, m)

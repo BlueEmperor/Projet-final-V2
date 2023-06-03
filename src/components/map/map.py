@@ -18,6 +18,7 @@ from src.global_state import GlobalState
 from src.status import PlayerStatus
 from src.components.entities.entity import Entity
 from src.components.animations.stair_animation import StairAnimation
+from src.components.UI.stats import StatUI
 
 vec = pygame.math.Vector2
 
@@ -476,12 +477,20 @@ class Map:
                     self.see_map_entities[j][i] = Map.GROUND
 
     #--------------------------- Events functions --------------------------------
-    def left_click_down_event(self, animation, inventory_ui):
+    def left_click_down_event(self, animation, inventory_ui, SCREEN=None, stat_ui = None):
+        if stat_ui!=None:
+            item = stat_ui.get_self()
+        if item==None:
+            item = self.get_item(self.mouse_pos)
         if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
-            print("not in attack mode")
+            if (isinstance(item,StatUI)):
+                item.open_effects(self._player, SCREEN)
+                print("ca marche")
+            else:
+                print("not in attack mode")
             return
         
-        item = self.get_item(self.mouse_pos)
+
         if(not(isinstance(item,Monster))):
             print("not a monster")
             return
@@ -492,7 +501,9 @@ class Map:
         
         if(isinstance(self._player.weapon, Wand)):
             if(self._player.mana - self._player.weapon.mana < 0):
+                print("not enough magic points to use this weapon")
                 return
+
             
             self._player.mana -= self._player.weapon.mana
 
@@ -516,6 +527,9 @@ class Map:
         if(isinstance(item, Chest)):
             if(((self._player.map_pos[0]-self.mouse_pos[0])**2+(self._player.map_pos[1]-self.mouse_pos[1])**2)**0.5<=1):
                 item.open_chest(self._player, inventory_ui)
+        elif (isinstance(item,StatUI)):
+            pass
+
 
         #elif(isinstance(self._player.weapon,Potion)):
         #    pot = self._player.weapon
