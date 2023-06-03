@@ -1,6 +1,6 @@
 import pygame
 
-from path import ASSETS_DIR, AUDIO_DIR,WEAPON_DIR
+from path import WEAPON_DIR
 from src.components.items.item import Item
 from src.components.animations.rpg_animation import RpgAnimation
 
