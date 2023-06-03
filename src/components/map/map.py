@@ -303,13 +303,13 @@ class Map:
     
     def dig(self, coord):
         if(isinstance(self.get_item(coord), Monster)):
-                self.get_item(coord).remove(self.monster_group)
-                self.rm(self.get_item(coord))
-                print("removed")
+            self.get_item(coord).remove(self.monster_group)
+            self.rm(self.get_item(coord))
+            
         elif(isinstance(self.get_item(coord), Chest)):
             self.get_item(coord).remove(self.box_group)
             self.rm(self.get_item(coord))
-            
+
         self.map[int(coord.y)][int(coord.x)] = Map.GROUND
         r=self.findRoom(coord)
         if(r):
