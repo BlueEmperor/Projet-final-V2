@@ -30,7 +30,7 @@ class Player(Entity):
         self.experience = 0
         self.experience_to_level_up = lambda: int((self.level+1)**2.2 + 12)
         self.xp = 0 #Juste pour que le jeu ne crash pas quand le player meurt, ne sert pas sinon
-        self.effects = [] #[[function lambda, duration, name of the effect], ...]
+        self.effects = [] #[[function lambda, duration, name of the effect, image of the potion], ...]
     
     #def get_item(self,n):
     def effect(self, m):

@@ -81,7 +81,7 @@ def gameplay_phase(events):
             #Mouses events
             if(event.type == pygame.MOUSEBUTTONDOWN):
                 if(event.button == 1):
-                    m.left_click_down_event(animations, inventory_ui)
+                    m.left_click_down_event(animations, inventory_ui,GlobalState.SCREEN,stat_ui)
                     inventory_ui.left_click_down_event(m)
 
                 elif(event.button == 3):
@@ -105,6 +105,7 @@ def gameplay_phase(events):
     if(not(minimap.open)):
         m.update(animations)
         inventory_ui.update()
+        stat_ui.update()
         hover.update(animations)
         m.draw(GlobalState.SCREEN)
         player.draw(GlobalState.SCREEN, m)

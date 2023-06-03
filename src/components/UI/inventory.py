@@ -174,7 +174,7 @@ class InventoryUI:
             for i in range(len(button_list)):
                 if(pygame.Rect(self.right_click_coord + vec(0, i*30-correct), (105, 30)).collidepoint(pygame.mouse.get_pos())):
                     pot = self.right_click_item
-                    self._player.effects.append([pot.effect, pot.turn, pot.usage])
+                    self._player.effects.append([pot.effect, pot.turn, pot.usage, pot.image_icon])
                     pot.durability -= 1
                     if(pot.durability == 0):
                         self.remove(pot.slot, pot.location)
