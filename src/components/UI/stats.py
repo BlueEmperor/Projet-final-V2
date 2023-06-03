@@ -52,17 +52,17 @@ class StatUI:
 
         #Effects
         if self.isopen:
-            SCREEN.blit(self.image2, vec(self.effects_rect.topleft) + vec(992,416) )
+            SCREEN.blit(self.image2, vec(self.effects_rect.topleft) + vec(1008,416) )
 
-            SCREEN.blit(self.font.render("EFFECTS:",True,(255, 255, 255)), (1040, 436))
+            SCREEN.blit(self.font.render("EFFECTS:",True,(255, 255, 255)), (1054, 436))
             for i in range (len(self._player.effects)):
                 #SCREEN.blit(self.font.render(str(self._player.effects[i][2]),True,(255, 255, 255)), (1000, 500+64*i))
-                SCREEN.blit(self.font.render(str(self._player.effects[i][1]) + " tour(s)",True,(255, 255, 255)),(1075, 500+64*i)) #(1150, 500+64*i))
-                SCREEN.blit((self.CLOCK_ICON), vec(1035,495+64*i))# 495+64*i))
-                SCREEN.blit((self._player.effects[i][3]), vec(1000, 495+64*i))
+                SCREEN.blit(self.font.render(str(self._player.effects[i][1]) + " tour(s)",True,(255, 255, 255)),(1087, 500+64*i)) #(1150, 500+64*i))
+                SCREEN.blit((self.CLOCK_ICON), vec(1047,495+64*i))# 495+64*i))
+                SCREEN.blit((self._player.effects[i][3]), vec(1012, 495+64*i))
 
         else:
-            SCREEN.blit(self.image2, vec(self.effects_rect.topleft) + vec(992,748) )
+            SCREEN.blit(self.image2, vec(self.effects_rect.topleft) + vec(1008,748) )
              
 
     def open_effects(self,player,SCREEN):
