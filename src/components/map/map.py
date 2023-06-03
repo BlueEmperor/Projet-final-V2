@@ -302,6 +302,14 @@ class Map:
         return(True)
     
     def dig(self, coord):
+        if(isinstance(self.get_item(coord), Monster)):
+                self.get_item(coord).remove(self.monster_group)
+                self.rm(self.get_item(coord))
+                print("removed")
+        elif(isinstance(self.get_item(coord), Chest)):
+            self.get_item(coord).remove(self.box_group)
+            self.rm(self.get_item(coord))
+            
         self.map[int(coord.y)][int(coord.x)] = Map.GROUND
         r=self.findRoom(coord)
         if(r):
@@ -313,6 +321,7 @@ class Map:
         dir_y = 1 if(start.y < end.y) else -1
         for i in range(int(start.y), int(end.y), dir_y):
             self.dig(vec(start.x,i))
+
         for i in range(int(start.x), int(end.x+dir_x), dir_x):
             self.dig(vec(i, end.y))
     

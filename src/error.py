@@ -2,13 +2,14 @@ import pygame
 
 from src.components.entities.monster import Monster
 from src.components.entities.player import Player
+from src.components.entities.chest import Chest
 
 vec = pygame.math.Vector2
 
 class Error(Exception):
     @staticmethod
     def is_entity(entity):
-        if(not isinstance(entity, (Player, Monster))):
+        if(not isinstance(entity, (Player, Monster, Chest))):
             raise TypeError(f"Expected entity but got {entity.__class__.__name__}")
         
     @staticmethod
