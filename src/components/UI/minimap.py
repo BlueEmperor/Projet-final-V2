@@ -1,7 +1,6 @@
 import pygame
 
 from src.config import Config
-from src.components.entities.player import Player
 
 vec = pygame.math.Vector2
 

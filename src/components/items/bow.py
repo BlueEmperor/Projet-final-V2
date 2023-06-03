@@ -1,6 +1,6 @@
 import pygame
 
-from path import ASSETS_DIR, AUDIO_DIR
+from path import ASSETS_DIR
 from src.components.items.item import Item
 from src.components.animations.bow_animation import BowAnimation
 

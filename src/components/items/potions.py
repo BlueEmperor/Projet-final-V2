@@ -1,6 +1,6 @@
 import pygame
 
-from path import ASSETS_DIR,CARAC_DIR, AUDIO_DIR
+from path import ASSETS_DIR,CARAC_DIR
 from src.components.items.item import Item
 
 vec = pygame.math.Vector2

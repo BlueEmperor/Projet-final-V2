@@ -3,9 +3,6 @@ import pygame
 from path import ASSETS_DIR
 from src.config import Config
 from src.components.entities.entity import Entity
-from src.components.entities.chest import Chest
-from src.components.entities.monster import Monster
-from src.components.items.item import Item
 from src.global_state import GlobalState
 from src.status import GameStatus
 

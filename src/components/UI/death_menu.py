@@ -5,12 +5,6 @@ from src.components.UI.button import Button
 from src.config import Config
 from src.global_state import GlobalState
 from src.status import GameStatus
-from src.components.map.map import Map
-from src.components.entities.player import Player
-from src.components.UI.inventory import InventoryUI
-from src.components.UI.stats import StatUI
-from src.components.UI.minimap import MiniMap
-from src.components.UI.hover import Hover
 
 vec = pygame.math.Vector2
 

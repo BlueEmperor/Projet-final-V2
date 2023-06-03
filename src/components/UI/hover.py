@@ -4,8 +4,6 @@ from path import ASSETS_DIR
 from src.components.entities.monster import Monster
 from src.components.entities.player import Player
 from src.components.entities.chest import Chest
-from src.components.items.sword import Sword
-from src.components.items.wand import Wand
 from src.components.items.potions import Potion
 from src.components.items.armor import Armor
 

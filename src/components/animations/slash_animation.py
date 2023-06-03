@@ -1,5 +1,4 @@
 import pygame
-from math import atan2, pi
 
 from src.components.animations.animation import Animation
 from path import ASSETS_DIR

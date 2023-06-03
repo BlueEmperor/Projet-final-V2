@@ -1,8 +1,5 @@
 import pygame
 
-from src.config import Config
-from path import ASSETS_DIR
-
 vec = pygame.math.Vector2
 
 class Animation:

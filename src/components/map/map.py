@@ -5,12 +5,9 @@ from math import cos, sin, pi
 from src.components.entities.chest import Chest
 from path import MAP_DIR, ASSETS_DIR
 from src.config import Config
-from src.components.UI.inventory import InventoryUI
 from src.components.map.node import Node
 from src.components.map.room import Room
 from src.components.entities.monster import Monster
-from src.components.items.bow import Bow
-from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.components.items.potions import Potion
 from src.components.items.armor import Armor

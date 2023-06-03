@@ -1,8 +1,7 @@
 import pygame
 
-from path import ASSETS_DIR, AUDIO_DIR
+from path import ASSETS_DIR
 from src.components.items.item import Item
-from src.config import Config
 from src.components.animations.fireball_animation import FireballAnimation
 
 vec = pygame.math.Vector2

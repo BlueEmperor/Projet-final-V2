@@ -2,7 +2,7 @@ import pygame
 from math import atan2, pi
 
 from src.components.animations.animation import Animation
-from path import ASSETS_DIR,WEAPON_DIR
+from path import WEAPON_DIR
 from src.config import Config
 
 vec=pygame.math.Vector2

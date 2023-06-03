@@ -1,6 +1,6 @@
 import pygame
 
-from path import ASSETS_DIR, AUDIO_DIR,WEAPON_DIR
+from path import ASSETS_DIR, WEAPON_DIR
 from src.components.items.item import Item
 from src.components.animations.slash_animation import SlashAnimation
 vec = pygame.math.Vector2

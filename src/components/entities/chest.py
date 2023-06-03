@@ -1,14 +1,12 @@
 import pygame
 import random
-from path import ASSETS_DIR, AUDIO_DIR
-from src.components.UI.inventory import InventoryUI
+from path import ASSETS_DIR
 from src.components.entities.entity import Entity
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
 from src.components.items.bow import Bow
 from src.components.items.potions import Potion
 from src.components.items.armor import Armor
-from src.components.items.item import Item
 from src.components.items.ak47 import Ak 
 from src.components.items.throw_dagger import ThrowableDager
 vec = pygame.math.Vector2

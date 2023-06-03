@@ -1,7 +1,6 @@
 import pygame
 
 from path import ASSETS_DIR
-from src.config import Config
 from src.components.entities.entity import Entity
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
