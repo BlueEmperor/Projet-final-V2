@@ -68,6 +68,8 @@ class Map:
         self._roomsToReach = []
         self._rooms = []
         self.generateRooms(nbrooms)
+        self.monster_zob()
+        self.coffre_zob()
         self.reachAllRooms()
         self._player.teleport(self._rooms[0].center())
         self.put(player,self._rooms[0].center())
@@ -76,8 +78,6 @@ class Map:
         coord = self._rooms[-1].center()
         self.put(Map.STAIR, coord)
         self.create_draw_map(self.map)
-        self.monster_zob()
-        self.coffre_zob()
         self.monster_group.update(player)
         self.box_group.update(player)
         self.moving_tick = 0
@@ -348,7 +348,7 @@ class Map:
         
     
     def monster_zob(self):
-        for room in self._rooms:
+        for room in self._roomsToReach:
             for _ in range(random.randint(1,3)):
                 x=random.randint(room.c1.x,room.c2.x-1)
                 y=random.randint(room.c1.y,room.c2.y-1)
@@ -362,7 +362,7 @@ class Map:
                 monster.add(self.monster_group)
 
     def coffre_zob(self):
-        for room in self._rooms:
+        for room in self._roomsToReach:
             for _ in range(random.randint(0,1)):
                 x=random.randint(room.c1.x,room.c2.x-1)
                 y=random.randint(room.c1.y,room.c2.y-1)
