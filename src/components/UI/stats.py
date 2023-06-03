@@ -63,11 +63,14 @@ class StatUI:
 
         else:
             SCREEN.blit(self.image2, vec(self.effects_rect.topleft) + vec(1008,748) )
+            for i in range(len(self._player.effects)):
+                 SCREEN.blit(self._player.effects[i][3], vec(1020+40*i, 760))
+                 
              
 
     def open_effects(self,player,SCREEN):
         self.isopen = not(self.isopen)
-        SCREEN.blit(self.effects_image, vec(self.effects_rect.topleft) + vec(816,608))
+
 
 
     def get_self(self):
