@@ -242,9 +242,6 @@ class InventoryUI:
         self.right_click_item = self.get_item(self.hover_coord, self.hover_object)
         self.right_click_coord = pygame.mouse.get_pos()
 
-    def right_click_up_event(self):
-        pass
-
     #--------------------------- update functions --------------------------------
     def update(self):
         mouse_pos = pygame.mouse.get_pos()

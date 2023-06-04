@@ -18,10 +18,6 @@ class Error(Exception):
             raise IndexError(f"Expected coord in map but got {coord}")
 
     @staticmethod
-    def CheckCoord(coord, m):
-        Error.in_map(coord, m)
-
-    @staticmethod
     def CheckMonster(monster, m):
         Error.is_entity(monster)
         Error.in_map(monster.map_pos, m)
