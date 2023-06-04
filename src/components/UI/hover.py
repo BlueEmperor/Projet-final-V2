@@ -40,8 +40,9 @@ class Hover:
         if(isinstance(item, (Player, str))):
             return
         
-        if(self._map.see_map[int(self._map.mouse_pos[1])][int(self._map.mouse_pos[0])] == self._map.WALL):
+        if(self._map.see_map_entities[int(self._map.mouse_pos[1])][int(self._map.mouse_pos[0])] == self._map.WALL):
             return
+        
         self.current_hover = item
         self.rect.center = self.current_hover.rect.center + vec(0, -85)
         #self._map._player.meet(self.current_hover,self._map)
