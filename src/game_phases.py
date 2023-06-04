@@ -38,8 +38,9 @@ death_menu = DeathMenu(m, player, animations, messages, inventory_ui, stat_ui, m
 
 player.add_in_inventory(Wand(*Wand.LIST[0]), inventory_ui)
 player.add_in_inventory(Sword(*Sword.LIST[0]), inventory_ui)   
-player.add_in_inventory(ThrowableDager(*ThrowableDager.LIST[0]), inventory_ui)       
+      
 for j in range(4):
+    player.add_in_inventory(ThrowableDager(*ThrowableDager.LIST[j]), inventory_ui) 
     player.add_in_inventory(Armor(*Armor.CHESTPLATE[j]),inventory_ui)
     player.add_in_inventory(Armor(*Armor.LEGGING[j]),inventory_ui)
     player.add_in_inventory(Armor(*Armor.HELMET[j]),inventory_ui)

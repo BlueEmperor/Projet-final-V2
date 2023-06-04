@@ -1,14 +1,18 @@
 import pygame
 
 from src.components.items.item import Item
-from path import ASSETS_DIR
+from path import ASSETS_DIR, WEAPON_DIR
 from src.components.animations.dagger_animation import DaggerAnimation
 
 class ThrowableDager(Item):
-    COMMON_DAGGER = ("Common Dagger", pygame.image.load(ASSETS_DIR / "dagger.png").convert_alpha(), 10, [1,5], DaggerAnimation)
-    RARE_DAGGER = ("Rare Dagger", pygame.image.load(ASSETS_DIR / "dagger.png").convert_alpha(),20, [1,5], DaggerAnimation)
-    EPIC_DAGGER = ("Epic Dagger", pygame.image.load(ASSETS_DIR / "dagger.png").convert_alpha(), 30, [1,5], DaggerAnimation)
-    LEGENDARY_DAGGER = ("Epic Dagger", pygame.image.load(ASSETS_DIR / "dagger.png").convert_alpha(), 50, [1,5], DaggerAnimation)
+    common_dagger = pygame.image.load(WEAPON_DIR / "wood_dagger.png").convert_alpha()
+    rare_dagger = pygame.image.load(WEAPON_DIR / "silver_dagger.png").convert_alpha()
+    epic_dagger = pygame.image.load(WEAPON_DIR / "golden_dagger.png").convert_alpha()
+    legendary_dagger = pygame.image.load(WEAPON_DIR / "diamond_dagger.png").convert_alpha()
+    COMMON_DAGGER = ("Common Dagger", common_dagger, 10, [1,5], DaggerAnimation)
+    RARE_DAGGER = ("Rare Dagger", rare_dagger,20, [1,5], DaggerAnimation)
+    EPIC_DAGGER = ("Epic Dagger", epic_dagger, 30, [1,5], DaggerAnimation)
+    LEGENDARY_DAGGER = ("Epic Dagger", legendary_dagger, 50, [1,5], DaggerAnimation)
     LIST = [COMMON_DAGGER, RARE_DAGGER, EPIC_DAGGER, LEGENDARY_DAGGER]
     def __init__(self, name, image, damage, range, animation = None):
         super().__init__()
