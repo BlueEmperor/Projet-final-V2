@@ -83,6 +83,7 @@ class Map:
         self.update_see_map()
         self.timer = -1
         print(self)
+        print(self._player.map_level)
 
         
 
@@ -112,28 +113,6 @@ class Map:
         if(coord in self):
             return(self.map[int(coord[1])][int(coord[0])])
         return(Map.WALL)
-    
-    #get the room that contains the coord or the element
-    def get_room(self, object):
-        if isinstance(object,Entity):
-            for room in self._rooms:
-                if self.pos(object) in room:
-                    return room
-        else:
-            for room in self._rooms:
-                if object in room:
-                    return room
-                
-    def get_item_room(self, object):
-        room=self.get_room(object)
-        items=[]
-        for i in range(abs(int(room.c1.x - room.c2.x))):
-            for j in range(abs(int(room.c1.y - room.c2.y))):
-        #for i in room:
-                item = self.get_item(vec(i,j))
-                if(isinstance(item, Monster)):
-                    items.append(item)
-        return items
 
     #Get the pos of the element
     def pos(self, element):
@@ -344,8 +323,8 @@ class Map:
                 while(self.get_item(vec(x,y))!=self.GROUND):
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
-
-                monster=Monster(*random.choice(Monster.MONSTER_LIST[self._player.map_level]), vec(x,y)) # type: ignore
+                n = self._player.map_level if(self._player.map_level <= 5) else 5
+                monster=Monster(*random.choice(Monster.MONSTER_LIST[n]), vec(x,y)) # type: ignore
                 self.put(monster, vec(x,y))
                 monster.add(self.monster_group)
 
@@ -474,16 +453,13 @@ class Map:
         if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
             if (isinstance(item,StatUI)):
                 item.open_effects(self._player, SCREEN)
-            print("not attack")
             return
         
 
         if(not(isinstance(item,Monster))):
-            print("not a monster")
             return
         
         if(not(self._player.can_attack(item, self))):
-            print("can't attack")
             return
         
         if(isinstance(self._player.weapon, Wand)):
@@ -591,8 +567,11 @@ class Map:
                             animation.append(StairAnimation(0, 0, 0))
                             self.timer = 65
                             self._player.map_level+=1
-                            for i in range(4):
+                            for i in range(3):
+                                if(len(Chest.RARITY_CHEST) <= 1):
+                                    return
                                 Chest.RARITY_CHEST.pop(0)
+
         self._player.update()
         self.monster_group.update(self._player)
         self.box_group.update(self._player)

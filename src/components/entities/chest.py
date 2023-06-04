@@ -32,7 +32,6 @@ class Chest(Entity):
         self.RARITY_NUMBER = Chest.RARITY_TABLE[self.RARITY]
         self.name = self.RARITY
         self.inventory_creation()
-        print(self.RARITY)
         #for i in range(random.randint(1,3)):
             #item = random.choice(self.ITEM_LIST)
             #self.inventory.append(item(*random.choice(item.LIST)))

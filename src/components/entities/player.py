@@ -88,29 +88,11 @@ class Player(Entity):
 
         return(L)
 
-    def teleport(self, coord): #mettre if il est riche ,le tp plus loin avec expovariate
-        self.map_pos = coord
-        self.absolute_pos = coord*48
-
-    def heal(self, number):
-        self.health += number
-        if(self.health > self.max_health):
-            self.health = self.max_health
-
     def armor_bonus(self,number):
         self.defense_boost = number
 
     def damage_bonus(self,number):
         self.damage_boost = number
-
-    def poison(self,number):
-        self.health -= number
-        if(self.health <= 0):
-            return(True)
-        return(False)
-
-    def invisibility(self, number):
-        pass
     
     def update_defense(self):
         self.defense = 0
