@@ -83,6 +83,7 @@ class Map:
         self.update_see_map()
         self.timer = -1
         print(self)
+
         
 
     def __repr__(self):
@@ -359,7 +360,7 @@ class Map:
                     x=random.randint(room.c1.x,room.c2.x-1)
                     y=random.randint(room.c1.y,room.c2.y-1)
 
-                monster=Monster(*Monster.MONSTER_LIST[random.randint(0,len(Monster.MONSTER_LIST)-1)], vec(x,y)) # type: ignore
+                monster=Monster(*random.choice(Monster.MONSTER_LIST[self._player.map_level]), vec(x,y)) # type: ignore
                 self.put(monster, vec(x,y))
                 monster.add(self.monster_group)
 
@@ -600,6 +601,9 @@ class Map:
                         elif(self.get_item(self._player.map_pos+self.DIR[key]) == Map.STAIR):
                             animation.append(StairAnimation(0, 0, 0))
                             self.timer = 65
+                            self._player.map_level+=1
+                            for i in range(4):
+                                Chest.RARITY_CHEST.pop(0)
         self._player.update()
         self.monster_group.update(self._player)
         self.box_group.update(self._player)

@@ -44,7 +44,7 @@ class Monster(Entity):
                 [pygame.image.load(ASSETS_DIR/("entities/Big guy/face_big_guy_"+ str(i+1)+ ".png")).convert_alpha() for i in range(4)]],
                50,
                50)
-    MONSTER_LIST = [SQUELETTE, VAMPIRE,SNAKE, BIG_GUY]
+    MONSTER_LIST = [[SQUELETTE, VAMPIRE],[VAMPIRE,SNAKE], [SNAKE,BIG_GUY]]
     
     def __init__(self,name,health,speed, weapon, image_list, xp, gold, pos):
         super().__init__(name, pos,image_list[0], health)

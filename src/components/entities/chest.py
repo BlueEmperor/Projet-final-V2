@@ -28,18 +28,19 @@ class Chest(Entity):
         self.xp = 0
         self.open_time = open_time
         self.wall_ability = False
-        self.RARITY = self.RARITY_CHEST[self.rarity()]
+        self.RARITY = self.rarity()
         self.RARITY_NUMBER = Chest.RARITY_TABLE[self.RARITY]
         self.name = self.RARITY
         self.inventory_creation()
-
+        print(self.RARITY)
         #for i in range(random.randint(1,3)):
             #item = random.choice(self.ITEM_LIST)
             #self.inventory.append(item(*random.choice(item.LIST)))
 
 
     def rarity(self):
-        return(random.randint(0,18))
+        return random.choice(self.RARITY_CHEST)
+
     
     def inventory_creation(self):
         for _ in range(2):
