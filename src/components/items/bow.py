@@ -1,6 +1,6 @@
 import pygame
 
-from path import ASSETS_DIR
+from path import ASSETS_DIR, WEAPON_DIR
 from src.components.items.item import Item
 from src.components.animations.bow_animation import BowAnimation
 
@@ -8,11 +8,14 @@ vec = pygame.math.Vector2
 
 class Bow(Item):
     IMAGE = pygame.image.load(ASSETS_DIR / "bow_icon.png").convert_alpha()
+    silver_bow = pygame.image.load(WEAPON_DIR / "silver_bow.png").convert_alpha()
+    golden_bow = pygame.image.load(WEAPON_DIR / "golden_bow.png").convert_alpha()
+    diamond_bow = pygame.image.load(WEAPON_DIR / "diamond_bow.png").convert_alpha()
     ARCHER_BOW = ("Archer's bow", IMAGE, 2, 30 ,vec(1,4))
     COMMUNE_BOW =("Everyday's bow", IMAGE, 2, 30 ,vec(1,6))
-    RARE_BOW =("David Bowie's bow", IMAGE, 5, 50 ,vec(1,6))
-    EPIC_BOW =("Bo bow", IMAGE, 10, 50 ,vec(1,6))
-    LEGENDARY_BOW =("Racist bow",IMAGE, 20, 100, vec(1,7))
+    RARE_BOW =("David Bowie's bow", silver_bow, 5, 50 ,vec(1,6))
+    EPIC_BOW =("Bo bow", golden_bow, 10, 50 ,vec(1,6))
+    LEGENDARY_BOW =("Racist bow",diamond_bow, 20, 100, vec(1,7))
     LIST=[COMMUNE_BOW,RARE_BOW,EPIC_BOW,LEGENDARY_BOW]
     
     def __init__(self,name,image,damage,durability,range,animation = BowAnimation):
