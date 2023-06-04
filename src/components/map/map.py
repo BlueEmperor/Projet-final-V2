@@ -112,28 +112,6 @@ class Map:
         if(coord in self):
             return(self.map[int(coord[1])][int(coord[0])])
         return(Map.WALL)
-    
-    #get the room that contains the coord or the element
-    def get_room(self, object):
-        if isinstance(object,Entity):
-            for room in self._rooms:
-                if self.pos(object) in room:
-                    return room
-        else:
-            for room in self._rooms:
-                if object in room:
-                    return room
-                
-    def get_item_room(self, object):
-        room=self.get_room(object)
-        items=[]
-        for i in range(abs(int(room.c1.x - room.c2.x))):
-            for j in range(abs(int(room.c1.y - room.c2.y))):
-        #for i in room:
-                item = self.get_item(vec(i,j))
-                if(isinstance(item, Monster)):
-                    items.append(item)
-        return items
 
     #Get the pos of the element
     def pos(self, element):
