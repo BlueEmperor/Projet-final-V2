@@ -12,7 +12,7 @@ class Sword(Item):
     golden_sword = pygame.image.load(WEAPON_DIR / "golden_sword.png").convert_alpha()
     diamond_sword = pygame.image.load(WEAPON_DIR / "diamond_sword.png").convert_alpha()
     SKELETON_SWORD =("Skeleton sword",IMAGE, 4, 200, vec(1,1),0, SlashAnimation)
-    COMMUNE_SWORD = ("Jesus sword", wood_sword, 8, 50, vec(1,1),10, SlashAnimation)
+    COMMUNE_SWORD = ("Jesus sword", wood_sword, 7, 50, vec(1,1),10, SlashAnimation)
     RARE_SWORD = ("SEXYSEB's sword", silver_sword, 15, 20, vec(1,1),10, SlashAnimation)
     EPIC_SWORD = ("Timozob' sword", golden_sword, 30, 50, vec(1,1),20, SlashAnimation)
     LEGENDARY_SWORD = ("3 FROMAGES' Sword", diamond_sword, 50, 100, vec(1,2),50, SlashAnimation)

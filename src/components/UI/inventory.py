@@ -12,6 +12,7 @@ from src.components.items.armor import Armor
 from src.components.items.ak47 import Ak
 from src.components.items.rocket_launcher import Rocket_launcher
 from src.components.items.sword import Sword
+from src.components.items.throw_dagger import ThrowableDager
 
 vec = pygame.math.Vector2
 
@@ -382,7 +383,7 @@ class InventoryUI:
     #Draw the information of the select item
     def draw_select_information(self, SCREEN):
         if(self.select_item != None):
-            if(isinstance(self.select_item, (Bow, Sword, Wand,Ak,Rocket_launcher))):
+            if(isinstance(self.select_item, (Bow, Sword, Wand,Ak,Rocket_launcher,ThrowableDager))):
                 SCREEN.blit(self.font2.render("Description : " + str(self.select_item.description),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,334))
                 SCREEN.blit(self.font2.render("Damage : " + str(self.select_item.damage),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,363))
                 SCREEN.blit(self.font2.render("Durability : " + str(self.select_item.durability),True,(255, 255, 255)), vec(self.inventory_rect.topleft)+vec(330,392))

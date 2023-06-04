@@ -12,10 +12,10 @@ class Bow(Item):
     golden_bow = pygame.image.load(WEAPON_DIR / "golden_bow.png").convert_alpha()
     diamond_bow = pygame.image.load(WEAPON_DIR / "diamond_bow.png").convert_alpha()
     ARCHER_BOW = ("Archer's bow", IMAGE, 2, 30 ,vec(1,4))
-    COMMUNE_BOW =("Everyday's bow", IMAGE, 5, 30 ,vec(1,6))
-    RARE_BOW =("David Bowie's bow", silver_bow, 10, 50 ,vec(1,6))
-    EPIC_BOW =("Bo bow", golden_bow, 20, 50 ,vec(1,6))
-    LEGENDARY_BOW =("Racist bow",diamond_bow, 40, 100, vec(1,7))
+    COMMUNE_BOW =("Everyday's bow", IMAGE, 5, 30 ,vec(2,5))
+    RARE_BOW =("David Bowie's bow", silver_bow, 10, 50 ,vec(2,5))
+    EPIC_BOW =("Bo bow", golden_bow, 20, 50 ,vec(2,5))
+    LEGENDARY_BOW =("Racist bow",diamond_bow, 40, 100, vec(2,5))
     LIST=[COMMUNE_BOW,RARE_BOW,EPIC_BOW,LEGENDARY_BOW]
     
     def __init__(self,name,image,damage,durability,range,animation = BowAnimation):

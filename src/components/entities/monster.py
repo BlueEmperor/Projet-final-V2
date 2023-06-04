@@ -4,7 +4,8 @@ from path import ASSETS_DIR
 from src.components.entities.entity import Entity
 from src.components.items.sword import Sword
 from src.components.items.wand import Wand
-
+from src.components.items.bow import Bow
+from src.components.items.ak47 import Ak
 
 vec=pygame.math.Vector2
 
@@ -39,7 +40,7 @@ class Monster(Entity):
     BOO = ("Boo",
              20,
              1,
-             Wand(*Wand.EPIC_WAND),
+             Bow(*Bow.EPIC_BOW),
              [[pygame.image.load(ASSETS_DIR / ("entities/boo/face_boo_"+str(i+1)+".png")).convert_alpha() for i in range (4)],
               [pygame.image.load(ASSETS_DIR / ("entities/boo/face_boo_"+str(i+1)+".png")).convert_alpha() for i in range (4)]],
              15,
@@ -65,7 +66,7 @@ class Monster(Entity):
     WIZARD = ("Wizard",
                 60,
                 1,
-                Wand(*Wand.LEGENDARY_WAND),
+                Ak(*Ak.EPIC_AK),
                  [[pygame.image.load(ASSETS_DIR/("entities/wizard/face_wiz_"+ str(i+1)+ ".png")).convert_alpha() for i in range(4)],
                 [pygame.image.load(ASSETS_DIR/("entities/wizard/face_wiz_"+ str(i+1)+ ".png")).convert_alpha() for i in range(4)]],
                 50,

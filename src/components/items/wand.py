@@ -11,11 +11,11 @@ class Wand(Item):
     silver_wand = pygame.image.load(WEAPON_DIR / "silver_wand.png").convert_alpha()
     golden_wand = pygame.image.load(WEAPON_DIR / "golden_wand.png").convert_alpha()
     diamond_wand = pygame.image.load(WEAPON_DIR / "diamond_wand.png").convert_alpha()
-    VAMPIRE_WAND = ("Vampire's wand", IMAGE, 5, 30 ,vec(1,5), 0, FireballAnimation)
-    COMMUNE_WAND =("Harry Potter's wand", IMAGE, 5, 30 ,vec(1,5), 25, FireballAnimation)
-    RARE_WAND =("Hermione's wand", silver_wand, 10, 50 ,vec(1,3), 30,FireballAnimation)
+    VAMPIRE_WAND = ("Vampire's wand", IMAGE, 8, 30 ,vec(1,4), 0, FireballAnimation)
+    COMMUNE_WAND =("Harry Potter's wand", IMAGE, 5, 30 ,vec(1,4), 25, FireballAnimation)
+    RARE_WAND =("Hermione's wand", silver_wand, 10, 50 ,vec(1,4), 30,FireballAnimation)
     EPIC_WAND =("APAGNAN's wand", golden_wand, 20, 50 ,vec(1,4), 40,FireballAnimation)
-    LEGENDARY_WAND =("CROPINOU's wand",diamond_wand, 50, 100, vec(1,5), 50,FireballAnimation)
+    LEGENDARY_WAND =("CROPINOU's wand",diamond_wand, 50, 100, vec(1,4), 50,FireballAnimation)
     LIST=[COMMUNE_WAND,RARE_WAND,EPIC_WAND,LEGENDARY_WAND]
 
     def __init__(self,name,image,damage,durability,range,mana,animation = None):

@@ -14,10 +14,10 @@ class Ak(Item):
     bluegem_ak = pygame.image.load(WEAPON_DIR / "bluegem_ak.png").convert_alpha()
 
     #SKELETON_AK =("timothée's ak",IMAGE, 20, 200, vec(1,1),FireShotAnimation)
-    COMMUNE_AK = ("Marseille ak", classic_ak, 20, 50, vec(1,8),FireShotAnimation)
-    RARE_AK = ("terrorist ak", silver_ak, 50, 20, vec(1,8),FireShotAnimation)
-    EPIC_AK = ("quiet kid's ak", golden_ak, 100, 50, vec(1,8),FireShotAnimation)
-    LEGENDARY_AK = ("Iran ak", bluegem_ak, 200, 100, vec(1,8),FireShotAnimation)
+    COMMUNE_AK = ("Marseille ak", classic_ak, 10, 50, vec(1,4),FireShotAnimation)
+    RARE_AK = ("terrorist ak", silver_ak, 20, 20, vec(1,4),FireShotAnimation)
+    EPIC_AK = ("quiet kid's ak", golden_ak, 30, 50, vec(1,4),FireShotAnimation)
+    LEGENDARY_AK = ("Iran ak", bluegem_ak, 50, 100, vec(1,4),FireShotAnimation)
     LIST = [COMMUNE_AK,RARE_AK,EPIC_AK,LEGENDARY_AK]
     
     def __init__(self, name, image, damage, durability, range, animation = None):
