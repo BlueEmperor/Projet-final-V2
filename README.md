@@ -17,6 +17,7 @@ TOUCHES ET COMMANDES:
 -left_click sur un élement dans la hotbar pour l'équiper en tant qu'arme
 -left_click sur une entité de la map pour l'attaquer (une fois l'arme équipée)
 -Le drag and drop (maintenir le clic et déplacer la souris) pour trier l'inventaire ou équiper les armures
+-Espace active le cheat et rajoute assez de vie pour survivre longtemps
 
 
 
