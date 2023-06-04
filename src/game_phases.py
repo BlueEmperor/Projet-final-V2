@@ -67,9 +67,6 @@ def gameplay_phase(events):
             if(event.button == 1):
                 inventory_ui.left_click_up_event(m)
 
-            elif(event.button == 3):
-                inventory_ui.right_click_up_event()
-
         if(len(animations) == 0):
             #Mouses events
             if(event.type == pygame.MOUSEBUTTONDOWN):

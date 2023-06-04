@@ -31,5 +31,4 @@ class FireballAnimation(Animation):
                          frame_until_damage=duration,
                          function = lambda user, user_weapon, target, m, messages: target.damage(int(user_weapon.damage*user.damage_boost), m, player, messages),
                          user=user,
-                         target=target,
-                         sound=SOUND)
+                         target=target)
