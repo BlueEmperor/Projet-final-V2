@@ -73,6 +73,7 @@ def gameplay_phase(events):
                 
                 elif(event.key == pygame.K_SPACE):
                     player.health = 20000
+                    player.max_health = 20000
                     print("cheat activated")
 
             elif(event.type == pygame.KEYUP):
