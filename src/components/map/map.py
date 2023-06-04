@@ -214,7 +214,7 @@ class Map:
                 for j in range(int(weapon.range[0]), int(weapon.range[1])+1):
                     c = vec(round(sin(pi/2*i)*j+coord[0]),round(cos(pi/2*i)*j+coord[1]))
                     item = self.get_item(c)
-                    if(vec(c) in self and item != Map.WALL):
+                    if(vec(c) in self and item != Map.WALL and self.see_map[int(c[1])][int(c[0])] != Map.WALL):
                         if(self.line_of_sight(c, coord)):
                             if(item in (Map.GROUND, Map.STAIR)):
                                 self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
@@ -222,7 +222,7 @@ class Map:
                                 self.attack_tile.append((c,Map.ATTACK_TILE_RED))
                         
                         else:
-                            if(item in (Map.GROUND, Map.STAIR)):
+                            if(item in (Map.GROUND, Map.STAIR) or self.see_map_entities[int(c[1])][int(c[0])] == Map.WALL):
                                 self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
                             else:
                                 self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
@@ -231,7 +231,7 @@ class Map:
             for i in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
                 for j in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
                     c = vec(i+coord[0], j+coord[1])
-                    if(c in self and self.get_item(c) != Map.WALL):
+                    if(c in self and self.get_item(c) != Map.WALL and self.see_map[int(c[1])][int(c[0])] != Map.WALL):
                         diff = c - coord
                         if(weapon.range[0]<=abs(diff[0])+abs(diff[1])<=weapon.range[1]):
                             item = self.get_item(c)
@@ -243,25 +243,10 @@ class Map:
                                         self.attack_tile.append((c,Map.ATTACK_TILE_RED))
                                 
                                 else:
-                                    if(item in (Map.GROUND, Map.STAIR)):
+                                    if(item in (Map.GROUND, Map.STAIR) or self.see_map_entities[int(c[1])][int(c[0])] == Map.WALL):
                                         self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_BLUE))
                                     else:
                                         self.attack_tile.append((c,Map.ATTACK_TILE_LIGHT_RED))
-
-        elif(weapon.attack_type == "continuous"):
-            for i in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
-                for j in range(int(-weapon.range[1]), int(weapon.range[1]+1)):
-                    c = vec(i+coord[0], j+coord[1])
-                    if(c in self and self.get_item(c) != Map.WALL):
-                        diff = c - coord
-                        if(weapon.range[0]<=abs(diff[0])+abs(diff[1])<=weapon.range[1]):
-                            item = self.get_item(c)
-                            if(vec(c) in self and item != Map.WALL):
-                                #if(self.line_of_sight(c, coord)):
-                                if(item in (Map.GROUND, Map.STAIR)):
-                                    self.attack_tile.append((c,Map.ATTACK_TILE_BLUE))
-                                else:
-                                    self.attack_tile.append((c,Map.ATTACK_TILE_RED))
                                 
 
 
@@ -485,16 +470,20 @@ class Map:
             item = stat_ui.get_self()
         if item==None:
             item = self.get_item(self.mouse_pos)
+
         if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
             if (isinstance(item,StatUI)):
                 item.open_effects(self._player, SCREEN)
+            print("not attack")
             return
         
 
         if(not(isinstance(item,Monster))):
+            print("not a monster")
             return
         
         if(not(self._player.can_attack(item, self))):
+            print("can't attack")
             return
         
         if(isinstance(self._player.weapon, Wand)):

@@ -67,15 +67,11 @@ class Entity(pygame.sprite.Sprite):
         dist=(entity.map_pos-self.map_pos)
         if(self.weapon.attack_type == "linear"):
             if(m.line_of_sight(entity.map_pos,self.map_pos)):
-                return((dist[0]==0 or dist[1]==0) and abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
+                return((dist[0]==0 or dist[1]==0) and abs(dist[0])+abs(dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
         
         elif(self.weapon.attack_type == "zone"):
             if(m.line_of_sight(entity.map_pos,self.map_pos)):
-                return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
-
-        elif (self.weapon.attack_type == "continuous"):
-            return(abs(dist[0]+dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
-
+                return(abs(dist[0])+abs(dist[1]) in range(int(self.weapon.range[0]), int(self.weapon.range[1])+1))
 
         return(False)
         

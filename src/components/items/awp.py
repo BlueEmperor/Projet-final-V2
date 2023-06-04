@@ -26,7 +26,7 @@ class Awp(Item):
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
         self.name = name
-        self.attack_type = "zone"
+        self.attack_type = "linear"
         self.description = "Si je sors la awp je sais qu ils feront tous caca"
         self.damage = damage
         self.durability = durability

@@ -26,7 +26,7 @@ class Rocket_launcher(Item):
         self.image_icon = pygame.transform.scale(self.image, (32, 32))
         self.rect = self.image.get_rect()
         self.name = name
-        self.attack_type = "continuous"
+        self.attack_type = "zone"
         self.description = "Vous aimez les explosions?"
         self.damage = damage
         self.durability = durability
