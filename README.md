@@ -15,7 +15,7 @@ TOUCHES ET COMMANDES:
 -right_click sur un élément dans l'inventaire afin d'utiliser ou jeter cet élément
 -left_click sur un élément dans l'inventaire pour obtenir des informations dessus
 -left_click sur un élement dans la hotbar pour l'équiper en tant qu'arme
--left_click sur une entité de la map pour l'attaquer(une fois l'arme équipée)
+-left_click sur une entité de la map pour l'attaquer (une fois l'arme équipée)
 -Le drag and drop (maintenir le clic et déplacer la souris) pour trier l'inventaire ou équiper les armures
 
 

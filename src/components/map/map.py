@@ -470,16 +470,20 @@ class Map:
             item = stat_ui.get_self()
         if item==None:
             item = self.get_item(self.mouse_pos)
+
         if(not(GlobalState.PLAYER_STATE == PlayerStatus.ATTACK)):
             if (isinstance(item,StatUI)):
                 item.open_effects(self._player, SCREEN)
+            print("not attack")
             return
         
 
         if(not(isinstance(item,Monster))):
+            print("not a monster")
             return
         
         if(not(self._player.can_attack(item, self))):
+            print("can't attack")
             return
         
         if(isinstance(self._player.weapon, Wand)):
